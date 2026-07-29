@@ -6,9 +6,25 @@
     height: 100%;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
+    // When socials goes full-width, use 4 columns in a single row
     &__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    // Back to 2x2 on mobile
+    &__grid {
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    &__grid {
+      gap: 8px;
     }
   }
 }
@@ -30,6 +46,11 @@
     background: #2c2c2c;
   }
 
+  svg {
+    width: 54px;
+    height: 54px;
+  }
+
   &__label {
     font-family: "Geist", sans-serif;
     font-weight: 400;
@@ -37,11 +58,38 @@
     color: #6a6a6a;
   }
 
+  @media (max-width: 768px) {
+    padding: 18px 14px;
+
+    svg {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
   @media (max-width: 640px) {
     padding: 16px 12px;
 
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+
     &__label {
       font-size: 11px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    padding: 12px 8px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    &__label {
+      font-size: 10px;
     }
   }
 }
