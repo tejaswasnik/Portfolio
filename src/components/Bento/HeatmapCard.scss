@@ -1,0 +1,35 @@
+.heatmap-card {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: #6a6a6a;
+    letter-spacing: 0.04em;
+  }
+
+  &__img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 640px) {
+    &__label {
+      font-size: 16px;
+    }
+
+    // Ensure heatmap image scrolls horizontally rather than getting crushed
+    overflow-x: auto;
+  }
+}

@@ -1,0 +1,91 @@
+.spotify-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  &__label {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: #6a6a6a;
+    letter-spacing: 0.04em;
+    padding-top: 4px;
+  }
+
+  &__logo {
+    flex-shrink: 0;
+  }
+
+  &__album {
+    width: 153px;
+    height: 153px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 16px;
+  }
+
+  &__track {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  &__track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__song {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 32px;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  &__artist {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &__link {
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 1100px) {
+    &__album {
+      width: 120px;
+      height: 120px;
+    }
+
+    &__song {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    &__album {
+      width: 100px;
+      height: 100px;
+    }
+
+    &__song {
+      font-size: 20px;
+    }
+
+    &__artist {
+      font-size: 13px;
+    }
+  }
+}

@@ -1,10 +1,14 @@
-import React from "react";
 import DotGrid from "./components/Background/components/DotGrid";
+import Hero from "./components/Hero/Hero";
+import BentoGrid from "./components/Bento/BentoGrid";
+import Projects from "./components/Projects/Projects";
+import Contact from "./components/Contact/Contact";
 import "./main.scss";
 
 const App = () => {
   return (
     <div className="app">
+      {/* Interactive dot-grid background */}
       <div className="background">
         <DotGrid
           dotSize={5}
@@ -19,9 +23,25 @@ const App = () => {
         />
       </div>
 
-      <div className="content">
-        
-      </div>
+      <main className="content">
+        {/* Hero */}
+        <Hero />
+
+        {/* Bento grid */}
+        <section className="page-section">
+          <BentoGrid />
+        </section>
+
+        {/* Featured projects */}
+        <section className="page-section page-section--projects">
+          <Projects />
+        </section>
+
+        {/* Contact */}
+        <section className="page-section page-section--contact">
+          <Contact />
+        </section>
+      </main>
     </div>
   );
 };

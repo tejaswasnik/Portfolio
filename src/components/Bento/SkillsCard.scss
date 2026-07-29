@@ -1,0 +1,82 @@
+.skills-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 52px;
+  }
+
+  &__label {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: #6a6a6a;
+    letter-spacing: 0.04em;
+  }
+
+  &__section {
+    margin-bottom: 24px;
+  }
+
+  &__section-label {
+    font-family: "Geist Mono", monospace;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.27em;
+    color: #6a6a6a;
+    margin-bottom: 12px;
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    &__header {
+      margin-bottom: 32px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    &__header {
+      margin-bottom: 24px;
+    }
+
+    &__label,
+    &__section-label {
+      font-size: 16px;
+    }
+  }
+}
+
+.skill-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(177, 177, 177, 0.5);
+  border-radius: 10px;
+  padding: 4px 14px;
+  height: 40px;
+  color: #ffffff;
+  font-family: "Geist Mono", monospace;
+  font-weight: 600;
+  font-size: 20px;
+
+  @media (max-width: 1100px) {
+    font-size: 16px;
+    height: 36px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 14px;
+    height: 32px;
+    padding: 4px 10px;
+  }
+}
