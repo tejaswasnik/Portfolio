@@ -1,0 +1,60 @@
+.projects {
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 40px;
+    color: #ffffff;
+  }
+
+  &__subtitle {
+    font-family: "Geist", sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  &__grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    &__heading {
+      justify-content: center;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+      margin-bottom: 32px;
+    }
+
+    &__grid {
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__title {
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 15px;
+    }
+  }
+}

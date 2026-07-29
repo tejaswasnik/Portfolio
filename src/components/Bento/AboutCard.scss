@@ -1,0 +1,228 @@
+.about-card {
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 32px;
+  }
+
+  &__avatar {
+    width: 204px;
+    height: 204px;
+    border-radius: 20px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  &__identity {
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
+    gap: 6px;
+  }
+
+  &__freelance {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #1ed760;
+    border-radius: 10px;
+    padding: 2px 14px 2px 42px;
+    width: fit-content;
+    position: relative;
+    color: #1ed760;
+    font-family: "Geist", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  &__freelance-dot {
+    position: absolute;
+    left: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1ed760;
+  }
+
+  &__name {
+    font-family: "Geist", sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  &__handle {
+    font-family: "Geist", sans-serif;
+    font-weight: 300;
+    font-size: 32px;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  &__bio {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    row-gap: 12px;
+  }
+
+  &__bio-text {
+    font-family: "Geist", sans-serif;
+    font-weight: 400;
+    font-size: 32px;
+    color: #ffffff;
+  }
+
+  &__bio-comma,
+  &__bio-and {
+    font-family: "Geist", sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #ffffff;
+  }
+
+  // Tablet
+  @media (max-width: 1100px) {
+    &__name {
+      font-size: 48px;
+    }
+
+    &__handle {
+      font-size: 24px;
+    }
+
+    &__bio-text {
+      font-size: 24px;
+    }
+
+    &__bio-comma,
+    &__bio-and {
+      font-size: 20px;
+    }
+  }
+
+  // Mobile
+  @media (max-width: 640px) {
+    &__top {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    &__avatar {
+      width: 140px;
+      height: 140px;
+    }
+
+    &__identity {
+      padding-top: 0;
+      align-items: center;
+      text-align: center;
+    }
+
+    &__name {
+      font-size: 36px;
+    }
+
+    &__handle {
+      font-size: 20px;
+    }
+
+    &__bio {
+      justify-content: center;
+    }
+
+    &__bio-text {
+      font-size: 20px;
+    }
+
+    &__bio-comma,
+    &__bio-and {
+      font-size: 16px;
+    }
+  }
+}
+
+.tech-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(177, 177, 177, 0.5);
+  border-radius: 10px;
+  padding: 4px 14px;
+  height: 40px;
+  color: #ffffff;
+  font-family: "Geist", sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+
+  &--highlight {
+    border-color: rgba(177, 177, 177, 0.5);
+  }
+
+  @media (max-width: 1100px) {
+    font-size: 18px;
+    height: 36px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 15px;
+    height: 32px;
+    padding: 4px 10px;
+  }
+}
+
+.button {
+  margin-top: 32px;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #1ed760;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 32px;
+    color: #000000;
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(30, 215, 96, 0.3);
+
+    &:hover {
+      background: #1fdf67;
+      box-shadow: 0 6px 20px rgba(30, 215, 96, 0.4);
+    }
+
+    &:active {
+      box-shadow: 0 2px 8px rgba(30, 215, 96, 0.3);
+    }
+
+    svg {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin-top: 20px;
+
+    button {
+      width: 100%;
+      padding: 10px 24px;
+      font-size: 16px;
+
+      svg {
+        font-size: 20px;
+      }
+    }
+  }
+}

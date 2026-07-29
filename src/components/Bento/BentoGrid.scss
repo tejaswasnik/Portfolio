@@ -1,0 +1,118 @@
+.bento-card {
+  background: rgba(26, 22, 29, 0.75);
+  border: 2px solid #2c2c2c;
+  border-radius: 20px;
+  padding: 34px 30px;
+
+  @media (max-width: 768px) {
+    padding: 24px 20px;
+  }
+}
+
+.bento-grid {
+  display: grid;
+  // 3 columns: about takes col 1-2, skills takes col 3 spanning 2 rows
+  grid-template-columns: 1fr 1fr 487px;
+  grid-template-rows: auto auto auto auto;
+  gap: 24px;
+
+  // About card: cols 1-2, row 1
+  > .about-card {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+
+  // Skills card: col 3, rows 1-2
+  > .skills-card {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  // Spotify card: col 1, row 2
+  > .spotify-card {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  // Socials card: col 2, row 2
+  > .socials-card {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  // Currently Working On: cols 1-2, row 3
+  > .working-on-card {
+    grid-column: 1 / 3;
+    grid-row: 3;
+  }
+
+  // Learning card: col 3, row 3
+  > .learning-card {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  // Heatmap: all 3 cols, row 4
+  > .heatmap-card {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+
+  // Tablet: 2 columns, skills moves out of its spanning position
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+
+    > .about-card {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    > .skills-card {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    > .spotify-card {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    > .socials-card {
+      grid-column: 2;
+      grid-row: auto;
+    }
+
+    > .working-on-card {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    > .learning-card {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    > .heatmap-card {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+  }
+
+  // Mobile: single column, everything stacks
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+
+    > .about-card,
+    > .skills-card,
+    > .spotify-card,
+    > .socials-card,
+    > .working-on-card,
+    > .learning-card,
+    > .heatmap-card {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+}

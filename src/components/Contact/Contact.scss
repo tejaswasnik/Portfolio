@@ -1,0 +1,260 @@
+.contact {
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-family: "Geist Mono", monospace;
+    font-weight: 700;
+    font-size: 40px;
+    color: #ffffff;
+  }
+
+  &__subtitle {
+    font-family: "Geist", sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 40px;
+  }
+
+  &__card {
+    background: rgba(26, 22, 29, 0.75);
+    border: 2px solid #2c2c2c;
+    border-radius: 20px;
+    padding: 50px 60px;
+  }
+
+  &__card-title {
+    font-family: "Geist", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+
+  &__card-subtitle {
+    font-family: "Geist", sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 40px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__label {
+    font-family: "Geist", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #ffffff;
+  }
+
+  &__input {
+    width: 100%;
+    height: 74px;
+    background: #3b3b3b;
+    border: none;
+    border-radius: 15px;
+    padding: 0 24px;
+    font-family: "Geist", sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    outline: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+   
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: 308px;
+    background: #3b3b3b;
+    border: none;
+    border-radius: 15px;
+    padding: 20px 24px;
+    font-family: "Geist", sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    outline: none;
+    resize: vertical;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+   
+  }
+
+  &__submit-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  &__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #1ed760;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 14px 40px;
+    box-shadow: 0 4px 12px rgba(30, 215, 96, 0.3);
+
+    &:hover {
+      background: #1fdf67;
+      box-shadow: 0 6px 20px rgba(30, 215, 96, 0.4);
+    }
+
+    &:active {
+      box-shadow: 0 2px 8px rgba(30, 215, 96, 0.3);
+    }
+
+    span {
+      font-family: "Geist", sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: #000000;
+      letter-spacing: 0.5px;
+    }
+
+    svg {
+      color: #000000;
+      font-size: 22px;
+    }
+  }
+
+  // Tablet
+  @media (max-width: 1024px) {
+    &__card {
+      padding: 40px 40px;
+    }
+
+    &__card-title {
+      font-size: 32px;
+    }
+
+    &__card-subtitle {
+      font-size: 18px;
+      margin-bottom: 32px;
+    }
+
+    &__submit {
+      padding: 12px 32px;
+
+      span {
+        font-size: 16px;
+      }
+
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  // Mobile
+  @media (max-width: 768px) {
+    &__heading {
+      justify-content: center;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    &__card {
+      padding: 32px 24px;
+      border-radius: 16px;
+    }
+
+    &__card-title {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    &__card-subtitle {
+      font-size: 16px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    &__form {
+      gap: 20px;
+    }
+
+    &__label {
+      font-size: 16px;
+    }
+
+    &__input {
+      height: 56px;
+      font-size: 16px;
+    }
+
+    &__textarea {
+      min-height: 200px;
+      font-size: 16px;
+    }
+
+    &__submit {
+      width: 100%;
+      padding: 12px 24px;
+
+      span {
+        font-size: 16px;
+      }
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__card {
+      padding: 24px 16px;
+    }
+
+    &__card-title {
+      font-size: 20px;
+    }
+
+    &__submit {
+      span {
+        font-size: 14px;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}

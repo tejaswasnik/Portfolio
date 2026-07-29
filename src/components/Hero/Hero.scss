@@ -1,0 +1,51 @@
+.hero {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0 175px;
+  margin-bottom: 2rem;
+
+  &__name {
+    font-family: "Geist", sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  &__title {
+    font-family: "Geist", sans-serif;
+    font-weight: 700;
+    font-size: 64px;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1200px) {
+    padding: 0 60px;
+
+    &__name,
+    &__title {
+      font-size: 48px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &__name,
+    &__title {
+      font-size: 36px;
+      white-space: normal;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__name,
+    &__title {
+      font-size: 28px;
+    }
+  }
+}
