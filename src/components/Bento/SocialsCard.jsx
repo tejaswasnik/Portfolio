@@ -18,10 +18,10 @@ const SocialsCard = () => {
   return (
     <div className="socials-card bento-card">
       <div className="socials-card__grid">
-        <SocialItem icon="mdi:github" label="GitHub" href="https://github.com/tezus" />
+        <SocialItem icon="mdi:github" label="GitHub" href="https://github.com/tejaswasnik" />
         <SocialItem icon="mdi:linkedin" label="Linkedin" href="https://linkedin.com/in/tejaswasnik" />
-        <SocialItem icon="mingcute:social-x-line" label="X" href="https://x.com" />
-        <SocialItem icon="devicon-plain:leetcode" label="LeetCode" href="https://leetcode.com" />
+        <SocialItem icon="mingcute:social-x-line" label="X" href="https://x.com/itstezus" />
+        <SocialItem icon="devicon-plain:leetcode" label="LeetCode" href="https://leetcode.com/u/TejasWasnik/" />
       </div>
     </div>
   );
