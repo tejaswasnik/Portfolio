@@ -5,17 +5,11 @@ import "./Projects.scss";
 const projects = [
   {
     id: 1,
-    title: "Project Name.",
-    description: "Small description of the project.",
-    liveUrl: "#",
-    repoUrl: "https://github.com",
-  },
-  {
-    id: 2,
-    title: "Project Name.",
-    description: "Small description of the project.",
-    liveUrl: "#",
-    repoUrl: "https://github.com",
+    title: "PixelFeed",
+    description: " A full-stack social media platform with secure authentication, cloud image uploads, likes, follows, and personalized user profiles.",
+    image: "https://ik.imagekit.io/pgt5y5hyw/Capture.PNG", // Add your project image path here
+    liveUrl: "https://pixelfeed.onrender.com/",
+    repoUrl: "https://github.com/tejaswasnik/PixelFeed",
   },
 ];
 
