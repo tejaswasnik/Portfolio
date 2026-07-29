@@ -1,11 +1,19 @@
 import { Icon } from "@iconify/react";
 import "./ProjectCard.scss";
 
-const ProjectCard = ({ title, description, liveUrl, repoUrl }) => {
+const ProjectCard = ({ title, description, image, liveUrl, repoUrl }) => {
   return (
     <div className="project-card">
-      {/* Placeholder image area */}
-      <div className="project-card__image" />
+      {/* Project image */}
+      <div className="project-card__image">
+        {image ? (
+          <img src={image} alt={title} className="project-card__img" />
+        ) : (
+          <div className="project-card__placeholder">
+            <Icon icon="mdi:image-outline" width={64} height={64} color="rgba(255,255,255,0.2)" />
+          </div>
+        )}
+      </div>
 
       <h3 className="project-card__title">{title}</h3>
       <p className="project-card__desc">{description}</p>
