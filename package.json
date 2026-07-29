@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@iconify-react/line-md": "^1.0.2",
+    "@iconify-react/mynaui": "^1.0.4",
+    "@iconify-react/simple-icons": "^1.0.22",
     "@iconify/react": "^6.0.2",
     "axios": "^1.19.0",
     "dotenv": "^17.4.2",
