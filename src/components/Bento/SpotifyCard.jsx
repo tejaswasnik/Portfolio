@@ -37,7 +37,7 @@ const SpotifyCard = () => {
   if (loading) {
     return (
       <div className="spotify-card bento-card">
-        <p>Loading...</p>
+        <p>Loading Spotify...</p>
       </div>
     );
   }
@@ -50,30 +50,12 @@ const SpotifyCard = () => {
     );
   }
 
-  if (!spotify.isPlaying) {
-    return (
-      <div className="spotify-card bento-card">
-        <div className="spotify-card__header">
-          <span className="spotify-card__label">NOW PLAYING</span>
-
-          <Icon
-            icon="selfhst:spotify"
-            width={50}
-            height={50}
-            color="white"
-            className="spotify-card__logo"
-          />
-        </div>
-
-        <p>Nothing is currently playing.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="spotify-card bento-card">
       <div className="spotify-card__header">
-        <span className="spotify-card__label">NOW PLAYING</span>
+        <span className="spotify-card__label">
+          {spotify.isPlaying ? "NOW PLAYING" : "LAST PLAYED"}
+        </span>
 
         <Icon
           icon="selfhst:spotify"
@@ -99,6 +81,16 @@ const SpotifyCard = () => {
           <span className="spotify-card__artist">
             {spotify.artist}
           </span>
+
+          {!spotify.isPlaying && spotify.playedAt && (
+            <span className="spotify-card__time">
+              Last listened{" "}
+              {new Date(spotify.playedAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          )}
         </div>
 
         <a
