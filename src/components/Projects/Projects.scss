@@ -9,14 +9,14 @@
   &__title {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(22px, 3.5vw, 40px);
     color: #ffffff;
   }
 
   &__subtitle {
     font-family: "Geist", sans-serif;
     font-weight: 400;
-    font-size: 24px;
+    font-size: clamp(15px, 2vw, 24px);
     color: rgba(255, 255, 255, 0.5);
     text-align: center;
     margin-bottom: 52px;
@@ -34,12 +34,7 @@
       justify-content: center;
     }
 
-    &__title {
-      font-size: 28px;
-    }
-
     &__subtitle {
-      font-size: 18px;
       margin-bottom: 32px;
     }
 
@@ -49,12 +44,8 @@
   }
 
   @media (max-width: 480px) {
-    &__title {
-      font-size: 22px;
-    }
-
     &__subtitle {
-      font-size: 15px;
+      margin-bottom: 24px;
     }
   }
 }

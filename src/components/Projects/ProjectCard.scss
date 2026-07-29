@@ -3,6 +3,7 @@
   border-radius: 10px;
   padding: 30px;
   width: 631px;
+  max-width: 100%;
 
   &__image {
     width: 100%;
@@ -39,16 +40,17 @@
   &__title {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 48px;
+    font-size: clamp(24px, 3.5vw, 48px);
     color: #ffffff;
     margin-bottom: 8px;
     line-height: 1.1;
+    word-break: break-word;
   }
 
   &__desc {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 24px;
+    font-size: clamp(14px, 1.8vw, 24px);
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 40px;
     line-height: 1.3;
@@ -73,7 +75,7 @@
     span {
       font-family: "Geist Mono", monospace;
       font-weight: 700;
-      font-size: 24px;
+      font-size: clamp(14px, 1.8vw, 24px);
       color: #ffffff;
     }
 
@@ -92,25 +94,16 @@
     }
   }
 
-  // Tablet: fluid width, scale down fonts
+  // Tablet: fluid width, scale down
   @media (max-width: 1200px) {
     width: 100%;
     max-width: 631px;
 
-    &__title {
-      font-size: 36px;
-    }
-
     &__desc {
-      font-size: 20px;
       margin-bottom: 28px;
     }
 
     &__btn {
-      span {
-        font-size: 20px;
-      }
-
       &--live,
       &--repo {
         height: 68px;
@@ -118,7 +111,7 @@
     }
   }
 
-  // Mobile: fully fluid, further scale
+  // Mobile: fully fluid
   @media (max-width: 640px) {
     width: 100%;
     max-width: 100%;
@@ -126,25 +119,48 @@
 
     &__image {
       height: 200px;
-    }
-
-    &__title {
-      font-size: 26px;
+      margin-bottom: 16px;
     }
 
     &__desc {
-      font-size: 16px;
       margin-bottom: 20px;
     }
 
+    &__actions {
+      gap: 12px;
+    }
+
     &__btn {
-      span {
-        font-size: 15px;
-      }
+      gap: 6px;
 
       &--live,
       &--repo {
         height: 54px;
+      }
+
+      svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+    }
+  }
+
+  @media (max-width: 380px) {
+    padding: 16px;
+
+    &__image {
+      height: 160px;
+    }
+
+    &__actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    &__btn {
+      &--live,
+      &--repo {
+        height: 48px;
       }
     }
   }

@@ -46,6 +46,10 @@ body {
   @media (max-width: 768px) {
     padding: 40px 0 60px;
   }
+
+  @media (max-width: 480px) {
+    padding: 30px 0 40px;
+  }
 }
 
 .page-section {
@@ -84,6 +88,19 @@ body {
 
     &--contact {
       padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 14px;
+    margin-bottom: 32px;
+
+    &--projects {
+      padding: 0 14px;
+    }
+
+    &--contact {
+      padding: 0 14px;
     }
   }
 }

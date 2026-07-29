@@ -9,14 +9,14 @@
   &__title {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(22px, 3.5vw, 40px);
     color: #ffffff;
   }
 
   &__subtitle {
     font-family: "Geist", sans-serif;
     font-weight: 400;
-    font-size: 24px;
+    font-size: clamp(16px, 2vw, 24px);
     color: rgba(255, 255, 255, 0.5);
     margin-bottom: 40px;
   }
@@ -31,7 +31,7 @@
   &__card-title {
     font-family: "Geist", sans-serif;
     font-weight: 700;
-    font-size: 40px;
+    font-size: clamp(22px, 3vw, 40px);
     color: #ffffff;
     margin-bottom: 8px;
   }
@@ -39,7 +39,7 @@
   &__card-subtitle {
     font-family: "Geist", sans-serif;
     font-weight: 300;
-    font-size: 20px;
+    font-size: clamp(15px, 1.5vw, 20px);
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: 40px;
   }
@@ -78,8 +78,6 @@
     &::placeholder {
       color: rgba(255, 255, 255, 0.35);
     }
-
-   
   }
 
   &__textarea {
@@ -98,8 +96,6 @@
     &::placeholder {
       color: rgba(255, 255, 255, 0.35);
     }
-
-   
   }
 
   &__submit-row {
@@ -119,6 +115,7 @@
     cursor: pointer;
     padding: 14px 40px;
     box-shadow: 0 4px 12px rgba(30, 215, 96, 0.3);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
       background: #1fdf67;
@@ -149,12 +146,7 @@
       padding: 40px 40px;
     }
 
-    &__card-title {
-      font-size: 32px;
-    }
-
     &__card-subtitle {
-      font-size: 18px;
       margin-bottom: 32px;
     }
 
@@ -178,12 +170,7 @@
       justify-content: center;
     }
 
-    &__title {
-      font-size: 28px;
-    }
-
     &__subtitle {
-      font-size: 18px;
       margin-bottom: 28px;
       text-align: center;
     }
@@ -194,12 +181,10 @@
     }
 
     &__card-title {
-      font-size: 24px;
       text-align: center;
     }
 
     &__card-subtitle {
-      font-size: 16px;
       margin-bottom: 28px;
       text-align: center;
     }
@@ -215,11 +200,15 @@
     &__input {
       height: 56px;
       font-size: 16px;
+      border-radius: 12px;
+      padding: 0 18px;
     }
 
     &__textarea {
       min-height: 200px;
       font-size: 16px;
+      border-radius: 12px;
+      padding: 16px 18px;
     }
 
     &__submit {
@@ -240,13 +229,40 @@
   @media (max-width: 480px) {
     &__card {
       padding: 24px 16px;
+      border-radius: 14px;
     }
 
-    &__card-title {
-      font-size: 20px;
+    &__form {
+      gap: 16px;
+    }
+
+    &__field {
+      gap: 8px;
+    }
+
+    &__label {
+      font-size: 14px;
+    }
+
+    &__input {
+      height: 48px;
+      font-size: 15px;
+      padding: 0 14px;
+    }
+
+    &__textarea {
+      min-height: 160px;
+      font-size: 15px;
+      padding: 14px;
+    }
+
+    &__submit-row {
+      margin-top: 16px;
     }
 
     &__submit {
+      padding: 10px 20px;
+
       span {
         font-size: 14px;
       }

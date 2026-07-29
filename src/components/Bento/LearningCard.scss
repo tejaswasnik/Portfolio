@@ -36,7 +36,7 @@
   &__tech-name {
     font-family: "Geist Mono", monospace;
     font-weight: 600;
-    font-size: 64px;
+    font-size: clamp(32px, 5vw, 64px);
     color: #ffffff;
     line-height: 1;
   }
@@ -44,28 +44,51 @@
   &__desc {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 24px;
+    font-size: clamp(16px, 1.8vw, 24px);
     color: rgba(255, 255, 255, 0.8);
     margin-top: 16px;
   }
 
   @media (max-width: 1100px) {
-    &__tech-name {
-      font-size: 44px;
+    &__header {
+      margin-bottom: 16px;
     }
 
-    &__desc {
-      font-size: 18px;
+    &__label {
+      font-size: 16px;
+    }
+
+    &__tech-inner {
+      padding: 12px 16px;
+      gap: 12px;
+
+      svg {
+        width: 64px !important;
+        height: 64px !important;
+      }
     }
   }
 
   @media (max-width: 640px) {
-    &__tech-name {
-      font-size: 36px;
+    &__header {
+      margin-bottom: 14px;
+    }
+
+    &__label {
+      font-size: 14px;
+    }
+
+    &__tech-inner {
+      padding: 10px 14px;
+
+      svg {
+        width: 48px !important;
+        height: 48px !important;
+      }
     }
 
     &__desc {
-      font-size: 16px;
+      margin-top: 12px;
     }
   }
 }

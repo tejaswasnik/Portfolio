@@ -6,13 +6,19 @@
 
   @media (max-width: 768px) {
     padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 16px;
+    border-radius: 14px;
   }
 }
 
 .bento-grid {
   display: grid;
   // 3 columns: about takes col 1-2, skills takes col 3 spanning 2 rows
-  grid-template-columns: 1fr 1fr 487px;
+  grid-template-columns: 1fr 1fr minmax(320px, 487px);
   grid-template-rows: auto auto auto auto;
   gap: 24px;
 
@@ -99,10 +105,23 @@
     }
   }
 
+  // Small tablet / large phone: spotify + socials stack full-width
+  @media (max-width: 768px) {
+    gap: 14px;
+
+    > .spotify-card {
+      grid-column: 1 / -1;
+    }
+
+    > .socials-card {
+      grid-column: 1 / -1;
+    }
+  }
+
   // Mobile: single column, everything stacks
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
 
     > .about-card,
     > .skills-card,

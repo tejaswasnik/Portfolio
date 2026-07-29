@@ -21,16 +21,17 @@
   &__title {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 48px;
+    font-size: clamp(28px, 3.5vw, 48px);
     color: #ffffff;
     margin-bottom: 8px;
     line-height: 1.1;
+    word-break: break-word;
   }
 
   &__desc {
     font-family: "Geist Mono", monospace;
     font-weight: 700;
-    font-size: 24px;
+    font-size: clamp(16px, 2vw, 24px);
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 24px;
     line-height: 1.3;
@@ -44,7 +45,7 @@
     border: 1px solid #434343;
     border-radius: 10px;
     padding: 28px 20px;
-    width: 357px;
+    width: min(357px, 100%);
     text-decoration: none;
     align-self: flex-end;
     cursor: pointer;
@@ -53,7 +54,7 @@
     span {
       font-family: "Geist Mono", monospace;
       font-weight: 700;
-      font-size: 24px;
+      font-size: clamp(16px, 1.8vw, 24px);
       color: #ffffff;
     }
 
@@ -63,41 +64,24 @@
   }
 
   @media (max-width: 1100px) {
-    &__title {
-      font-size: 36px;
-    }
-
-    &__desc {
-      font-size: 20px;
+    &__label {
+      font-size: 16px;
     }
 
     &__repo-btn {
-      width: 280px;
       padding: 20px 16px;
-
-      span {
-        font-size: 20px;
-      }
     }
   }
 
   @media (max-width: 640px) {
-    &__title {
-      font-size: 28px;
-    }
-
-    &__desc {
-      font-size: 16px;
+    &__label {
+      font-size: 14px;
     }
 
     &__repo-btn {
       width: 100%;
       align-self: stretch;
       padding: 16px;
-
-      span {
-        font-size: 16px;
-      }
     }
   }
 }
