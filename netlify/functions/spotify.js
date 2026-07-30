@@ -41,8 +41,38 @@ console.log("Access token received:", !!accessToken);
       }
     );
 
-    // Nothing is currently playing
+    // Nothing is currently playing — fetch recently played
     if (spotifyResponse.status === 204 || !spotifyResponse.data) {
+      try {
+        const recentResponse = await axios.get(
+          "https://api.spotify.com/v1/me/player/recently-played?limit=1",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const recentTrack = recentResponse.data?.items?.[0];
+        if (recentTrack) {
+          const song = recentTrack.track;
+          return {
+            statusCode: 200,
+            body: JSON.stringify({
+              isPlaying: false,
+              title: song.name,
+              artist: song.artists.map((artist) => artist.name).join(", "),
+              album: song.album.name,
+              albumImage: song.album.images[0]?.url,
+              spotifyUrl: song.external_urls.spotify,
+              playedAt: recentTrack.played_at,
+            }),
+          };
+        }
+      } catch (recentError) {
+        console.error("Failed to fetch recently played:", recentError.message);
+      }
+
       return {
         statusCode: 200,
         body: JSON.stringify({

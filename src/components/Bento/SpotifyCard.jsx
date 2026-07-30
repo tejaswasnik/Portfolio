@@ -1,38 +1,54 @@
 import { Icon } from "@iconify/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import "./SpotifyCard.scss";
+
+const POLL_PLAYING = 10000; // 10s when a song is playing
+const POLL_IDLE = 30000; // 30s when idle
 
 const SpotifyCard = () => {
   const [spotify, setSpotify] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchSpotify = async () => {
-      try {
-        const response = await fetch("/.netlify/functions/spotify");
+  const fetchSpotify = useCallback(async () => {
+    try {
+      const response = await fetch("/.netlify/functions/spotify");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch Spotify data");
-        }
-
-        const data = await response.json();
-        console.log("Spotify:", data);
-
-        setSpotify(data);
-      } catch (error) {
-        console.error("Failed to fetch Spotify data:", error);
-        setSpotify(null);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch Spotify data");
       }
+
+      const data = await response.json();
+      setSpotify(data);
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch Spotify data:", error);
+      setSpotify(null);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let timeoutId = null;
+    let cancelled = false;
+
+    const poll = async () => {
+      const data = await fetchSpotify();
+      if (cancelled) return;
+
+      // Poll faster when playing, slower when idle
+      const delay = data?.isPlaying ? POLL_PLAYING : POLL_IDLE;
+      timeoutId = setTimeout(poll, delay);
     };
 
-    fetchSpotify();
-
-    const interval = setInterval(fetchSpotify, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    poll();
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [fetchSpotify]);
 
   if (loading) {
     return (
@@ -42,13 +58,26 @@ const SpotifyCard = () => {
     );
   }
 
-  if (!spotify) {
+  if (!spotify || !spotify.title) {
     return (
       <div className="spotify-card bento-card">
-        <p>Unable to load Spotify data.</p>
+        <div className="spotify-card__header">
+          <span className="spotify-card__label">OFFLINE</span>
+          <Icon
+            icon="selfhst:spotify"
+            width={50}
+            height={50}
+            color="white"
+            className="spotify-card__logo"
+          />
+        </div>
+        <p className="spotify-card__offline-msg">Not listening right now</p>
       </div>
     );
   }
+
+  // Key changes when the song changes, triggering CSS fade-in
+  const songKey = `${spotify.title}-${spotify.artist}`;
 
   return (
     <div className="spotify-card bento-card">
@@ -66,46 +95,48 @@ const SpotifyCard = () => {
         />
       </div>
 
-      <img
-        src={spotify.albumImage}
-        alt={spotify.album}
-        className="spotify-card__album"
-      />
+      <div className="spotify-card__content" key={songKey}>
+        <img
+          src={spotify.albumImage}
+          alt={spotify.album}
+          className="spotify-card__album"
+        />
 
-      <div className="spotify-card__track">
-        <div className="spotify-card__track-info">
-          <span className="spotify-card__song">
-            {spotify.title}
-          </span>
-
-          <span className="spotify-card__artist">
-            {spotify.artist}
-          </span>
-
-          {!spotify.isPlaying && spotify.playedAt && (
-            <span className="spotify-card__time">
-              Last listened{" "}
-              {new Date(spotify.playedAt).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+        <div className="spotify-card__track">
+          <div className="spotify-card__track-info">
+            <span className="spotify-card__song">
+              {spotify.title}
             </span>
-          )}
-        </div>
 
-        <a
-          href={spotify.spotifyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="spotify-card__link"
-        >
-          <Icon
-            icon="heroicons:arrow-top-right-on-square-20-solid"
-            width={26}
-            height={26}
-            color="white"
-          />
-        </a>
+            <span className="spotify-card__artist">
+              {spotify.artist}
+            </span>
+
+            {!spotify.isPlaying && spotify.playedAt && (
+              <span className="spotify-card__time">
+                Last listened{" "}
+                {new Date(spotify.playedAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            )}
+          </div>
+
+          <a
+            href={spotify.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="spotify-card__link"
+          >
+            <Icon
+              icon="heroicons:arrow-top-right-on-square-20-solid"
+              width={26}
+              height={26}
+              color="white"
+            />
+          </a>
+        </div>
       </div>
     </div>
   );

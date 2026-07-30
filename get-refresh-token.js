@@ -3,7 +3,7 @@ import axios from "axios";
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const CODE = "AQBc6HuIzK6UJJ7dEjtTeXSV6OdOhChBHHXFzw3AL7PjHnxIckA68YNtSnGUrzMdFWJYsF355FuTJgbl38mpciHsiGmsM-wLeyeuiQPLjYqW0vHS3J_S6jLHgHnqDQ7yRaDqqgNjJJ9OP-PTid2qdfBq56JKxzw3cHn0u-wLvBD_fzCUCw38oIe1ShM1q-evXmrtPcOYSDVCbbqmQKA8iKgiveMZqz32b4AlcIpc9YLaP-5GJn6KGCLW7pdtaYgWnbELnI81"
+const CODE = "AQD64sNiOl_GnHxjLbDoRDj-Lo-9NEIOhku4S0RUFAVgkFo3jQ0jFyQZwf3itt_iXI7HPFGvR37iDxjsBHXIhIfX3EiTUjCdC_GsrYVr0-DP2UaduQDmFDP4iEovB6lCsD0NyFlmMtxPoSoOB9plW08fjOq86Dx5gJl4x5hREm77oLmNoOstgKlkJXP9cxu-DZtzPmwOjsCp5wV-cTwsXw_eMvz2s4-rZc2AN3FthZLyazxhgURPDFZ_X6d6UOqCspGpJ11OHVal4V064jLp1HISlWQlWBfWcj4SvQTOHf0U"
 const REDIRECT_URI = "http://127.0.0.1:8888/callback";
 
 const basic = Buffer.from(
