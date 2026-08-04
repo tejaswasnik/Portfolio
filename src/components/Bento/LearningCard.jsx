@@ -21,7 +21,7 @@ const LearningCard = () => {
         </div>
       </div>
 
-      <p className="learning-card__desc">Animation</p>
+      <p className="learning-card__desc">Programming Language</p>
     </div>
   );
 };
