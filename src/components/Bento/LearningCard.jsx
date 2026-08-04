@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import "./LearningCard.scss";
-import FramerSolidIcon from '@iconify-react/mynaui/framer-solid';
 
 const LearningCard = () => {
   return (
@@ -12,8 +11,13 @@ const LearningCard = () => {
 
       <div className="learning-card__tech">
         <div className="learning-card__tech-inner">
-          <FramerSolidIcon icon="ri:nextjs-fill" width={94} height={94} color="white" />
-          <span className="learning-card__tech-name">Framer</span>
+          <Icon
+            icon="devicon:typescript"
+            className="learning-card__tech-icon"
+            width={64}
+            height={64}
+          />
+          <span className="learning-card__tech-name">TypeScript</span>
         </div>
       </div>
 
