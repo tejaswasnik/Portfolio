@@ -9,11 +9,11 @@ const WorkingOnCard = () => {
         <span className="working-on-card__label">CURRENTLY WORKING ON</span>
       </div>
 
-      <h3 className="working-on-card__title">Portfolio</h3>
-      <p className="working-on-card__desc">Portfolio V1.</p>
+      <h3 className="working-on-card__title">SearchMind</h3>
+      <p className="working-on-card__desc">AI-powered search engine.</p>
 
       <a
-        href="https://github.com/tejaswasnik/Portfolio"
+        href="https://github.com/tejaswasnik/SearchMind"
         target="_blank"
         rel="noopener noreferrer"
         className="working-on-card__repo-btn"
