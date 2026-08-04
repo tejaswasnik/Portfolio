@@ -27,6 +27,13 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    .learning-card__tech-icon,
+    svg {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      display: block;
+    }
     border: 1px solid rgba(177, 177, 177, 0.5);
     border-radius: 10px;
     padding: 14px 20px;
@@ -36,7 +43,7 @@
   &__tech-name {
     font-family: "Geist Mono", monospace;
     font-weight: 600;
-    font-size: clamp(32px, 5vw, 64px);
+    font-size: clamp(20px, 2.5vw, 32px);
     color: #ffffff;
     line-height: 1;
   }
