@@ -43,6 +43,9 @@
   &__tech-name {
     font-family: "Geist Mono", monospace;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: clamp(20px, 2.5vw, 32px);
     color: #ffffff;
     line-height: 1;
