@@ -1,9 +1,17 @@
 .hero {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
   gap: 0.5rem;
   padding: 0 175px;
   margin-bottom: 2rem;
+  perspective: 600px;
+
+  &__text-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
 
   &__name {
     font-family: "Geist", sans-serif;
@@ -21,14 +29,47 @@
     white-space: nowrap;
   }
 
+  &__title-container {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: baseline;
+    min-height: 1.2em;
+  }
+
+  &__char {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+
+  &__underline {
+    height: 3px;
+    width: 100%;
+    max-width: 500px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #9333ea,
+      #a855f7,
+      #c084fc,
+      transparent
+    );
+    transform-origin: left center;
+    transform: scaleX(0);
+    border-radius: 2px;
+    margin-top: 4px;
+  }
+
   @media (max-width: 1200px) {
     padding: 0 60px;
   }
 
   @media (max-width: 768px) {
     padding: 0 20px;
-    flex-direction: column;
-    gap: 0.25rem;
+
+    &__text-wrapper {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
     &__name,
     &__title {
