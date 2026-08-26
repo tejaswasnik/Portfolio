@@ -25,6 +25,7 @@ body {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
 }
 
 .app {
@@ -107,4 +108,9 @@ body {
       padding: 0 14px;
     }
   }
+}
+
+// Utility class for will-change optimization
+.gsap-reveal {
+  will-change: transform, opacity;
 }

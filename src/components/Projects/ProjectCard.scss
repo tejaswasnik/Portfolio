@@ -25,6 +25,16 @@
     transition: transform 0.3s ease;
   }
 
+  &__wipe {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #9333ea, #6d28d9);
+    transform-origin: right center;
+    z-index: 2;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
   &__placeholder {
     display: flex;
     align-items: center;
