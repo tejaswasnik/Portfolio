@@ -72,19 +72,39 @@ const SpotifyCard = () => {
     }
   }, [spotify?.title, spotify?.artist]);
 
-  if (loading) {
-    return (
-      <div className="spotify-card bento-card">
-        <p>Loading Spotify...</p>
-      </div>
-    );
-  }
+  // Determine what to render inside the card
+  const renderContent = () => {
+    if (loading) {
+      return <p>Loading Spotify...</p>;
+    }
 
-  if (!spotify || !spotify.title) {
+    if (!spotify || !spotify.title) {
+      return (
+        <>
+          <div className="spotify-card__header">
+            <span className="spotify-card__label">OFFLINE</span>
+            <Icon
+              icon="selfhst:spotify"
+              width={50}
+              height={50}
+              color="white"
+              className="spotify-card__logo"
+            />
+          </div>
+          <p className="spotify-card__offline-msg">Not listening right now</p>
+        </>
+      );
+    }
+
+    const songKey = `${spotify.title}-${spotify.artist}`;
+
     return (
-      <div className="spotify-card bento-card" ref={setRefs}>
+      <>
         <div className="spotify-card__header">
-          <span className="spotify-card__label">OFFLINE</span>
+          <span className="spotify-card__label">
+            {spotify.isPlaying ? "NOW PLAYING" : "LAST PLAYED"}
+          </span>
+
           <Icon
             icon="selfhst:spotify"
             width={50}
@@ -93,73 +113,57 @@ const SpotifyCard = () => {
             className="spotify-card__logo"
           />
         </div>
-        <p className="spotify-card__offline-msg">Not listening right now</p>
-      </div>
-    );
-  }
 
-  // Key changes when the song changes, triggering CSS fade-in
-  const songKey = `${spotify.title}-${spotify.artist}`;
+        <div className="spotify-card__content" key={songKey} ref={contentRef}>
+          <img
+            src={spotify.albumImage}
+            alt={spotify.album}
+            className="spotify-card__album"
+          />
+
+          <div className="spotify-card__track">
+            <div className="spotify-card__track-info">
+              <span className="spotify-card__song">
+                {spotify.title}
+              </span>
+
+              <span className="spotify-card__artist">
+                {spotify.artist}
+              </span>
+
+              {!spotify.isPlaying && spotify.playedAt && (
+                <span className="spotify-card__time">
+                  Last listened{" "}
+                  {new Date(spotify.playedAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              )}
+            </div>
+
+            <a
+              href={spotify.spotifyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="spotify-card__link"
+            >
+              <Icon
+                icon="heroicons:arrow-top-right-on-square-20-solid"
+                width={26}
+                height={26}
+                color="white"
+              />
+            </a>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   return (
     <div className="spotify-card bento-card" ref={setRefs}>
-      <div className="spotify-card__header">
-        <span className="spotify-card__label">
-          {spotify.isPlaying ? "NOW PLAYING" : "LAST PLAYED"}
-        </span>
-
-        <Icon
-          icon="selfhst:spotify"
-          width={50}
-          height={50}
-          color="white"
-          className="spotify-card__logo"
-        />
-      </div>
-
-      <div className="spotify-card__content" key={songKey} ref={contentRef}>
-        <img
-          src={spotify.albumImage}
-          alt={spotify.album}
-          className="spotify-card__album"
-        />
-
-        <div className="spotify-card__track">
-          <div className="spotify-card__track-info">
-            <span className="spotify-card__song">
-              {spotify.title}
-            </span>
-
-            <span className="spotify-card__artist">
-              {spotify.artist}
-            </span>
-
-            {!spotify.isPlaying && spotify.playedAt && (
-              <span className="spotify-card__time">
-                Last listened{" "}
-                {new Date(spotify.playedAt).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            )}
-          </div>
-
-          <a
-            href={spotify.spotifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="spotify-card__link"
-          >
-            <Icon
-              icon="heroicons:arrow-top-right-on-square-20-solid"
-              width={26}
-              height={26}
-              color="white"
-            />
-          </a>
-        </div>
-      </div>
+      {renderContent()}
     </div>
   );
 };
