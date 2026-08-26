@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import { useState, useEffect, useCallback, useRef } from "react";
-import gsap from "gsap";
 import useTilt from "../../hooks/useTilt";
 
 import "./SpotifyCard.scss";
@@ -13,7 +12,6 @@ const SpotifyCard = () => {
   const [loading, setLoading] = useState(true);
   const cardRef = useRef(null);
   const tiltRef = useTilt({ maxRotation: 5, scale: 1.01 });
-  const contentRef = useRef(null);
 
   const setRefs = (el) => {
     cardRef.current = el;
@@ -60,17 +58,7 @@ const SpotifyCard = () => {
     };
   }, [fetchSpotify]);
 
-  // Animate content when song changes
-  useEffect(() => {
-    if (contentRef.current && spotify?.title) {
-      gsap.from(contentRef.current, {
-        opacity: 0,
-        x: 20,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  }, [spotify?.title, spotify?.artist]);
+
 
   // Determine what to render inside the card
   const renderContent = () => {
@@ -96,7 +84,7 @@ const SpotifyCard = () => {
       );
     }
 
-    const songKey = `${spotify.title}-${spotify.artist}`;
+
 
     return (
       <>
@@ -114,7 +102,7 @@ const SpotifyCard = () => {
           />
         </div>
 
-        <div className="spotify-card__content" key={songKey} ref={contentRef}>
+        <div className="spotify-card__content">
           <img
             src={spotify.albumImage}
             alt={spotify.album}
