@@ -1,6 +1,7 @@
 import Chip from "@/components/ui/Chip";
 import TrackedLink from "@/components/public/TrackedLink";
 import { GithubIcon, ArrowUpRightIcon, ArrowRightIcon } from "@/components/ui/icons";
+import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 // Matches Button's "icon" variant classes (src/components/ui/Button.jsx)
 // as a link rather than a <button onClick> — avoids needing "use client"
@@ -30,7 +31,7 @@ export default function ProjectCard({ project, skillsById }) {
         {project.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
           <img
-            src={project.coverImage}
+            src={withImageKitTransform(project.coverImage, "w-440,q-75,c-at_max")}
             alt=""
             className="size-full object-cover"
           />

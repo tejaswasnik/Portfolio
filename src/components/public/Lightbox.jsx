@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { ExpandIcon } from "@/components/ui/icons";
+import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 /**
  * Screenshot gallery with an accessible lightbox. No Figma frame exists
@@ -55,7 +56,7 @@ export default function Lightbox({ images, projectName }) {
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
-              src={src}
+              src={withImageKitTransform(src, "w-360,q-75,c-at_max")}
               alt={`${projectName} screenshot ${index + 1}`}
               className="h-[220px] w-full rounded-t-xl object-cover"
             />
@@ -99,7 +100,7 @@ export default function Lightbox({ images, projectName }) {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
-              src={images[openIndex]}
+              src={withImageKitTransform(images[openIndex], "w-1000,q-80,c-at_max")}
               alt={`${projectName} screenshot ${openIndex + 1}`}
               className="max-h-[80vh] w-full rounded-xl border border-border-subtle object-contain"
             />

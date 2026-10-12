@@ -16,6 +16,7 @@ import {
   getPublicProfile,
   getPublicSiteSettings,
 } from "@/lib/db/cache";
+import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 // Matches Button's primary/dashed variant classes as links (Button only
 // renders a <button> — see docs/DECISIONS.md step 3 for why these stay
@@ -32,7 +33,11 @@ export async function generateMetadata({ params }) {
   if (!project) return {};
 
   const title = project.seo?.title || `${project.name} — Tejas Wasnik`;
-  const description = project.seo?.description || project.shortDescription;
+  const description =
+    project.seo?.description ||
+    project.shortDescription ||
+    (await getPublicSiteSettings())?.description ||
+    `${project.name}, a project by Tejas Wasnik.`;
   const ogImage = project.seo?.ogImage || project.coverImage || undefined;
 
   return {
@@ -146,7 +151,7 @@ export default async function ProjectDetailPage({ params }) {
           <div className="p-6">
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
-              src={project.coverImage}
+              src={withImageKitTransform(project.coverImage, "w-700,q-75,c-at_max")}
               alt={`${project.name} cover`}
               className="w-full rounded-2xl border border-border-subtle object-cover"
             />

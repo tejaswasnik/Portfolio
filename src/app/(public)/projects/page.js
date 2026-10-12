@@ -100,9 +100,12 @@ export default async function ProjectsPage({ searchParams }) {
         </div>
       </section>
 
-      <section aria-label="Project list">
+      <section aria-labelledby="project-list-heading">
         <SectionDivider />
         <div className="flex flex-col gap-4 p-6">
+          <h2 id="project-list-heading" className="sr-only">
+            Project list
+          </h2>
           {projects.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {projects.map((project) => (

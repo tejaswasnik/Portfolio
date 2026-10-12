@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { UploadIcon } from "@/components/ui/icons";
+import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 /**
  * The banner slot (Figma 5:5326): a looping GIF when one is set, a
@@ -29,7 +30,7 @@ export default function BannerMedia({ bannerUrl }) {
     return (
       // eslint-disable-next-line @next/next/no-img-element -- animated GIF; next/image can't preserve looping.
       <img
-        src={bannerUrl}
+        src={withImageKitTransform(bannerUrl, "w-480,q-70,c-at_max")}
         alt=""
         className="h-[138px] w-full rounded-lg object-cover"
       />

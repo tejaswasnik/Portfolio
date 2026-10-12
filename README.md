@@ -37,6 +37,17 @@ npm run dev                  # http://localhost:3000
 
 Secrets live only in env files and the host's environment settings, never in the repo.
 
+## Deployment (Vercel)
+
+1. **Push the repo to GitHub** (or GitLab/Bitbucket) and [import it on Vercel](https://vercel.com/new) — framework preset `Next.js`, build command `next build`, output left as default. No other config is needed; `next.config.mjs`'s security headers and the `middleware.js` admin/maintenance gate both work as-is on Vercel.
+2. **MongoDB Atlas network access:** in Atlas → *Network Access*, add an IP allowlist entry for `0.0.0.0/0` (Vercel's serverless functions run on a changing pool of IPs, so a fixed-IP allowlist isn't practical — use Atlas's own database user credentials, not IP restriction, as the access control). Use a dedicated Atlas database user (not the Atlas account owner) scoped to read/write on this one database.
+3. **Environment variables:** in the Vercel project → *Settings → Environment Variables*, add every variable from `.env.example` (see the table above for what each one is and where to get it) to both the **Production** and **Preview** environments. Set `SITE_URL` to the real production domain (step 5) — it drives `sitemap.xml`, `robots.txt` and Open Graph URLs, so a preview deploy left on `http://localhost:3000` will emit wrong absolute URLs.
+4. **Seed the admin user** once, against the production database: run `npm run seed:admin` locally with `.env.local` pointed at the production `MONGODB_URI` and `ADMIN_EMAIL` (or run it from a one-off `vercel env pull` + local invocation) — this only needs to happen once per database, not on every deploy.
+5. **Custom domain:** in the Vercel project → *Settings → Domains*, add the domain and follow Vercel's DNS instructions (an `A`/`ALIAS` record at the apex, or a `CNAME` on a subdomain, pointed at Vercel). Once it's verified, update `SITE_URL` to match and redeploy so sitemap/OG/robots pick up the final domain.
+6. **Gmail OAuth2 in production:** the Google Cloud OAuth consent screen must be *In production* (not *Testing*) before deploying, or `GOOGLE_REFRESH_TOKEN` silently expires after 7 days and the contact form starts saving messages with `emailFailed: true` instead of sending them (the message itself is never lost — see `docs/ARCHITECTURE.md`'s contact flow).
+7. **ImageKit:** no extra production config — the same public/private keys and URL endpoint work from any deploy; just make sure the dashboard's allowed origins (if configured) include the production domain.
+8. **Verify after deploy:** visit `/`, `/projects`, log into `/admin`, toggle maintenance mode on and off (confirms the public site swaps to the maintenance page while `/admin` stays reachable), and submit the contact form once.
+
 ## Routes
 
 | Public | Admin (`/admin`, protected) |

@@ -3,9 +3,10 @@
  * contact row 10:1085, about footnote 5:5638, banner upload 5:5325, project
  * card actions 5:5651 — see docs/DECISIONS.md step 3 — plus icon/back and
  * icon/expand from the project details page, 72:453/72:566, step 4; plus
- * the admin login (57:2) and admin shell (53:3/53:95) icons, step 7), with
- * the baked `stroke` hex swapped for `currentColor` so each icon inherits
- * its wrapper's text color and works in both themes. No shape was redrawn.
+ * the admin login (57:2) and admin shell (53:3/53:95) icons, step 7; plus
+ * icon/copy from the media library, 71:646, step 12), with the baked
+ * `stroke` hex swapped for `currentColor` so each icon inherits its
+ * wrapper's text color and works in both themes. No shape was redrawn.
  */
 
 function Icon({ size = 16, viewBox, children, className = "" }) {
@@ -569,6 +570,27 @@ export function FileIcon(props) {
       <path
         d="M9.33333 1.33333V4C9.33333 4.35362 9.47381 4.69276 9.72386 4.94281C9.97391 5.19286 10.313 5.33333 10.6667 5.33333H13.3333"
         stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function CopyIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M11.6667 5.25H6.41667C5.77233 5.25 5.25 5.77233 5.25 6.41667V11.6667C5.25 12.311 5.77233 12.8333 6.41667 12.8333H11.6667C12.311 12.8333 12.8333 12.311 12.8333 11.6667V6.41667C12.8333 5.77233 12.311 5.25 11.6667 5.25Z"
+        stroke="currentColor"
+        strokeWidth="0.875"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2.91667 8.75H2.33333C2.02391 8.75 1.72717 8.62708 1.50838 8.40829C1.28958 8.1895 1.16667 7.89275 1.16667 7.58333V2.33333C1.16667 2.02391 1.28958 1.72717 1.50838 1.50838C1.72717 1.28958 2.02391 1.16667 2.33333 1.16667H7.58333C7.89275 1.16667 8.1895 1.28958 8.40829 1.50838C8.62708 1.72717 8.75 2.02391 8.75 2.33333V2.91667"
+        stroke="currentColor"
+        strokeWidth="0.875"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
