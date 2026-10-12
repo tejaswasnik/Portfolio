@@ -26,7 +26,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (lowercase project status enum, relative imports in src/lib/db for plain-node script compatibility, `node --env-file` instead of dotenv, 24-month events TTL, thin collection helpers vs. full CRUD, a real `.env` appeared on disk but db:seed/db:ensure-indexes were not run against it).
 
 ### 3. Public home page
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: (pending — see commit log)
+- Verification: `npm run lint && npm test && npm run build` all pass (54 tests); dev server checked — nav/rails render correctly in HTML, no server errors; sections render nothing yet because `sections`/`profile`/`skills`/`projects` are unseeded in the live DB (expected, see docs/DECISIONS.md). Visibility/graceful-degradation logic (empty social links skipped, failed GitHub fetch hides Activity, unpublished-DB states still render the rest of the page) verified by code review plus a new Vitest suite for `src/lib/github/contributions.js`.
+- Notes: see docs/DECISIONS.md for deviations (home-page reads hit the real `.env` Mongo cluster read-only at build time since `/` is statically prerendered; Banner/Profile split into independently toggleable pieces; project cards render `coverImage` not bespoke illustration; icons inlined with `currentColor` instead of `<img src>`; Message me/Let's Talk degrade to `mailto:`; a few spots duplicate Button's class strings for `<a>` links since editing step 1's primitives was out of scope).
 
 ### 4. Projects pages
 - Status: not started
@@ -61,6 +65,8 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ## Designed by me
 - `Toggle` (switch) primitive — no Figma frame anywhere in the file (home page has none; admin section/skill toggles come in step 8). Built from tokens; revisit against the real `67:836` frame in step 8.
 - `Dialog` primitive's focus-trap/Esc/aria wiring — the contact modal (`74:1105`) gave the visual chrome (panel, header, ESC label, inputs), but the interactive behavior itself has no design reference.
+- GitHub heatmap section heading text ("Activity") — the Figma `get_design_context` response for that section was truncated before a heading node appeared; used the side index's own label for consistency.
+- Public-facing empty states for the avatar ("no caption" instead of Figma's "YOUR PHOTO") and banner ("Banner coming soon" instead of Figma's "Upload GIF banner") — the Figma copy reads as an editor-facing hint, not public copy.
 
 ## Blocked
 (Failures that survived 3 distinct fix attempts.)
