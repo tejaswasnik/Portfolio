@@ -1,18 +1,27 @@
 import { z } from "zod";
 
 const envSchema = z.object({
+  // Core: the app cannot run at all without these (DB + admin auth).
   MONGODB_URI: z.string().min(1),
   JWT_SECRET: z.string().min(1),
   ADMIN_EMAIL: z.string().email(),
-  IMAGEKIT_PUBLIC_KEY: z.string().min(1),
-  IMAGEKIT_PRIVATE_KEY: z.string().min(1),
-  IMAGEKIT_URL_ENDPOINT: z.string().url(),
-  GOOGLE_CLIENT_ID: z.string().min(1),
-  GOOGLE_CLIENT_SECRET: z.string().min(1),
-  GOOGLE_REFRESH_TOKEN: z.string().min(1),
-  GMAIL_USER: z.string().email(),
-  GITHUB_TOKEN: z.string().min(1),
-  ANALYTICS_SALT: z.string().min(1),
+
+  // Feature-specific: each gates one integration (ImageKit uploads,
+  // Gmail OAuth2 notifications, the GitHub heatmap, analytics hashing).
+  // CLAUDE.md requires graceful fallbacks for GitHub, ImageKit and email
+  // failures, so these default to "" instead of failing validation —
+  // every consumer must check for a non-empty value itself before using
+  // one (see src/lib/mail, src/lib/github, src/lib/rate-limit).
+  IMAGEKIT_PUBLIC_KEY: z.string().default(""),
+  IMAGEKIT_PRIVATE_KEY: z.string().default(""),
+  IMAGEKIT_URL_ENDPOINT: z.string().default(""),
+  GOOGLE_CLIENT_ID: z.string().default(""),
+  GOOGLE_CLIENT_SECRET: z.string().default(""),
+  GOOGLE_REFRESH_TOKEN: z.string().default(""),
+  GMAIL_USER: z.string().default(""),
+  GITHUB_TOKEN: z.string().default(""),
+  ANALYTICS_SALT: z.string().default(""),
+
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),

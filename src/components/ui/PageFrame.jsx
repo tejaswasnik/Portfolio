@@ -1,14 +1,20 @@
+import ContactModalProvider from "@/components/public/ContactModalProvider";
+
 /**
  * The "drafting table" page chrome (docs/design.md §5): two full-height
  * dashed rails flanking the 760px content column, with small crosshair
  * marks where a rail meets a section divider. Rails are desktop-only
  * (≥1200px per docs/design.md §10); content stays centered below that.
+ *
+ * Also mounts the single contact modal (step 5) for the whole page via
+ * ContactModalProvider, so every public page gets "Message me"/"Let's
+ * Talk" wiring for free without each page managing its own modal state.
  */
 export default function PageFrame({ children, className = "" }) {
   return (
     <div className={`relative mx-auto max-w-column ${className}`.trim()}>
       <Rails />
-      {children}
+      <ContactModalProvider>{children}</ContactModalProvider>
     </div>
   );
 }

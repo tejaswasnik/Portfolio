@@ -1,22 +1,16 @@
 import SectionDivider from "@/components/ui/SectionDivider";
-
-// Matches Button's "primary" variant classes (src/components/ui/Button.jsx)
-// as a mailto link — this CTA opens the contact modal once step 5 builds
-// it; until then it degrades to mailto, like the contact row's "Message
-// me" cell (docs/DECISIONS.md).
-const ctaLinkClass =
-  "rounded-pill bg-cta-bg border border-cta-bg text-cta-text px-8 py-3.5 text-sm font-medium tracking-[0.005em] hover:bg-text-primary";
+import LetsTalkTrigger from "@/components/public/LetsTalkTrigger";
 
 /**
  * "Let's talk" CTA + footer (Figma 5:6258 → 5:6261). Grouped with the
  * footer since Figma's own "Connect and footer" frame treats them as
- * one editorial column with no divider between them.
- * @param {{
- *   heading?: string, subtext?: string, email?: string,
- *   footerText?: string,
- * }} props
+ * one editorial column with no divider between them. The CTA always
+ * opens the contact modal (step 5) — it no longer needs a social email
+ * on file, since the modal emails siteSettings.notificationEmail, not
+ * profile.socialLinks.email (docs/DECISIONS.md).
+ * @param {{ heading?: string, subtext?: string, footerText?: string }} props
  */
-export default function LetsTalkSection({ heading, subtext, email, footerText }) {
+export default function LetsTalkSection({ heading, subtext, footerText }) {
   return (
     <section id="lets-talk" aria-labelledby="lets-talk-heading">
       <SectionDivider />
@@ -29,11 +23,7 @@ export default function LetsTalkSection({ heading, subtext, email, footerText })
             {subtext ?? "If you have a project, a question, or just want to say hello."}
           </p>
         </div>
-        {email ? (
-          <a href={`mailto:${email}`} className={ctaLinkClass}>
-            Let&apos;s Talk →
-          </a>
-        ) : null}
+        <LetsTalkTrigger />
         <p className="font-mono text-[10px] text-text-muted">
           {footerText ?? `© ${new Date().getFullYear()}`}
         </p>

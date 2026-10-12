@@ -49,4 +49,15 @@ describe("getEnv", () => {
     const { getEnv } = await import("./env.js");
     expect(() => getEnv()).toThrowError(/ADMIN_EMAIL/);
   });
+
+  it("succeeds with only the core variables set, leaving feature-specific ones empty", async () => {
+    vi.stubEnv("MONGODB_URI", validEnv.MONGODB_URI);
+    vi.stubEnv("JWT_SECRET", validEnv.JWT_SECRET);
+    vi.stubEnv("ADMIN_EMAIL", validEnv.ADMIN_EMAIL);
+    const { getEnv } = await import("./env.js");
+    const env = getEnv();
+    expect(env.GOOGLE_CLIENT_ID).toBe("");
+    expect(env.GITHUB_TOKEN).toBe("");
+    expect(env.ANALYTICS_SALT).toBe("");
+  });
 });

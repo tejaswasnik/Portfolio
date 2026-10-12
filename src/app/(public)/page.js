@@ -56,12 +56,11 @@ export default async function Home() {
 
   const sectionRendered = {
     about: visibleKeys.has("about") && Boolean(profile?.about),
-    "contact-links": visibleKeys.has("contact-links") && Boolean(
-      profile?.socialLinks?.email ||
-        profile?.socialLinks?.github ||
-        profile?.socialLinks?.linkedin ||
-        profile?.socialLinks?.twitter,
-    ),
+    // "Message me" always works (it emails siteSettings.notificationEmail,
+    // not a social link), so this section renders whenever it's visible —
+    // unlike step 3, it no longer depends on any social link being set
+    // (docs/DECISIONS.md step 5).
+    "contact-links": visibleKeys.has("contact-links"),
     "github-heatmap": visibleKeys.has("github-heatmap") && Boolean(calendar),
     projects: visibleKeys.has("projects") && featuredProjects.length > 0,
     "tech-stack": visibleKeys.has("tech-stack") && skills.length > 0,
@@ -111,7 +110,6 @@ export default async function Home() {
                 key={section.key}
                 heading={profile?.letsTalkHeading}
                 subtext={profile?.letsTalkSubtext}
-                email={profile?.socialLinks?.email}
                 footerText={siteSettings?.footerText}
               />
             );
