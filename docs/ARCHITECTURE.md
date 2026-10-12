@@ -7,7 +7,7 @@ Next.js App Router app. Public pages are server components, statically rendered 
 ```
 src/
   app/
-    (public)/            page.tsx, projects/, projects/[slug]/, maintenance/, not-found.tsx
+    (public)/            page.jsx, projects/, projects/[slug]/, maintenance/, not-found.jsx
     admin/
       login/  (dashboard)/  projects/  skills/  sections/  banner/  profile/  messages/  settings/  media/
     api/
@@ -17,7 +17,7 @@ src/
     public/    nav, banner, profile, about, contact-row, heatmap, project-card, stack, cta, footer, side-index, contact-modal
     admin/     sidebar, topbar, data-table, forms, charts, dropzone
   lib/
-    db/        client.ts (cached Mongo client), models/*
+    db/        client.js (cached Mongo client), collections/* (typed-by-JSDoc collection helpers)
     schemas/   Zod schemas shared by forms and API
     auth/      JWT sign/verify (jose), cookie helpers, bcrypt, lockout, requireAdmin()
     analytics/ track client, hashing, aggregation pipelines
@@ -25,8 +25,8 @@ src/
     github/    contributions fetch + cache
     mail/      Nodemailer transport (Gmail OAuth2) + sendMail()
     rate-limit/ Mongo-backed limiter (rateLimits collection, TTL index)
-  styles/      globals.css (tokens from design.md §11), tailwind.config.ts
-middleware.ts  protects /admin/*, serves maintenance mode
+  styles/      globals.css (tokens from design.md §11), tailwind.config.js
+middleware.js  protects /admin/*, serves maintenance mode
 ```
 
 ## Data model (MongoDB)
@@ -48,7 +48,7 @@ middleware.ts  protects /admin/*, serves maintenance mode
 ## Authentication (JWT)
 - Login: validate with Zod, check lockout, verify bcrypt hash, then sign a JWT (`sub`, `ver` = `users.tokenVersion`, `exp` ≈ 30 min) and set it as an HTTP-only, Secure, SameSite=Lax cookie.
 - Sliding expiry: re-issue the cookie on admin activity; no activity for the lifetime means the next request redirects to `/admin/login`.
-- Verification: `middleware.ts` verifies the signature and expiry with `jose` (edge-safe); `requireAdmin()` re-verifies and checks `ver` against the database in every server action and route handler.
+- Verification: `middleware.js` verifies the signature and expiry with `jose` (edge-safe); `requireAdmin()` re-verifies and checks `ver` against the database in every server action and route handler.
 - Logout and "change password/email" bump `tokenVersion`, which invalidates all existing tokens (plain JWTs cannot be revoked otherwise).
 - State-changing admin requests are also protected against CSRF (SameSite cookie plus an Origin check on route handlers).
 

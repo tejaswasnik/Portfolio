@@ -3,8 +3,8 @@
 Check items off as they ship. Each item names the Figma frame to build from (see `figma-map.md`). Tests accompany each feature; don't defer them.
 
 ## Phase 0 — Foundation
-- [ ] Create Next.js + TypeScript + Tailwind app, lint, typecheck, test setup, CI
-- [ ] Tokens, fonts and light/dark theme from `design.md` (`globals.css`, `tailwind.config.ts`)
+- [ ] Create Next.js (JavaScript) + Tailwind app, lint, test setup, CI
+- [ ] Tokens, fonts and light/dark theme from `design.md` (`globals.css`, `tailwind.config.js`)
 - [ ] Mongo client helper, Zod schemas, collection helpers and indexes
 - [ ] Env validation, `.env.example`, security headers
 - [ ] Shared UI: buttons, chips, inputs, toggle, dialog, icons, hatched divider, rails and crosshair layout
