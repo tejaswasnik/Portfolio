@@ -1,10 +1,28 @@
+import dns from "dns";
 import { MongoClient } from "mongodb";
 import { getEnv } from "../env.js";
+
+// System DNS can't always resolve *.mongodb.net (Atlas hostnames).
+// Force Google's public resolvers, mirroring the workaround in
+// scripts/seed-admin.js so the app server behaves the same way.
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch {
+  // Ignore in environments where setServers is restricted
+}
+
+// Clear any stale/rejected connection cached from prior failed attempts
+if (process.env.NODE_ENV === "development") {
+  delete globalThis._mongoClientPromise;
+}
 
 /** @type {Promise<MongoClient> | undefined} */
 let clientPromise;
 
 function createClientPromise() {
+  try {
+    dns.setServers(["8.8.8.8", "8.8.4.4"]);
+  } catch {}
   const { MONGODB_URI } = getEnv();
   const client = new MongoClient(MONGODB_URI);
   return client.connect();
@@ -21,13 +39,19 @@ function createClientPromise() {
 export function getClient() {
   if (process.env.NODE_ENV === "development") {
     if (!globalThis._mongoClientPromise) {
-      globalThis._mongoClientPromise = createClientPromise();
+      globalThis._mongoClientPromise = createClientPromise().catch((err) => {
+        delete globalThis._mongoClientPromise;
+        throw err;
+      });
     }
     return globalThis._mongoClientPromise;
   }
 
   if (!clientPromise) {
-    clientPromise = createClientPromise();
+    clientPromise = createClientPromise().catch((err) => {
+      clientPromise = undefined;
+      throw err;
+    });
   }
   return clientPromise;
 }
