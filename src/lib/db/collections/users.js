@@ -60,6 +60,31 @@ export function bumpTokenVersion(db, id) {
 }
 
 /**
+ * Updates the admin's email (admin Settings, step 10). Callers must
+ * also call `bumpTokenVersion` — per docs/ARCHITECTURE.md, an email
+ * change invalidates every existing token.
+ * @param {import('mongodb').Db} db
+ * @param {import('mongodb').ObjectId | string} id
+ * @param {string} email
+ */
+export function updateUserEmail(db, id, email) {
+  const objectId = typeof id === "string" ? new ObjectId(id) : id;
+  return usersCollection(db).updateOne({ _id: objectId }, { $set: { email } });
+}
+
+/**
+ * Updates the admin's password hash (admin Settings, step 10). Callers
+ * must also call `bumpTokenVersion`, same reasoning as `updateUserEmail`.
+ * @param {import('mongodb').Db} db
+ * @param {import('mongodb').ObjectId | string} id
+ * @param {string} passwordHash
+ */
+export function updateUserPassword(db, id, passwordHash) {
+  const objectId = typeof id === "string" ? new ObjectId(id) : id;
+  return usersCollection(db).updateOne({ _id: objectId }, { $set: { passwordHash } });
+}
+
+/**
  * Creates or updates the single admin user (scripts/seed-admin.js).
  * @param {import('mongodb').Db} db
  * @param {{ email: string, passwordHash: string }} fields

@@ -51,3 +51,47 @@ export function markMessageEmailFailed(db, id) {
     { $set: { emailFailed: true } },
   );
 }
+
+/** @param {import('mongodb').Db} db @param {string} id */
+export function findMessageById(db, id) {
+  return messagesCollection(db).findOne({ _id: new ObjectId(id) });
+}
+
+/**
+ * @param {import('mongodb').Db} db
+ * @param {string} id
+ * @param {Record<string, unknown>} patch
+ */
+export function updateMessageById(db, id, patch) {
+  return messagesCollection(db).updateOne({ _id: new ObjectId(id) }, { $set: patch });
+}
+
+/** @param {import('mongodb').Db} db @param {string} id */
+export function deleteMessageById(db, id) {
+  return messagesCollection(db).deleteOne({ _id: new ObjectId(id) });
+}
+
+/** Marks every unread message as read (admin inbox's "Mark all read"). */
+export function markAllMessagesRead(db) {
+  return messagesCollection(db).updateMany({ read: false }, { $set: { read: true } });
+}
+
+/**
+ * Pure admin-inbox filter (step 10): narrows an already-fetched message
+ * array by search text (name/email/subject/message, case-insensitive)
+ * and the All/Unread/Archived segmented control.
+ * @param {Array<{name: string, email: string, subject: string, message: string, read: boolean, archived: boolean}>} messages
+ * @param {{search?: string, filter?: 'all'|'unread'|'archived'}} [options]
+ */
+export function filterAdminMessages(messages, { search, filter } = {}) {
+  const needle = search?.trim().toLowerCase();
+  return messages.filter((message) => {
+    if (needle) {
+      const haystack = `${message.name} ${message.email} ${message.subject} ${message.message}`.toLowerCase();
+      if (!haystack.includes(needle)) return false;
+    }
+    if (filter === "unread" && (message.read || message.archived)) return false;
+    if (filter === "archived" && !message.archived) return false;
+    return true;
+  });
+}

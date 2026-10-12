@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loginSchema, userSchema } from "./user.js";
+import { loginSchema, userSchema, changePasswordSchema } from "./user.js";
 
 describe("loginSchema", () => {
   it("accepts valid credentials", () => {
@@ -30,5 +30,34 @@ describe("userSchema", () => {
       expect(result.data.failedAttempts).toBe(0);
       expect(result.data.tokenVersion).toBe(0);
     }
+  });
+});
+
+describe("changePasswordSchema", () => {
+  it("accepts matching new passwords of at least 12 characters", () => {
+    const result = changePasswordSchema.safeParse({
+      currentPassword: "oldpassword",
+      newPassword: "newpassword123",
+      confirmPassword: "newpassword123",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a new password under 12 characters", () => {
+    const result = changePasswordSchema.safeParse({
+      currentPassword: "oldpassword",
+      newPassword: "short1",
+      confirmPassword: "short1",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects mismatched new/confirm passwords", () => {
+    const result = changePasswordSchema.safeParse({
+      currentPassword: "oldpassword",
+      newPassword: "newpassword123",
+      confirmPassword: "different1234",
+    });
+    expect(result.success).toBe(false);
   });
 });
