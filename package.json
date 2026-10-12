@@ -10,6 +10,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "db:ensure-indexes": "node --env-file=.env.local scripts/ensure-indexes.js",
     "db:seed": "node --env-file=.env.local scripts/seed.js",
     "seed:admin": "node --env-file=.env.local scripts/seed-admin.js",
@@ -29,6 +30,7 @@
     "zod": "^4.6.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",

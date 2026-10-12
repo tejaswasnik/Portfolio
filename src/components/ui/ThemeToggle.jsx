@@ -34,7 +34,7 @@ export default function ThemeToggle() {
         theme === "light" ? "Switch to dark theme" : "Switch to light theme"
       }
       aria-pressed={theme === "light"}
-      className="flex size-4 items-center justify-center text-text-secondary transition-colors hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="relative flex size-4 items-center justify-center text-text-secondary transition-colors before:absolute before:-inset-[14px] before:content-[''] hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       <svg
         width="16"
