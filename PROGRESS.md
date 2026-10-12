@@ -21,7 +21,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ### 2. Database and schemas
 - Status: done
 - Date: 2026-10-12
-- Commit: (recorded after commit)
+- Commit: e5c3728
 - Verification: `npm run lint && npm test && npm run build` all pass (47 tests); confirmed no top-level `getEnv()`/`getClient()`/`getDb()` calls, so the build succeeds with no `.env.local` present.
 - Notes: see docs/DECISIONS.md for deviations (lowercase project status enum, relative imports in src/lib/db for plain-node script compatibility, `node --env-file` instead of dotenv, 24-month events TTL, thin collection helpers vs. full CRUD, a real `.env` appeared on disk but db:seed/db:ensure-indexes were not run against it).
 
