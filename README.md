@@ -1,16 +1,50 @@
-# React + Vite
+# Portfolio V2 — Tejas Wasnik
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A personal portfolio with a private admin panel, built with Next.js. The public site follows the **"Field Notes"** design: one narrow column between dashed drafting rails, serif headings, mono annotations and a single sage accent. The admin panel lets the owner manage content, projects, skills, messages and analytics without redeploying.
 
-Currently, two official plugins are available:
+- **Product spec:** `docs/PRD.md` (source: *Portfolio Website PRD*, v1.0)
+- **Designs:** all screens are already designed in Figma → see [`docs/figma-map.md`](docs/figma-map.md)
+- **Design tokens and components:** [`docs/design.md`](docs/design.md)
+- **Architecture, data model, API:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- **Build order:** [`docs/ROADMAP.md`](docs/ROADMAP.md) · **Prompts:** [`docs/PROMPTS.md`](docs/PROMPTS.md) · **Run it all:** [`docs/MASTER_PROMPT.md`](docs/MASTER_PROMPT.md)
+- **Agent instructions:** [`CLAUDE.md`](CLAUDE.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+Next.js (App Router) + **JavaScript (no TypeScript)** · Tailwind CSS · MongoDB Atlas (official `mongodb` driver) · JWT auth (`jose`, HTTP-only cookie, single admin) · ImageKit · Nodemailer with Google OAuth2 (Gmail) · Zod · npm
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+cp .env.example .env.local   # fill in the values below
+npm run dev                  # http://localhost:3000
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm run build` / `npm start` | Production build / serve |
+| `npm run lint` | ESLint |
+| `npm test` | Unit tests |
+| `npm run seed:admin` | Create the admin user from `ADMIN_EMAIL` and a prompted password |
+
+### Environment variables
+
+`MONGODB_URI` · `JWT_SECRET` · `ADMIN_EMAIL` · `IMAGEKIT_PUBLIC_KEY` · `IMAGEKIT_PRIVATE_KEY` · `IMAGEKIT_URL_ENDPOINT` · `GOOGLE_CLIENT_ID` · `GOOGLE_CLIENT_SECRET` · `GOOGLE_REFRESH_TOKEN` · `GMAIL_USER` · `GITHUB_TOKEN` · `ANALYTICS_SALT` · `SITE_URL` (absolute origin for sitemap.xml/robots.txt/OG images, e.g. `https://tejaswasnik.dev`; defaults to `http://localhost:3000`)
+
+**Gmail OAuth2 setup (one time):** create an OAuth client in Google Cloud Console, enable the Gmail API, authorise the `https://mail.google.com/` scope once (for example via the OAuth Playground with your own client credentials) to get a refresh token, and put it in `GOOGLE_REFRESH_TOKEN`. Nodemailer exchanges it for access tokens automatically. Set the OAuth consent screen to *In production*, otherwise refresh tokens expire after 7 days.
+
+Secrets live only in env files and the host's environment settings, never in the repo.
+
+## Routes
+
+| Public | Admin (`/admin`, protected) |
+|---|---|
+| `/` home · `/projects` · `/projects/[slug]` | `/login` · `/` dashboard · `/projects` (+ `/new`, `/[id]`) |
+| Contact form (modal) · maintenance · 404 | `/skills` · `/sections` · `/banner` · `/profile` |
+| | `/messages` (+ `/[id]`) · `/settings` · `/media` |
+
+## Licence
+
+TBD (add a `LICENSE` file; MIT is the usual default for personal projects).
