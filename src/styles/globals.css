@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/*
+ * Field Notes design tokens (docs/design.md §2, §4, §11).
+ * Dark is the primary theme (data-theme="dark" or unset); light values
+ * confirmed against Figma's "Field Notes — Tokens" variable collection
+ * where available (text/* on node 28:34991), the rest inferred from the
+ * light home screenshot per design.md §9 ("invert the ramps, darken the
+ * accent for contrast") — see docs/DECISIONS.md.
+ */
+:root,
+:root[data-theme="dark"] {
+  /* surfaces */
+  --bg: #090a0b;
+  --surface-1: #0f1113;
+  --surface-2: #101214;
+  --surface-3: #1a1d20;
+  --surface-chip: #0e0f10;
+  --surface-icon-alt: #16191b;
+
+  /* borders */
+  --border-subtle: #1e2226;
+  --border-default: #2e3337;
+  --border-icon: #232729;
+  --border-mockup: #272a2d;
+  --border-chip-dashed: #272727;
+  --border-hover: #3a4045;
+  --rail: rgb(159 159 169 / 0.2);
+  --rail-node: rgb(159 159 169 / 0.7);
+
+  /* text */
+  --text-primary: #eceeed;
+  --text-secondary: #acb2b0;
+  --text-muted: #737b79;
+  --text-chip: #a1a1a1;
+
+  /* accent */
+  --accent: #b5d4bf;
+
+  /* heatmap (5 levels) */
+  --heat-0: #1a1d20;
+  --heat-1: #28342c;
+  --heat-2: #3b5142;
+  --heat-3: #6a8973;
+  --heat-4: #b5d4bf;
+
+  /* inverse CTA — constant across themes (docs/design.md §2 "Inverse (CTA)") */
+  --cta-bg: #eceeed;
+  --cta-text: #090a0b;
+}
+
+:root[data-theme="light"] {
+  /* surfaces */
+  --bg: #f5f4f1;
+  --surface-1: #ffffff;
+  --surface-2: #f0efec;
+  --surface-3: #e8e7e3;
+  --surface-chip: #f7f6f3;
+  --surface-icon-alt: #f0efec;
+
+  /* borders */
+  --border-subtle: #e3e1dc;
+  --border-default: #cdcbc4;
+  --border-icon: #d6d4cd;
+  --border-mockup: #d6d4cd;
+  --border-chip-dashed: #cdcbc4;
+  --border-hover: #b8b5ac;
+  --rail: rgb(66 78 71 / 0.2);
+  --rail-node: rgb(66 78 71 / 0.7);
+
+  /* text — confirmed via Figma variables (node 28:34991) */
+  --text-primary: #171c19;
+  --text-secondary: #424e47;
+  --text-muted: #56625b;
+  --text-chip: #56625b;
+
+  /* accent — darkened for AA contrast on a light background */
+  --accent: #3f6b52;
+
+  /* heatmap (5 levels) */
+  --heat-0: #e8e7e3;
+  --heat-1: #c9ded0;
+  --heat-2: #9cc4aa;
+  --heat-3: #6fa885;
+  --heat-4: #3f6b52;
+
+  /* inverse CTA stays constant */
+  --cta-bg: #eceeed;
+  --cta-text: #090a0b;
+}
+
+:root {
+  /* type (next/font sets the real family lists on <html>/<body>) */
+  --font-serif: "Instrument Serif", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* layout */
+  --column: 760px;
+  --gutter: 24px;
+
+  /* radius */
+  --r-xs: 1px;
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
+  --r-2xl: 12px;
+  --r-pill: 100px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-chip: var(--surface-chip);
+  --color-surface-icon-alt: var(--surface-icon-alt);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-icon: var(--border-icon);
+  --color-border-mockup: var(--border-mockup);
+  --color-border-chip-dashed: var(--border-chip-dashed);
+  --color-border-hover: var(--border-hover);
+  --color-rail: var(--rail);
+  --color-rail-node: var(--rail-node);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-chip: var(--text-chip);
+
+  --color-accent: var(--accent);
+
+  --color-heat-0: var(--heat-0);
+  --color-heat-1: var(--heat-1);
+  --color-heat-2: var(--heat-2);
+  --color-heat-3: var(--heat-3);
+  --color-heat-4: var(--heat-4);
+
+  --color-cta-bg: var(--cta-bg);
+  --color-cta-text: var(--cta-text);
+
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-xs: var(--r-xs);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-2xl);
+  --radius-pill: var(--r-pill);
+
+  --spacing-column: var(--column);
+  --spacing-gutter: var(--gutter);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /*
+   * Typography for markdown-rendered project descriptions (step 4),
+   * matching the About section's real type scale (Figma 72:505):
+   * heading 24px serif, subheading 20px serif, paragraph 14.5px Inter,
+   * dash-marker list, accent-bar quote. Plain CSS (not Tailwind
+   * utilities) because the markup comes from markdown-it's HTML output,
+   * not JSX we can attach className to directly.
+   */
+  .markdown-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .markdown-body h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    letter-spacing: 0.6px;
+    color: var(--text-primary);
+  }
+
+  .markdown-body h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--text-primary);
+  }
+
+  .markdown-body p {
+    font-size: 14.5px;
+    line-height: 1.625;
+    color: var(--text-secondary);
+  }
+
+  .markdown-body a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-default);
+  }
+
+  .markdown-body ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .markdown-body li {
+    position: relative;
+    padding-left: 1.125rem;
+    font-size: 14.5px;
+    line-height: 1.625;
+    color: var(--text-secondary);
+  }
+
+  .markdown-body li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    width: 0.5rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .markdown-body blockquote {
+    margin: 0;
+    padding: 0.25rem 0 0.25rem 0.875rem;
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    line-height: 1.36;
+    color: var(--text-primary);
+  }
+}
