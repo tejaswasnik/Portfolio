@@ -1,4 +1,5 @@
 import TrackedLink from "@/components/public/TrackedLink";
+import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 // Matches Button's "dashed" variant classes (src/components/ui/Button.jsx)
 // without reaching for an <a> rendered through a <button>-only component —
@@ -22,12 +23,12 @@ function initials(name) {
  */
 export default function ProfileIdentity({ profile }) {
   return (
-    <div className="flex items-center gap-6 px-6 py-6">
+    <div className="flex flex-col items-center gap-6 px-6 py-6 text-center sm:flex-row sm:items-center sm:text-left">
       <div className="flex size-[104px] shrink-0 items-center justify-center rounded-xl bg-surface-2">
         {profile?.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
           <img
-            src={profile.photoUrl}
+            src={withImageKitTransform(profile.photoUrl, "w-220,q-80,c-at_max")}
             alt={profile.name}
             className="size-full rounded-xl object-cover"
           />

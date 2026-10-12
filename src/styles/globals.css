@@ -31,7 +31,13 @@
   /* text */
   --text-primary: #eceeed;
   --text-secondary: #acb2b0;
-  --text-muted: #737b79;
+  /*
+   * #737b79 measured 3.90:1 against --surface-3 (step 13 Lighthouse/axe
+   * pass) — below WCAG AA's 4.5:1 for normal text. Bumped to the
+   * smallest lightness step that clears 4.5:1 against every dark-theme
+   * surface (bg/surface-1/2/3), see docs/DECISIONS.md step 13.
+   */
+  --text-muted: #818b87;
   --text-chip: #a1a1a1;
 
   /* accent */
