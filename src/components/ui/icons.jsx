@@ -479,6 +479,19 @@ export function TrashIcon(props) {
   );
 }
 
+export function CheckIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M11.6667 3.5L5.25 9.91667L2.33333 7"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
 export function UploadIcon(props) {
   return (
     <Icon viewBox="0 0 16 16" {...props}>
