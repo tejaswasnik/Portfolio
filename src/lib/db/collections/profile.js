@@ -9,3 +9,12 @@ export function profileCollection(db) {
 export function getProfile(db) {
   return profileCollection(db).findOne({});
 }
+
+/**
+ * Upserts the singleton profile document (Admin Profile & About, step 8).
+ * @param {import('mongodb').Db} db
+ * @param {Record<string, unknown>} patch
+ */
+export function updateProfile(db, patch) {
+  return profileCollection(db).updateOne({}, { $set: patch }, { upsert: true });
+}
