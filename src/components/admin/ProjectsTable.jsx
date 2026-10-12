@@ -12,7 +12,7 @@ import {
   reorderProjects,
   toggleProjectFeatured,
   toggleProjectPublished,
-} from "@/app/admin/projects/actions.js";
+} from "@/app/admin/(dashboard)/projects/actions.js";
 
 const statusLabel = { ongoing: "Ongoing", completed: "Completed" };
 

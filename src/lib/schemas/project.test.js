@@ -4,6 +4,8 @@ import {
   projectToggleSchema,
   projectIdSchema,
   projectReorderSchema,
+  projectFormSchema,
+  projectUpdateFormSchema,
 } from "./project.js";
 
 const validId = "507f1f77bcf86cd799439011";
@@ -118,5 +120,59 @@ describe("projectReorderSchema (admin list drag-to-reorder)", () => {
     expect(
       projectReorderSchema.safeParse({ orderedIds: [validId, "bad-id"] }).success,
     ).toBe(false);
+  });
+});
+
+describe("projectFormSchema (New/Edit project form)", () => {
+  const { order: _order, ...validWithoutOrder } = valid;
+
+  it("accepts a valid form payload with a numeric orderChoice", () => {
+    const result = projectFormSchema.safeParse({ ...validWithoutOrder, orderChoice: 2 });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts orderChoice: 'last'", () => {
+    const result = projectFormSchema.safeParse({ ...validWithoutOrder, orderChoice: "last" });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects orderChoice: 0 (positions are 1-based)", () => {
+    const result = projectFormSchema.safeParse({ ...validWithoutOrder, orderChoice: 0 });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an arbitrary orderChoice string", () => {
+    const result = projectFormSchema.safeParse({ ...validWithoutOrder, orderChoice: "first" });
+    expect(result.success).toBe(false);
+  });
+
+  it("still enforces the underlying project fields (e.g. a valid slug)", () => {
+    const result = projectFormSchema.safeParse({
+      ...validWithoutOrder,
+      slug: "Not A Slug",
+      orderChoice: "last",
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("projectUpdateFormSchema (Edit project form)", () => {
+  const { order: _order, ...validWithoutOrder } = valid;
+
+  it("accepts a valid payload with an id", () => {
+    const result = projectUpdateFormSchema.safeParse({
+      ...validWithoutOrder,
+      orderChoice: "last",
+      id: validId,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a missing id", () => {
+    const result = projectUpdateFormSchema.safeParse({
+      ...validWithoutOrder,
+      orderChoice: "last",
+    });
+    expect(result.success).toBe(false);
   });
 });
