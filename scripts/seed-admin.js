@@ -2,6 +2,9 @@ import readline from "node:readline";
 import { getClient } from "../src/lib/db/client.js";
 import { hashPassword } from "../src/lib/auth/password.js";
 import { upsertAdminUser } from "../src/lib/db/collections/users.js";
+import dns from "dns"
+
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 /**
  * Creates/updates the single admin user from ADMIN_EMAIL and a

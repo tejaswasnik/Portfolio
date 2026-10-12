@@ -43,9 +43,10 @@ export async function POST(request) {
   let db;
   try {
     db = await getDb();
-  } catch {
+  } catch (error) {
+    console.error("Login route getDb error:", error);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again later." },
+      { error: "Something went wrong. Please try again later.", details: error?.message || String(error) },
       { status: 503 },
     );
   }
