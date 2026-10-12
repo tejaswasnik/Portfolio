@@ -614,6 +614,20 @@ export function ChevronDownIcon(props) {
   );
 }
 
+export function InfoIcon(props) {
+  return (
+    <Icon viewBox="0 0 16 16" {...props}>
+      <path
+        d="M8 14.6667A6.6667 6.6667 0 1 0 8 1.3333a6.6667 6.6667 0 0 0 0 13.3334Z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
+      <path d="M8 7.3333V11.3333" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M8 5.3333h.0067" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </Icon>
+  );
+}
+
 export function MenuIcon(props) {
   return (
     <Icon viewBox="0 0 16 16" {...props}>

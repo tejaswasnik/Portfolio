@@ -8,6 +8,7 @@ import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
 import MoveButtons from "@/components/admin/MoveButtons";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   deleteProject,
   reorderProjects,
@@ -32,6 +33,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const notify = useActionToast();
 
   async function handleToggle(action, project, field, nextValue) {
     setItems((current) =>
@@ -43,6 +45,10 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
         current.map((p) => (p.id === project.id ? { ...p, [field]: !nextValue } : p)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
+    } else {
+      const fieldLabel = field === "featured" ? "Featured" : "Published";
+      notify(result, `Project ${nextValue ? fieldLabel.toLowerCase() : "un" + fieldLabel.toLowerCase()}`);
     }
   }
 
@@ -72,12 +78,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
 
     startTransition(async () => {
       const result = await reorderProjects({ orderedIds: next.map((p) => p.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
   }
 
@@ -100,13 +101,20 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
 
     startTransition(async () => {
       const result = await reorderProjects({ orderedIds: next.map((p) => p.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
+  }
+
+  /** Shared by `handleDrop` and `moveItem`: rolls back on failure, toasts either way. */
+  function applyReorderResult(result, previousItems) {
+    if (!result.ok) {
+      setItems(previousItems);
+      setError(result.error || "Could not save the new order.");
+      notify(result);
+    } else {
+      notify(result, "Order saved");
+      router.refresh();
+    }
   }
 
   async function confirmDelete() {
@@ -115,9 +123,11 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
     if (result.ok) {
       setItems((current) => current.filter((p) => p.id !== deleteTarget.id));
       setDeleteTarget(null);
+      notify(result, "Project deleted");
       router.refresh();
     } else {
       setError(result.error || "Could not delete this project.");
+      notify(result);
     }
   }
 

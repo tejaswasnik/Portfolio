@@ -10,6 +10,7 @@ import Toggle from "@/components/ui/Toggle";
 import { ArrowUpRightIcon, ImageIcon, PlusIcon } from "@/components/ui/icons.jsx";
 import { slugify } from "@/lib/schemas/common.js";
 import { projectStatusValues } from "@/lib/schemas/project.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   createProject,
   deleteProject,
@@ -72,6 +73,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
 
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
+  const notify = useActionToast();
   const [submitting, setSubmitting] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -131,9 +133,11 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     if (!result.ok) {
       setFormError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
+    notify(result, mode === "create" ? "Project created" : "Changes saved");
     if (mode === "create") {
       router.push(`/admin/projects/${result.id}`);
     } else {
@@ -145,11 +149,13 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     setDeleting(true);
     const result = await deleteProject({ id: project.id });
     if (result.ok) {
+      notify(result, "Project deleted");
       router.push("/admin/projects");
     } else {
       setDeleting(false);
       setDeleteOpen(false);
       setFormError(result.error || "Could not delete this project.");
+      notify(result);
     }
   }
 

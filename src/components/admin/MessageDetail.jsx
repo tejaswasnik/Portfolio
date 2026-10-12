@@ -19,6 +19,7 @@ import {
   setMessageArchived,
   setMessageRead,
 } from "@/app/admin/(dashboard)/messages/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 function initials(name) {
   return (
@@ -48,6 +49,7 @@ export default function MessageDetail({ message }) {
   const [retrying, setRetrying] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [error, setError] = useState("");
+  const notify = useActionToast();
 
   const receivedAt = new Date(message.createdAt).toLocaleString([], {
     weekday: undefined,
@@ -68,7 +70,9 @@ export default function MessageDetail({ message }) {
     if (!result.ok) {
       setRead(!next);
       setError(result.error || "Something went wrong.");
+      notify(result);
     } else {
+      notify(result, next ? "Marked as read" : "Marked as unread");
       router.refresh();
     }
   }
@@ -80,7 +84,9 @@ export default function MessageDetail({ message }) {
     if (!result.ok) {
       setArchived(!next);
       setError(result.error || "Something went wrong.");
+      notify(result);
     } else {
+      notify(result, next ? "Message archived" : "Message unarchived");
       router.refresh();
     }
   }
@@ -92,19 +98,23 @@ export default function MessageDetail({ message }) {
     setRetrying(false);
     if (result.ok) {
       setEmailFailed(false);
+      notify(result, "Email sent");
       router.refresh();
     } else {
       setError(result.error || "The retry failed.");
+      notify(result);
     }
   }
 
   async function handleDelete() {
     const result = await deleteMessage({ id: message.id });
     if (result.ok) {
+      notify(result, "Message deleted");
       router.push("/admin/messages");
     } else {
       setDeleteOpen(false);
       setError(result.error || "Could not delete this message.");
+      notify(result);
     }
   }
 
