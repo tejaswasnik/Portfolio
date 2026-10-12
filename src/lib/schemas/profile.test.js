@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { profileSchema, profileFormSchema } from "./profile.js";
+import { profileSchema, profileFormSchema, bannerFormSchema } from "./profile.js";
 
 describe("profileSchema", () => {
   const valid = {
@@ -63,5 +63,33 @@ describe("profileFormSchema (admin Profile & About form)", () => {
 
   it("still enforces the underlying profile fields (e.g. a non-empty name)", () => {
     expect(profileFormSchema.safeParse({ ...valid, name: "" }).success).toBe(false);
+  });
+
+  it("strips bannerUrl/bannerFileId rather than requiring or validating them (owned by the Banner screen)", () => {
+    const result = profileFormSchema.safeParse({ ...valid, bannerUrl: "not-a-url" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data).not.toHaveProperty("bannerUrl");
+  });
+});
+
+describe("bannerFormSchema (admin Banner form)", () => {
+  it("accepts a valid banner url and fileId", () => {
+    const result = bannerFormSchema.safeParse({
+      bannerUrl: "https://ik.imagekit.io/demo/banner.gif",
+      bannerFileId: "abc123",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("defaults both fields to empty (revert to placeholder)", () => {
+    const result = bannerFormSchema.safeParse({});
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual({ bannerUrl: "", bannerFileId: "" });
+    }
+  });
+
+  it("rejects an invalid bannerUrl", () => {
+    expect(bannerFormSchema.safeParse({ bannerUrl: "not-a-url" }).success).toBe(false);
   });
 });

@@ -2,14 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Dropzone from "@/components/admin/Dropzone";
 import Toggle from "@/components/ui/Toggle";
-import {
-  ArrowUpRightIcon,
-  FileIcon,
-  MailIcon,
-  TrashIcon,
-  UploadIcon,
-} from "@/components/ui/icons.jsx";
+import { ArrowUpRightIcon, MailIcon } from "@/components/ui/icons.jsx";
 import { toggleSectionVisible } from "@/app/admin/(dashboard)/sections/actions.js";
 import { saveProfileAndAbout } from "@/app/admin/(dashboard)/profile/actions.js";
 
@@ -33,6 +28,7 @@ function buildInitialState(profile, siteSettings) {
     linkedin: profile?.socialLinks?.linkedin ?? "",
     twitter: profile?.socialLinks?.twitter ?? "",
     resumeUrl: profile?.resumeUrl ?? "",
+    resumeFileId: profile?.resumeFileId ?? "",
     letsTalkHeading: profile?.letsTalkHeading ?? "",
     letsTalkSubtext: profile?.letsTalkSubtext ?? "",
     footerText: siteSettings?.footerText ?? "",
@@ -48,9 +44,10 @@ function buildInitialState(profile, siteSettings) {
  * action the Sections screen uses, not bundled into this form's Save —
  * see docs/DECISIONS.md step 8).
  *
- * Photo and resume are plain URL fields, not the real ImageKit
- * Dropzone/upload — same step-9-pending degradation as the New/Edit
- * project form's cover image.
+ * Photo and resume upload through the shared `Dropzone` (step 9).
+ * `photoUrl` has no fileId field on `profileSchema` (session-only
+ * cleanup, like ProjectForm's cover image); `resumeFileId` does, so a
+ * replaced resume is deleted from ImageKit even across page loads.
  *
  * @param {{
  *   profile: object | null,
@@ -63,6 +60,10 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
   const initial = buildInitialState(profile, siteSettings);
 
   const [form, setForm] = useState(initial);
+  // No `photoFileId` field exists on `profileSchema` (docs/ARCHITECTURE.md
+  // lists bannerFileId/resumeFileId but not one for the photo) — session-only
+  // state, same reasoning as ProjectForm's coverImageFileId (docs/DECISIONS.md step 9).
+  const [photoFileId, setPhotoFileId] = useState("");
   const [heatmapVisible, setHeatmapVisible] = useState(heatmapSection?.visible ?? false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
@@ -115,6 +116,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
         twitter: form.twitter,
       },
       resumeUrl: form.resumeUrl,
+      resumeFileId: form.resumeFileId,
       letsTalkHeading: form.letsTalkHeading,
       letsTalkSubtext: form.letsTalkSubtext,
       footerText: form.footerText,
@@ -197,17 +199,20 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
                 )}
               </div>
               <div className="flex flex-1 flex-col gap-1.5">
-                <input
-                  type="url"
+                <Dropzone
                   value={form.photoUrl}
-                  onChange={set("photoUrl")}
-                  placeholder="https://ik.imagekit.io/… (photo URL)"
-                  className={fieldInput}
+                  fileId={photoFileId}
+                  onChange={({ url, fileId }) => {
+                    setForm((f) => ({ ...f, photoUrl: url }));
+                    setPhotoFileId(fileId);
+                    setSaved(false);
+                  }}
+                  accept="image/*"
+                  maxSizeMB={5}
+                  kind="image"
+                  label="Photo"
+                  hint="Square, at least 208 × 208 · stored on ImageKit"
                 />
-                <p className="font-mono text-[10px] text-text-muted">
-                  Square, at least 208 × 208 · stored on ImageKit (URL for now — step 9 adds
-                  upload)
-                </p>
                 {fieldErrors.photoUrl ? (
                   <span className="text-[11px] text-text-secondary">{fieldErrors.photoUrl[0]}</span>
                 ) : null}
@@ -387,42 +392,19 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
               <p className={fieldLabel}>PDF · ImageKit</p>
             </div>
 
-            {form.resumeUrl ? (
-              <div className="flex w-full items-center gap-3 rounded-lg border border-border-subtle bg-surface-2 p-3">
-                <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt">
-                  <FileIcon size={16} className="text-text-secondary" />
-                </span>
-                <p className="truncate text-[13px] font-medium text-text-primary">
-                  {form.resumeUrl.split("/").pop()}
-                </p>
-              </div>
-            ) : (
-              <p className="font-mono text-[10px] text-text-muted">No resume uploaded yet.</p>
-            )}
-
-            <label className="flex w-full flex-col gap-1.5">
-              <span className={fieldLabel}>Resume URL</span>
-              <div className="flex items-center gap-2 rounded-lg border border-border-default bg-surface-2 px-3 py-2.5">
-                <UploadIcon size={14} className="shrink-0 text-text-muted" />
-                <input
-                  type="url"
-                  value={form.resumeUrl}
-                  onChange={set("resumeUrl")}
-                  placeholder="https://ik.imagekit.io/… (PDF URL)"
-                  className="w-full bg-transparent text-[13px] text-text-primary placeholder:text-text-muted outline-none"
-                />
-              </div>
-            </label>
-            {form.resumeUrl ? (
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, resumeUrl: "" }))}
-                className="flex w-full items-center justify-center gap-1.5 rounded-md border border-border-default bg-surface-3 px-3 py-[7px] font-mono text-[10px] font-bold uppercase text-text-primary"
-              >
-                <TrashIcon size={12} />
-                Remove
-              </button>
-            ) : null}
+            <Dropzone
+              value={form.resumeUrl}
+              fileId={form.resumeFileId}
+              onChange={({ url, fileId }) => {
+                setForm((f) => ({ ...f, resumeUrl: url, resumeFileId: fileId }));
+                setSaved(false);
+              }}
+              accept="application/pdf"
+              maxSizeMB={10}
+              kind="file"
+              label="Resume"
+              hint="PDF · up to 10 MB"
+            />
             <p className="font-mono text-[10px] text-text-muted">
               A Resume button appears in the profile header while a file is set.
             </p>

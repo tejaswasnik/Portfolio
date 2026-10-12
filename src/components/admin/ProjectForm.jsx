@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
+import Dropzone from "@/components/admin/Dropzone";
 import Toggle from "@/components/ui/Toggle";
-import { ArrowUpRightIcon, ImageIcon, PlusIcon, UploadIcon } from "@/components/ui/icons.jsx";
+import { ArrowUpRightIcon, ImageIcon, PlusIcon } from "@/components/ui/icons.jsx";
 import { slugify } from "@/lib/schemas/common.js";
 import { projectStatusValues } from "@/lib/schemas/project.js";
 import {
@@ -26,10 +27,10 @@ const cardClass =
  * project" — identical layout, Edit adds populated values, a Delete card
  * action and a different header/button copy).
  *
- * Cover image and screenshots are plain URL fields, not the real
- * ImageKit Dropzone (that's step 9) — CLAUDE.md's "build against the
- * interface, make it degrade gracefully" applied here since ImageKit
- * credentials aren't wired up yet (see docs/DECISIONS.md step 8).
+ * Cover image and screenshots upload through the shared `Dropzone`
+ * (step 9) straight to ImageKit; `coverImage`/`screenshots[].url` are
+ * what's actually persisted (`projectSchema` has no fileId field for
+ * either, unlike profile's banner/resume — see docs/DECISIONS.md step 9).
  *
  * @param {{
  *   mode: 'create' | 'edit',
@@ -59,7 +60,15 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     mode === "edit" ? project.order + 1 : "last",
   );
   const [coverImage, setCoverImage] = useState(project?.coverImage ?? "");
-  const [screenshots, setScreenshots] = useState(project?.screenshots ?? []);
+  // No `coverImageFileId`/per-screenshot fileId field exists in
+  // projectSchema (docs/ARCHITECTURE.md's data model doesn't list one,
+  // unlike profile's bannerFileId/resumeFileId) — fileId here is
+  // session-only state so Dropzone can clean up a file it *just*
+  // uploaded if replaced again before saving; see docs/DECISIONS.md step 9.
+  const [coverImageFileId, setCoverImageFileId] = useState("");
+  const [screenshots, setScreenshots] = useState(
+    (project?.screenshots ?? []).map((url) => ({ url, fileId: "" })),
+  );
 
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
@@ -77,12 +86,12 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     if (!slugTouched) setSlug(slugify(value));
   }
 
-  function addScreenshot() {
-    setScreenshots((current) => [...current, ""]);
+  function addScreenshotSlot() {
+    setScreenshots((current) => [...current, { url: "", fileId: "" }]);
   }
 
-  function updateScreenshot(index, value) {
-    setScreenshots((current) => current.map((s, i) => (i === index ? value : s)));
+  function setScreenshotAt(index, next) {
+    setScreenshots((current) => current.map((s, i) => (i === index ? next : s)));
   }
 
   function removeScreenshot(index) {
@@ -101,7 +110,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
       shortDescription,
       longDescription,
       coverImage,
-      screenshots: screenshots.map((s) => s.trim()).filter(Boolean),
+      screenshots: screenshots.map((s) => s.url.trim()).filter(Boolean),
       liveUrl,
       githubUrl,
       techIds,
@@ -493,35 +502,26 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
               <p className={fieldLabel}>IMAGEKIT</p>
             </div>
 
-            {coverImage ? (
-              <div className="h-[150px] w-full overflow-hidden rounded-lg bg-gradient-to-br from-surface-3 to-surface-2">
-                {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL */}
-                <img src={coverImage} alt="" className="size-full object-cover" />
-              </div>
-            ) : (
-              <div className="flex h-[150px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border-default bg-surface-2 p-4 text-center">
-                <span className="flex size-8 items-center justify-center rounded-2xl bg-bg">
-                  <UploadIcon size={16} className="text-text-primary" />
-                </span>
-                <p className="font-mono text-[11px] text-text-primary">No cover image yet</p>
-              </div>
-            )}
-            <label className="flex w-full flex-col gap-1.5">
-              <span className={fieldLabel}>Image URL</span>
-              <input
-                type="url"
-                value={coverImage}
-                onChange={(event) => setCoverImage(event.target.value)}
-                placeholder="https://ik.imagekit.io/…"
-                className={fieldInput}
-              />
-              {fieldErrors.coverImage ? (
-                <span className="text-[11px] text-text-secondary">{fieldErrors.coverImage[0]}</span>
-              ) : null}
-            </label>
+            <Dropzone
+              value={coverImage}
+              fileId={coverImageFileId}
+              onChange={({ url, fileId }) => {
+                setCoverImage(url);
+                setCoverImageFileId(fileId);
+              }}
+              accept="image/*"
+              maxSizeMB={5}
+              kind="image"
+              label="Cover image"
+              hint="PNG, JPG or WebP · up to 5 MB"
+              folder="/portfolio/projects"
+            />
+            {fieldErrors.coverImage ? (
+              <span className="text-[11px] text-text-secondary">{fieldErrors.coverImage[0]}</span>
+            ) : null}
             <p className="font-mono text-[10px] text-text-muted">
-              Used on cards and as the default OG image. ImageKit upload isn&apos;t wired up yet —
-              paste a hosted image URL for now (step 9 replaces this with a real uploader).
+              Used on cards and as the default OG image. Stored on ImageKit; the old file is
+              deleted on replace.
             </p>
           </div>
 
@@ -534,35 +534,32 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
             </div>
 
             {screenshots.length > 0 ? (
-              <div className="grid w-full grid-cols-2 gap-2">
-                {screenshots.map((url, index) => (
-                  <div key={index} className="flex flex-col gap-1.5">
-                    <div className="relative h-20 w-full overflow-hidden rounded-md bg-gradient-to-br from-surface-3 to-surface-2">
-                      {url ? (
-                        // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
-                        <img src={url} alt="" className="size-full object-cover" />
-                      ) : null}
-                      <span className="absolute left-1 top-1 rounded bg-bg px-1 font-mono text-[9px] text-text-primary">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <input
-                        type="url"
-                        value={url}
-                        onChange={(event) => updateScreenshot(index, event.target.value)}
-                        placeholder="https://ik.imagekit.io/…"
-                        className="w-full rounded-md border border-border-default bg-surface-2 px-2 py-1 font-mono text-[10px] text-text-primary outline-none focus-visible:border-accent"
+              <div className="flex w-full flex-col gap-3">
+                {screenshots.map((screenshot, index) => (
+                  <div key={index} className="flex w-full items-start gap-2">
+                    <span className="mt-2.5 shrink-0 font-mono text-[10px] text-text-muted">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="flex-1">
+                      <Dropzone
+                        value={screenshot.url}
+                        fileId={screenshot.fileId}
+                        onChange={({ url, fileId }) => setScreenshotAt(index, { url, fileId })}
+                        accept="image/*"
+                        maxSizeMB={5}
+                        kind="image"
+                        label={`Screenshot ${index + 1}`}
+                        folder="/portfolio/projects"
                       />
-                      <button
-                        type="button"
-                        onClick={() => removeScreenshot(index)}
-                        aria-label={`Remove screenshot ${index + 1}`}
-                        className="shrink-0 text-text-muted hover:text-text-primary"
-                      >
-                        ×
-                      </button>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => removeScreenshot(index)}
+                      aria-label={`Remove screenshot ${index + 1} slot`}
+                      className="mt-2.5 shrink-0 text-text-muted hover:text-text-primary"
+                    >
+                      ×
+                    </button>
                   </div>
                 ))}
               </div>
@@ -570,7 +567,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
 
             <button
               type="button"
-              onClick={addScreenshot}
+              onClick={addScreenshotSlot}
               className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border-default bg-surface-2 py-2.5 font-mono text-[10px] uppercase text-text-secondary hover:border-accent/50"
             >
               <PlusIcon size={10} />
