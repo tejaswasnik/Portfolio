@@ -598,6 +598,35 @@ export function CopyIcon(props) {
   );
 }
 
+export function ChevronUpIcon(props) {
+  return (
+    <Icon viewBox="0 0 16 16" {...props}>
+      <path d="M4 10l4-4 4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronDownIcon(props) {
+  return (
+    <Icon viewBox="0 0 16 16" {...props}>
+      <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function MenuIcon(props) {
+  return (
+    <Icon viewBox="0 0 16 16" {...props}>
+      <path
+        d="M2 4h12M2 8h12M2 12h12"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+    </Icon>
+  );
+}
+
 export function UploadIcon(props) {
   return (
     <Icon viewBox="0 0 16 16" {...props}>

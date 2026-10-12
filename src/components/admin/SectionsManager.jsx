@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Toggle from "@/components/ui/Toggle";
+import MoveButtons from "@/components/admin/MoveButtons";
 import { CheckIcon, GripIcon } from "@/components/ui/icons.jsx";
 import { SECTION_DESCRIPTIONS, SECTION_INDEX_META } from "@/lib/sections.js";
 import {
@@ -79,8 +80,34 @@ export default function SectionsManager({ sections }) {
     });
   }
 
+  /**
+   * Swaps one section with its neighbor and saves the new order — the
+   * keyboard/touch-friendly alternative to dragging (design.md §23).
+   * @param {string} id
+   * @param {-1 | 1} direction
+   */
+  function moveItem(id, direction) {
+    const index = items.findIndex((s) => s.id === id);
+    const targetIndex = index + direction;
+    if (index === -1 || targetIndex < 0 || targetIndex >= items.length) return;
+
+    const next = [...items];
+    [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+    setItems(next);
+
+    startTransition(async () => {
+      const result = await reorderSections({ orderedIds: next.map((s) => s.id) });
+      if (!result.ok) {
+        setItems(items);
+        setError(result.error || "Could not save the new order.");
+      } else {
+        router.refresh();
+      }
+    });
+  }
+
   return (
-    <div className="flex w-full items-start gap-6">
+    <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex w-full flex-col items-start rounded-xl border border-border-subtle bg-surface-1 p-5">
           <div className="flex w-full items-center justify-between">
@@ -90,26 +117,26 @@ export default function SectionsManager({ sections }) {
             </p>
           </div>
 
-          {items.map((section) => (
+          {items.map((section, index) => (
             <div
               key={section.id}
               draggable
               onDragStart={() => handleDragStart(section.id)}
               onDragOver={(event) => handleDragOver(event, section.id)}
               onDrop={(event) => handleDrop(event, section.id)}
-              className={`flex w-full items-center gap-4 border-b border-border-subtle py-3 ${
+              className={`flex w-full flex-wrap items-center gap-x-4 gap-y-2 border-b border-border-subtle py-3 ${
                 section.visible ? "" : "opacity-65"
               }`}
             >
-              <div className="flex w-4 items-center">
+              <div className="hidden w-4 items-center sm:flex">
                 <GripIcon size={14} className="cursor-grab text-text-muted" />
               </div>
               <div className="w-6 text-[11px] text-text-muted">
                 {String(section.order + 1).padStart(2, "0")}
               </div>
-              <div className="flex flex-1 flex-col gap-0.5">
-                <p className="text-sm font-medium text-text-primary">{section.label}</p>
-                <p className="font-mono text-[10px] text-text-muted">
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <p className="truncate text-sm font-medium text-text-primary">{section.label}</p>
+                <p className="truncate font-mono text-[10px] text-text-muted">
                   {SECTION_DESCRIPTIONS[section.key]}
                 </p>
               </div>
@@ -127,6 +154,14 @@ export default function SectionsManager({ sections }) {
                   onChange={(next) => handleToggle(section, next)}
                 />
               </div>
+              <MoveButtons
+                disabled={false}
+                atStart={index === 0}
+                atEnd={index === items.length - 1}
+                name={section.label}
+                onMove={(direction) => moveItem(section.id, direction)}
+                className="w-full justify-end sm:w-auto"
+              />
             </div>
           ))}
 
@@ -150,7 +185,7 @@ export default function SectionsManager({ sections }) {
         ) : null}
       </div>
 
-      <div className="flex w-[344px] flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 lg:w-[344px]">
         <div className="flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5">
           <div className="flex w-full items-center justify-between">
             <p className="font-serif text-[22px] text-text-primary">Index preview</p>

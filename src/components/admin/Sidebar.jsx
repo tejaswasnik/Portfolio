@@ -1,18 +1,38 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogOutIcon } from "@/components/ui/icons.jsx";
 import { NAV_GROUPS, isActiveRoute } from "./nav-items.js";
+import { useAdminDrawer } from "./AdminShellProvider";
+import { useFocusTrap } from "@/lib/hooks/useFocusTrap.js";
 
 /**
  * 240px admin sidebar (Figma 53:3): logo, three nav groups, unread badge
  * on Messages, signed-in card with sign-out.
+ *
+ * Below `lg` (1024px, design.md §23) this becomes an off-canvas drawer
+ * instead of a static column: the same content renders twice (a
+ * `hidden lg:flex` static copy, and a `lg:hidden` overlay copy gated on
+ * `drawerOpen`) rather than one copy whose container classes change,
+ * since the overlay needs its own focus trap/backdrop/Esc handling that
+ * the static sidebar must never have.
  * @param {{ unreadMessages: number }} props
  */
 export default function Sidebar({ unreadMessages }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { drawerOpen, closeDrawer } = useAdminDrawer();
+  const panelRef = useRef(null);
+
+  useFocusTrap(panelRef, drawerOpen, closeDrawer);
+
+  // Close the drawer on navigation (design.md §23: "closes on route change").
+  useEffect(() => {
+    closeDrawer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only pathname should re-trigger this
+  }, [pathname]);
 
   async function handleSignOut() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -20,8 +40,8 @@ export default function Sidebar({ unreadMessages }) {
     router.refresh();
   }
 
-  return (
-    <div className="flex h-screen w-60 flex-col gap-6 overflow-y-auto border-r border-dashed border-rail bg-bg px-4 py-5">
+  const content = (
+    <>
       <div className="flex items-center gap-2.5 pl-2">
         <span className="font-serif text-xl tracking-[0.5px] text-text-primary">TW.</span>
         <span className="rounded-sm border border-border-default bg-surface-3 px-1.5 py-0.5 font-mono text-[8px] font-bold text-accent">
@@ -42,7 +62,7 @@ export default function Sidebar({ unreadMessages }) {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-[34px] items-center justify-between rounded-md pl-3 pr-2.5 font-mono text-[11px] ${
+                className={`flex h-[44px] items-center justify-between rounded-md pl-3 pr-2.5 font-mono text-[11px] lg:h-[34px] ${
                   active
                     ? "border border-border-default bg-surface-3 text-text-primary"
                     : "text-text-muted hover:text-text-primary"
@@ -82,6 +102,35 @@ export default function Sidebar({ unreadMessages }) {
           <LogOutIcon size={14} />
         </button>
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      <div className="hidden h-screen w-60 shrink-0 flex-col gap-6 overflow-y-auto border-r border-dashed border-rail bg-bg px-4 py-5 lg:flex">
+        {content}
+      </div>
+
+      {drawerOpen ? (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            aria-label="Close menu"
+            tabIndex={-1}
+            className="absolute inset-0 cursor-default bg-bg/60"
+            onClick={closeDrawer}
+          />
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Admin navigation"
+            className="relative z-10 flex h-screen w-[280px] flex-col gap-6 overflow-y-auto border-r border-border-subtle bg-bg px-4 py-5"
+          >
+            {content}
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

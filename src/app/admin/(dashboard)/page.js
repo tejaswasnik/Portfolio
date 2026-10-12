@@ -76,9 +76,9 @@ export default async function AdminDashboardPage({ searchParams }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">Dashboard</h1>
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">Dashboard</h1>
           <p className="font-mono text-[11px] text-text-muted">
             {label} · compared with the previous {days} days
           </p>
@@ -86,7 +86,7 @@ export default async function AdminDashboardPage({ searchParams }) {
         <DateRangeSelector range={range} from={resolved.from} to={resolved.to} />
       </div>
 
-      <div className="flex w-full gap-4">
+      <div className="grid w-full grid-cols-2 gap-4 md:flex">
         <KpiCard
           label="Page views"
           value={overview.pageViews.value.toLocaleString()}
@@ -119,14 +119,14 @@ export default async function AdminDashboardPage({ searchParams }) {
         />
       </div>
 
-      <div className="flex w-full items-start gap-4">
+      <div className="flex w-full flex-col items-start gap-4 lg:flex-row">
         <div className="flex-1 rounded-xl border border-border-subtle bg-surface-1 p-5">
           <div className="mb-4 flex w-full items-center justify-between">
             <p className="font-serif text-[22px] text-text-primary">Views over time</p>
           </div>
           <ViewsChart data={viewsOverTime} />
         </div>
-        <div className="w-[344px]">
+        <div className="w-full lg:w-[344px]">
           <RankedList
             title="Top pages"
             columnLabel="Views"
@@ -135,7 +135,7 @@ export default async function AdminDashboardPage({ searchParams }) {
         </div>
       </div>
 
-      <div className="flex w-full items-start gap-4">
+      <div className="flex w-full flex-col items-start gap-4 lg:flex-row">
         <div className="flex-1">
           <RankedList
             title="Top referrers"
@@ -150,16 +150,16 @@ export default async function AdminDashboardPage({ searchParams }) {
             rows={countries.map((c) => ({ label: c.country, value: c.visitors }))}
           />
         </div>
-        <div className="w-[344px]">
+        <div className="w-full lg:w-[344px]">
           <DeviceBreakdown {...deviceBreakdown} />
         </div>
       </div>
 
-      <div className="flex w-full items-start gap-4">
+      <div className="flex w-full flex-col items-start gap-4 lg:flex-row">
         <div className="flex-1">
           <ClickTrackingTable rows={clickTracking} />
         </div>
-        <div className="w-[344px]">
+        <div className="w-full lg:w-[344px]">
           <RecentActivity items={recentActivity} unreadCount={unreadCount} />
         </div>
       </div>

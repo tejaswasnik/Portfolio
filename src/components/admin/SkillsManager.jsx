@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
+import MoveButtons from "@/components/admin/MoveButtons";
 import {
   createSkill,
   deleteSkill,
@@ -132,6 +133,33 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     });
   }
 
+  /**
+   * Swaps one skill with its neighbor and saves the new order — the
+   * keyboard/touch-friendly alternative to dragging (design.md §23).
+   * @param {string} id
+   * @param {-1 | 1} direction
+   */
+  function moveItem(id, direction) {
+    if (reorderDisabled) return;
+    const index = items.findIndex((s) => s.id === id);
+    const targetIndex = index + direction;
+    if (index === -1 || targetIndex < 0 || targetIndex >= items.length) return;
+
+    const next = [...items];
+    [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+    setItems(next);
+
+    startTransition(async () => {
+      const result = await reorderSkills({ orderedIds: next.map((s) => s.id) });
+      if (!result.ok) {
+        setItems(items);
+        setError(result.error || "Could not save the new order.");
+      } else {
+        router.refresh();
+      }
+    });
+  }
+
   async function confirmDelete() {
     if (!deleteTarget) return;
     const result = await deleteSkill({ id: deleteTarget.id });
@@ -177,10 +205,10 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
   }
 
   return (
-    <div className="flex w-full items-start gap-6">
-      <div className="flex flex-1 flex-col gap-4">
+    <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
+      <div className="flex w-full flex-1 flex-col gap-4">
         <div className="flex w-full flex-col items-start rounded-xl border border-border-subtle bg-surface-1 px-5 pb-2 pt-1">
-          <div className="flex w-full items-center gap-4 border-b border-border-subtle py-3">
+          <div className="hidden w-full items-center gap-4 border-b border-border-subtle py-3 md:flex">
             <div className="w-4" />
             <div className="w-8" />
             <div className="flex-1 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
@@ -192,7 +220,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
             <div className="w-[60px] font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
               Shown
             </div>
-            <div className="w-10 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
+            <div className="w-16 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
               Order
             </div>
             <div className="w-16" />
@@ -203,63 +231,129 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
               No skills match these filters.
             </p>
           ) : (
-            items.map((skill) => (
-              <div
-                key={skill.id}
-                draggable={!reorderDisabled}
-                onDragStart={() => handleDragStart(skill.id)}
-                onDragOver={(event) => handleDragOver(event, skill.id)}
-                onDrop={(event) => handleDrop(event, skill.id)}
-                className={`flex w-full items-center gap-4 border-b border-border-subtle py-2.5 last:border-b-0 ${
-                  skill.visible ? "" : "opacity-60"
-                }`}
-              >
-                <div className="flex w-4 items-center">
-                  <GripIcon
-                    size={14}
-                    className={
-                      reorderDisabled
-                        ? "cursor-not-allowed text-text-muted/50"
-                        : "cursor-grab text-text-muted"
-                    }
-                  />
+            items.map((skill, index) => (
+              <div key={skill.id} className="w-full">
+                {/* Mobile card */}
+                <div
+                  className={`flex w-full flex-col gap-3 border-b border-border-subtle py-3 last:border-b-0 md:hidden ${
+                    skill.visible ? "" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+                      {skill.iconNode}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[13px] font-medium text-text-primary">
+                        {skill.name}
+                      </p>
+                      <p className="truncate font-mono text-[10px] text-text-muted">
+                        {skill.category || "—"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={`Edit ${skill.name}`}
+                      onClick={() => startEdit(skill)}
+                      className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                    >
+                      <PencilIcon size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Delete ${skill.name}`}
+                      onClick={() => setDeleteTarget(skill)}
+                      className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="flex items-center gap-1.5 font-mono text-[9px] uppercase text-text-muted">
+                      Shown
+                      <Toggle
+                        checked={skill.visible}
+                        label={`Shown — ${skill.name}`}
+                        onChange={(next) => handleToggle(skill, next)}
+                      />
+                    </label>
+                    <MoveButtons
+                      disabled={reorderDisabled}
+                      atStart={index === 0}
+                      atEnd={index === items.length - 1}
+                      name={skill.name}
+                      onMove={(direction) => moveItem(skill.id, direction)}
+                      className="ml-auto"
+                    />
+                  </div>
                 </div>
-                <div className="flex w-8 items-center">
-                  <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
-                    {skill.iconNode}
-                  </span>
-                </div>
-                <div className="flex-1 text-[13px] font-medium text-text-primary">
-                  {skill.name}
-                </div>
-                <div className="w-24 font-mono text-[10px] text-text-muted">
-                  {skill.category || "—"}
-                </div>
-                <div className="w-[60px]">
-                  <Toggle
-                    checked={skill.visible}
-                    label={`Shown — ${skill.name}`}
-                    onChange={(next) => handleToggle(skill, next)}
-                  />
-                </div>
-                <div className="w-10 text-[11px] text-text-secondary">{skill.order + 1}</div>
-                <div className="flex w-16 items-start gap-1.5">
-                  <button
-                    type="button"
-                    aria-label={`Edit ${skill.name}`}
-                    onClick={() => startEdit(skill)}
-                    className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
-                  >
-                    <PencilIcon size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={`Delete ${skill.name}`}
-                    onClick={() => setDeleteTarget(skill)}
-                    className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
-                  >
-                    <TrashIcon size={14} />
-                  </button>
+
+                {/* Desktop row */}
+                <div
+                  draggable={!reorderDisabled}
+                  onDragStart={() => handleDragStart(skill.id)}
+                  onDragOver={(event) => handleDragOver(event, skill.id)}
+                  onDrop={(event) => handleDrop(event, skill.id)}
+                  className={`hidden w-full items-center gap-4 border-b border-border-subtle py-2.5 last:border-b-0 md:flex ${
+                    skill.visible ? "" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex w-4 items-center">
+                    <GripIcon
+                      size={14}
+                      className={
+                        reorderDisabled
+                          ? "cursor-not-allowed text-text-muted/50"
+                          : "cursor-grab text-text-muted"
+                      }
+                    />
+                  </div>
+                  <div className="flex w-8 items-center">
+                    <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+                      {skill.iconNode}
+                    </span>
+                  </div>
+                  <div className="flex-1 text-[13px] font-medium text-text-primary">
+                    {skill.name}
+                  </div>
+                  <div className="w-24 font-mono text-[10px] text-text-muted">
+                    {skill.category || "—"}
+                  </div>
+                  <div className="w-[60px]">
+                    <Toggle
+                      checked={skill.visible}
+                      label={`Shown — ${skill.name}`}
+                      onChange={(next) => handleToggle(skill, next)}
+                    />
+                  </div>
+                  <div className="flex w-16 items-center gap-1 text-[11px] text-text-secondary">
+                    {skill.order + 1}
+                    <MoveButtons
+                      disabled={reorderDisabled}
+                      atStart={index === 0}
+                      atEnd={index === items.length - 1}
+                      name={skill.name}
+                      onMove={(direction) => moveItem(skill.id, direction)}
+                    />
+                  </div>
+                  <div className="flex w-16 items-start gap-1.5">
+                    <button
+                      type="button"
+                      aria-label={`Edit ${skill.name}`}
+                      onClick={() => startEdit(skill)}
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                    >
+                      <PencilIcon size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Delete ${skill.name}`}
+                      onClick={() => setDeleteTarget(skill)}
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))
@@ -280,7 +374,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
       <form
         onSubmit={handleSubmit}
-        className="flex w-[344px] flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5"
+        className="flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5 lg:w-[344px]"
       >
         <div className="flex w-full items-center justify-between">
           <p className="font-serif text-[22px] text-text-primary">

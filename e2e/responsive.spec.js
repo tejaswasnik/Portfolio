@@ -25,6 +25,10 @@ const PUBLIC_PAGES = [
   ["/projects", "projects list"],
   ["/maintenance", "maintenance"],
   ["/this-page-does-not-exist-404-check", "404"],
+  // The only admin screen reachable without credentials (fixes round 2,
+  // Fix 4) — every other /admin/* route needs a real login this
+  // environment doesn't have (see PROGRESS.md "Needs from you").
+  ["/admin/login", "admin login"],
 ];
 
 for (const width of WIDTHS) {

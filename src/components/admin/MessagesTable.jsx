@@ -89,7 +89,7 @@ export default function MessagesTable({ messages }) {
       ) : null}
 
       <div className="flex w-full flex-col items-start rounded-xl border border-border-subtle bg-surface-1 px-5 pb-1 pt-1">
-        <div className="flex w-full items-center gap-4 border-b border-border-subtle py-3">
+        <div className="hidden w-full items-center gap-4 border-b border-border-subtle py-3 md:flex">
           <div className="w-2" />
           <div className="w-9" />
           <div className="w-[190px] font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
@@ -112,60 +112,15 @@ export default function MessagesTable({ messages }) {
             No messages match these filters.
           </p>
         ) : (
-          items.map((message) => (
-            <Link
-              key={message.id}
-              href={`/admin/messages/${message.id}`}
-              className={`flex w-full items-center gap-4 border-b border-border-subtle py-3.5 last:border-b-0 hover:bg-surface-2 ${
-                message.archived ? "opacity-60" : ""
-              }`}
-            >
-              <div className="flex w-2 items-center">
-                {!message.read ? (
-                  <span className="size-1.5 rounded-full bg-accent" aria-label="Unread" />
-                ) : null}
-              </div>
-              <div className="w-9">
-                <span className="flex size-9 items-center justify-center rounded-full border border-border-default bg-surface-3 font-serif text-[13px] text-accent">
-                  {initials(message.name)}
-                </span>
-              </div>
-              <div className="w-[190px]">
-                <p
-                  className={`text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
-                >
-                  {message.name}
-                </p>
-                <p className="font-mono text-[10px] text-text-muted">{message.email}</p>
-              </div>
-              <div className="min-w-0 flex-1">
-                <p
-                  className={`truncate text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
-                >
-                  {message.subject || "(no subject)"}
-                </p>
-                <p className="truncate text-[12px] text-text-muted">{message.message}</p>
-              </div>
-              <div className="w-24">
-                {message.emailFailed ? (
-                  <span className="inline-flex items-center rounded-[3px] border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase text-accent">
-                    Email failed
-                  </span>
-                ) : message.archived ? (
-                  <span className="inline-flex items-center rounded-[3px] border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase text-text-muted">
-                    Archived
-                  </span>
-                ) : null}
-              </div>
-              <div className="w-[84px] font-mono text-[10px] text-text-secondary">
-                {formatReceived(message.createdAt)}
-              </div>
-              <div className="flex w-16 items-center gap-1.5">
+          items.map((message) => {
+            const flag = message.emailFailed ? "Email failed" : message.archived ? "Archived" : null;
+            const actions = (
+              <>
                 <button
                   type="button"
                   aria-label={message.archived ? `Unarchive ${message.name}` : `Archive ${message.name}`}
                   onClick={(event) => handleArchiveToggle(event, message)}
-                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary md:size-7"
                 >
                   <ArchiveIcon size={14} />
                 </button>
@@ -177,13 +132,108 @@ export default function MessagesTable({ messages }) {
                     event.stopPropagation();
                     setDeleteTarget(message);
                   }}
-                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary md:size-7"
                 >
                   <TrashIcon size={14} />
                 </button>
-              </div>
-            </Link>
-          ))
+              </>
+            );
+
+            return (
+              <Link
+                key={message.id}
+                href={`/admin/messages/${message.id}`}
+                className={`block w-full border-b border-border-subtle py-3.5 last:border-b-0 hover:bg-surface-2 ${
+                  message.archived ? "opacity-60" : ""
+                }`}
+              >
+                {/* Mobile card */}
+                <div className="flex flex-col gap-2 md:hidden">
+                  <div className="flex items-center gap-3">
+                    {!message.read ? (
+                      <span className="size-1.5 shrink-0 rounded-full bg-accent" aria-label="Unread" />
+                    ) : (
+                      <span className="size-1.5 shrink-0" aria-hidden="true" />
+                    )}
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border-default bg-surface-3 font-serif text-[13px] text-accent">
+                      {initials(message.name)}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={`truncate text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
+                      >
+                        {message.name}
+                      </p>
+                      <p className="truncate font-mono text-[10px] text-text-muted">
+                        {formatReceived(message.createdAt)}
+                      </p>
+                    </div>
+                    {actions}
+                  </div>
+                  <p
+                    className={`truncate text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
+                  >
+                    {message.subject || "(no subject)"}
+                  </p>
+                  <p className="truncate text-[12px] text-text-muted">{message.message}</p>
+                  {flag ? (
+                    <span
+                      className={`inline-flex w-fit items-center rounded-[3px] border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase ${
+                        message.emailFailed ? "text-accent" : "text-text-muted"
+                      }`}
+                    >
+                      {flag}
+                    </span>
+                  ) : null}
+                </div>
+
+                {/* Desktop row */}
+                <div className="hidden w-full items-center gap-4 md:flex">
+                  <div className="flex w-2 items-center">
+                    {!message.read ? (
+                      <span className="size-1.5 rounded-full bg-accent" aria-label="Unread" />
+                    ) : null}
+                  </div>
+                  <div className="w-9">
+                    <span className="flex size-9 items-center justify-center rounded-full border border-border-default bg-surface-3 font-serif text-[13px] text-accent">
+                      {initials(message.name)}
+                    </span>
+                  </div>
+                  <div className="w-[190px]">
+                    <p
+                      className={`text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
+                    >
+                      {message.name}
+                    </p>
+                    <p className="font-mono text-[10px] text-text-muted">{message.email}</p>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={`truncate text-[13px] ${message.read ? "font-medium text-text-secondary" : "font-semibold text-text-primary"}`}
+                    >
+                      {message.subject || "(no subject)"}
+                    </p>
+                    <p className="truncate text-[12px] text-text-muted">{message.message}</p>
+                  </div>
+                  <div className="w-24">
+                    {flag ? (
+                      <span
+                        className={`inline-flex items-center rounded-[3px] border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase ${
+                          message.emailFailed ? "text-accent" : "text-text-muted"
+                        }`}
+                      >
+                        {flag}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="w-[84px] font-mono text-[10px] text-text-secondary">
+                    {formatReceived(message.createdAt)}
+                  </div>
+                  <div className="flex w-16 items-center gap-1.5">{actions}</div>
+                </div>
+              </Link>
+            );
+          })
         )}
       </div>
 
