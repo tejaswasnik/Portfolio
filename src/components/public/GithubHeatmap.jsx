@@ -50,13 +50,19 @@ export default function GithubHeatmap({ calendar }) {
         >
           Activity
         </h2>
-        <div className="flex flex-col gap-2.5">
-          <div className="flex justify-between font-mono text-[9px] text-text-muted">
+        {/*
+          The full year is ~52 columns wide (~730px at 10px cells + gap),
+          which overflows any mobile viewport — design.md §22: "heatmap
+          ... scrolls horizontally with the months row". Both rows share
+          one scroll container so they stay aligned while scrolling.
+        */}
+        <div className="flex flex-col gap-2.5 overflow-x-auto">
+          <div className="flex w-max min-w-full justify-between gap-1 font-mono text-[9px] text-text-muted">
             {monthLabels.map((label, index) => (
               <span key={`${label}-${index}`}>{label.toUpperCase()}</span>
             ))}
           </div>
-          <div className="flex gap-1">
+          <div className="flex w-max gap-1">
             {calendar.weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-1">
                 {week.days.map((day) => (

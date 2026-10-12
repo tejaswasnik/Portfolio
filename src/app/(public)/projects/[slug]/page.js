@@ -24,9 +24,9 @@ import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 // renders a <button> — see docs/DECISIONS.md step 3 for why these stay
 // duplicated rather than editing the step 1 primitive).
 const liveLinkClass =
-  "inline-flex items-center gap-2 rounded-pill bg-cta-bg border border-cta-bg text-cta-text px-3.5 py-2.5 text-sm font-medium hover:bg-text-primary";
+  "inline-flex w-full items-center justify-center gap-2 rounded-pill bg-cta-bg border border-cta-bg text-cta-text px-3.5 py-2.5 text-sm font-medium hover:bg-text-primary sm:w-auto";
 const githubLinkClass =
-  "inline-flex items-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase hover:border-accent/50";
+  "inline-flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase hover:border-accent/50 sm:w-auto";
 
 /** @param {{ params: Promise<{ slug: string }> }} props */
 export async function generateMetadata({ params }) {
@@ -104,7 +104,7 @@ export default async function ProjectDetailPage({ params }) {
         <SectionDivider />
         <div className="flex flex-col gap-4 p-6">
           <div className="flex items-center gap-3">
-            <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">
+            <h1 className="font-serif text-[30px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
               {project.name}
             </h1>
             <span

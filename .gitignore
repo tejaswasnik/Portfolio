@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright (fixes round 2: e2e responsive checks)
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

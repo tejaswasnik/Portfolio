@@ -7,6 +7,12 @@ import { useEffect, useId, useRef } from "react";
  * layout) follows the contact form modal (Figma 74:1105); focus trap,
  * Esc-to-close and aria wiring have no Figma frame and are built from
  * tokens (see docs/PROGRESS.md "Designed by me").
+ *
+ * Below `sm` (640px) every dialog becomes a full-width bottom sheet
+ * (design.md §22 "< 520... becomes a full-width bottom sheet" for the
+ * contact modal, §23 "Dialogs and the icon picker become bottom sheets"
+ * for admin — consolidated on one breakpoint rather than building two
+ * slightly different responsive behaviours for the same primitive).
  * @param {{open: boolean, onClose: () => void, title: string, children: React.ReactNode}} props
  */
 export default function Dialog({ open, onClose, title, children }) {
@@ -51,7 +57,7 @@ export default function Dialog({ open, onClose, title, children }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-bg/80 p-6 sm:items-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-bg/80 sm:items-center sm:p-6">
       <button
         type="button"
         aria-label="Close dialog"
@@ -64,7 +70,7 @@ export default function Dialog({ open, onClose, title, children }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 w-full max-w-[520px] rounded-2xl border border-border-subtle bg-surface-1 p-8"
+        className="relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-border-subtle bg-surface-1 p-6 sm:max-w-[520px] sm:rounded-2xl sm:p-8"
       >
         <div className="mb-4 flex items-center justify-between">
           <h2
