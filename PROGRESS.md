@@ -14,7 +14,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ### 1. Design tokens and theme
 - Status: done
 - Date: 2026-10-12
-- Commit: (pending — see commit after this file)
+- Commit: 373bb60
 - Verification: `npm run lint && npm test && npm run build` all pass; dev server checked at /dev/ui — compiled CSS inlines `var(--token)` into utility rules (no hard-coded hex); no-flash theme script and font variables confirmed present in rendered HTML.
 - Notes: see docs/DECISIONS.md for deviations (no tailwind.config.js, light theme tokens partly derived from screenshot since Figma variables only exposed text colors, --cta-bg/--cta-text kept constant across themes, added --border-hover token).
 
