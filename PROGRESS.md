@@ -28,7 +28,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ### 3. Public home page
 - Status: done
 - Date: 2026-10-12
-- Commit: (pending — see commit log)
+- Commit: caa0bcb
 - Verification: `npm run lint && npm test && npm run build` all pass (54 tests); dev server checked — nav/rails render correctly in HTML, no server errors; sections render nothing yet because `sections`/`profile`/`skills`/`projects` are unseeded in the live DB (expected, see docs/DECISIONS.md). Visibility/graceful-degradation logic (empty social links skipped, failed GitHub fetch hides Activity, unpublished-DB states still render the rest of the page) verified by code review plus a new Vitest suite for `src/lib/github/contributions.js`.
 - Notes: see docs/DECISIONS.md for deviations (home-page reads hit the real `.env` Mongo cluster read-only at build time since `/` is statically prerendered; Banner/Profile split into independently toggleable pieces; project cards render `coverImage` not bespoke illustration; icons inlined with `currentColor` instead of `<img src>`; Message me/Let's Talk degrade to `mailto:`; a few spots duplicate Button's class strings for `<a>` links since editing step 1's primitives was out of scope).
 
