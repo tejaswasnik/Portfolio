@@ -42,7 +42,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ### 5. Contact form
 - Status: done
 - Date: 2026-10-12
-- Commit: (pending — see commit history after this file is committed)
+- Commit: ed92cf4
 - Verification: `npm run lint && npm test && npm run build` all pass (78 tests, +15 new: env-loader fix, rate-limit atomic upsert, sendMail credential/send-failure paths, full contact route handler with every dependency mocked). `next build` confirms `/api/contact` is dynamic (`ƒ`). Dev server checked: `/projects`'s "Let's Talk" button renders as a real `<button>` (not gated by the unseeded `sections` collection); `POST /api/contact` exercised live for bad email (400 + fieldErrors), empty message (400 + fieldErrors), and a filled honeypot (silent 200, confirmed no DB write via code path) — did not submit a fully valid request live, to avoid writing an unrequested document to the real Mongo cluster.
 - Notes: see docs/DECISIONS.md for deviations (fixed a pre-existing getEnv() bug that broke the Mongo client for any missing optional var; IP-hash salt source; atomic rate-limit upsert; honeypot returns silent success; client always sees success once the message is saved regardless of email outcome; ContactModalProvider mounted in PageFrame; Message me/Let's Talk no longer gated on a social email).
 
