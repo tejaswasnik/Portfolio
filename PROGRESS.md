@@ -112,9 +112,20 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Public-facing empty states for the avatar ("no caption" instead of Figma's "YOUR PHOTO") and banner ("Banner coming soon" instead of Figma's "Upload GIF banner") — the Figma copy reads as an editor-facing hint, not public copy.
 - Screenshot lightbox (`src/components/public/Lightbox.jsx`) — no Figma frame for the overlay itself; gallery grid/caption-row chrome follows the real frame, focus-trap/Esc/arrow-key interaction reuses `Dialog`'s pattern from step 1.
 
+## Final phase (MASTER_PROMPT.md §7)
+- Status: partially done
+- Date: 2026-10-12
+- Clean-install re-verification: done — `rm -rf node_modules .next && npm ci && npm run lint && npm test && npm run build` all pass (293/293 tests) on a fresh `npm ci` install.
+- Lighthouse on `/`, `/projects`, a project details page: done this session, see step 13's entry above for scores and caveats about this sandbox's measurement noise. Re-run against the real Vercel deployment before treating any number near the 90 threshold as final.
+- Full authenticated e2e pass (seed → admin login → create/edit/publish a project → see it on the public site → submit the contact form → see the message in the inbox → check the dashboard counts → toggle a section → toggle maintenance mode → export JSON): **not done** — this sandbox can now reach the real MongoDB Atlas/ImageKit (see step 13's notes, a change from every earlier step), but the admin password isn't known to this session, so a real login couldn't be exercised. Everything up to the login form itself was re-verified (redirects, rate limiting logic, lockout — all unit-tested since step 7).
+- Figma re-comparison: not done exhaustively this session — see step 13's entry for what was spot-checked and why a full pass was out of scope here.
+- README accuracy: done — the "Deployment (Vercel)" section added in step 13 covers env vars, Atlas network access, domain and Gmail OAuth2's production-mode requirement.
+- v1.0.0 tag: **not created**. Deliberately held back — tagging a release is a declaration that it's ready to ship, and two real gaps remain open (the authenticated e2e pass, the full Figma re-comparison) that only the project owner can reasonably sign off on given they involve judgment calls (is close-enough-via-code-review sufficient, is the real admin password ready to use). Recommend tagging once those are either completed or explicitly waived.
+
 ## Blocked
 (Failures that survived 3 distinct fix attempts.)
 
 ## Needs from you
-- Real credentials for `.env.local` (MongoDB URI, ImageKit keys, Google OAuth client id/secret/refresh token, Gmail user, GitHub token, analytics salt, JWT secret, admin email) — building against mocks/placeholders until supplied.
-- Run `npm run seed:admin` against a reachable database and do a full manual login → `/admin` dashboard → sign-out pass — not exercisable in this sandbox (no outbound network to MongoDB Atlas; see step 7's notes).
+- The admin password, to run a real authenticated e2e pass (login → dashboard → projects/skills/sections/profile/banner/messages/settings/media → sign out) — `.env`/`.env.local` credentials and a seeded database already exist and are reachable from this sandbox as of step 13 (a change from every earlier step's "no outbound network to Atlas" note), so this is now the only missing piece.
+- A decision on tagging v1.0.0 — see "Final phase" above.
+- Optional: a dedicated pass to re-compare every page against its Figma frame at all four breakpoints (1440/1280/768/375) in both themes — each page was checked once during its own build step, but a full re-diff after steps 12-13's changes hasn't been done.
