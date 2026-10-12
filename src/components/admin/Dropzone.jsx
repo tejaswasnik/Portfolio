@@ -4,6 +4,8 @@ import { useId, useRef, useState } from "react";
 import { FileIcon, TrashIcon, UploadIcon } from "@/components/ui/icons.jsx";
 import { useImageKitUpload } from "@/lib/imagekit/useImageKitUpload.js";
 import { deleteImageKitFileAction } from "@/lib/imagekit/actions.js";
+import { recordMediaUpload } from "@/app/admin/(dashboard)/media/actions.js";
+import MediaPickerDialog from "@/components/admin/MediaPickerDialog";
 
 /**
  * Reusable single-file ImageKit uploader (CLAUDE.md step 9): drag/drop
@@ -45,6 +47,7 @@ export default function Dropzone({
   const inputId = useId();
   const inputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const { upload, uploading, progress, error, setError } = useImageKitUpload({ folder });
 
   async function handleFile(file) {
@@ -56,6 +59,14 @@ export default function Dropzone({
 
     const result = await upload(file);
     if (!result.ok) return;
+
+    recordMediaUpload({
+      fileId: result.fileId,
+      url: result.url,
+      name: result.name || file.name,
+      type: file.type || "application/octet-stream",
+      size: result.size ?? file.size,
+    }).catch(() => {});
 
     if (fileId) deleteImageKitFileAction({ fileId }).catch(() => {});
     onChange({ url: result.url, fileId: result.fileId });
@@ -129,6 +140,22 @@ export default function Dropzone({
           className="sr-only"
         />
       </label>
+
+      {kind === "image" ? (
+        <button
+          type="button"
+          onClick={() => setPickerOpen(true)}
+          className="self-start font-mono text-[10px] text-text-muted underline hover:text-text-primary"
+        >
+          Browse library instead
+        </button>
+      ) : null}
+
+      <MediaPickerDialog
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onPick={onChange}
+      />
 
       {uploading ? (
         <div className="h-1 w-full overflow-hidden rounded-full bg-surface-2">

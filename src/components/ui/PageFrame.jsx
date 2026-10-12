@@ -15,11 +15,11 @@ import AnalyticsBeacon from "@/components/public/AnalyticsBeacon";
  */
 export default function PageFrame({ children, className = "" }) {
   return (
-    <div className={`relative mx-auto max-w-column ${className}`.trim()}>
+    <main className={`relative mx-auto max-w-column ${className}`.trim()}>
       <Rails />
       <AnalyticsBeacon />
       <ContactModalProvider>{children}</ContactModalProvider>
-    </div>
+    </main>
   );
 }
 

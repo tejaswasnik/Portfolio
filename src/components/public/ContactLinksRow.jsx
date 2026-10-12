@@ -55,7 +55,7 @@ export default function ContactLinksRow({ socialLinks }) {
   return (
     <section id="contact" aria-label="Contact links">
       <SectionDivider />
-      <div className="flex divide-x divide-border-subtle">
+      <div className="grid grid-cols-2 divide-x divide-y divide-border-subtle md:flex md:divide-y-0">
         <MessageMeTrigger icon={<MailIcon size={16} />} label="Message me" />
         {cells.map((cell) => (
           <TrackedLink
