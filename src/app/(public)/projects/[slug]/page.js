@@ -6,6 +6,7 @@ import Nav from "@/components/public/Nav";
 import MarkdownContent from "@/components/public/MarkdownContent";
 import Lightbox from "@/components/public/Lightbox";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
+import TrackedLink from "@/components/public/TrackedLink";
 import Chip from "@/components/ui/Chip";
 import { BackIcon, GithubIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import {
@@ -112,16 +113,28 @@ export default async function ProjectDetailPage({ params }) {
           </p>
           <div className="flex flex-wrap gap-2.5">
             {project.liveUrl ? (
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className={liveLinkClass}>
+              <TrackedLink
+                trackTarget={`${project.name} · live link`}
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={liveLinkClass}
+              >
                 Visit live site
                 <ArrowUpRightIcon size={14} />
-              </a>
+              </TrackedLink>
             ) : null}
             {project.githubUrl ? (
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={githubLinkClass}>
+              <TrackedLink
+                trackTarget={`${project.name} · GitHub`}
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={githubLinkClass}
+              >
                 <GithubIcon size={14} />
                 View on GitHub
-              </a>
+              </TrackedLink>
             ) : null}
           </div>
         </div>

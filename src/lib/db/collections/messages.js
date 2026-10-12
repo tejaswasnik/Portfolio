@@ -76,6 +76,13 @@ export function markAllMessagesRead(db) {
   return messagesCollection(db).updateMany({ read: false }, { $set: { read: true } });
 }
 
+/** Messages received between `start` and `end` (dashboard KPI counts, step 11). */
+export function findMessagesInRange(db, start, end) {
+  return messagesCollection(db)
+    .find({ createdAt: { $gte: start, $lte: end } })
+    .toArray();
+}
+
 /**
  * Pure admin-inbox filter (step 10): narrows an already-fetched message
  * array by search text (name/email/subject/message, case-insensitive)

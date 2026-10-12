@@ -85,7 +85,20 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Everything from here on (steps 11–13 and the final phase) continues autonomously per docs/MASTER_PROMPT.md's "Work autonomously... do not stop to ask me unless truly blocked" and the user's "continue till the project is completed" — no per-screen review pause, unlike step 8's explicit instruction.
 
 ### 11. Analytics
+- Status: done
+- Date: 2026-10-12
+- Commit: (pending)
+- Verification: `npm run lint && npm test && npm run build` all pass (269 tests, +51 new: `hash`/`bot`/`userAgent`/`referrer`/`dateRange`/`aggregations` fully fixture-tested with zero DB mocking, plus `/api/track` route tests and `trackEventInputSchema`). `next build` registers `/api/track` and shows `/admin` dynamic. Live dev-server check: unauthenticated `GET /admin` → 307, `POST /api/track` → 200, `GET /` → 200 (confirms `AnalyticsBeacon` mounted in `PageFrame` doesn't break SSR), `/projects` → 200 (confirms the `TrackedLink` swap in `ProjectCard` didn't break anything). Could not visually verify the live dashboard (same unreachable-Mongo limitation as every prior admin step) or exercise a real beacon round-trip end-to-end in a browser.
+- Notes: see docs/DECISIONS.md step 11 for full reasoning. Built `src/lib/analytics/` (hash, bot filter, UA/referrer/country parsing, date-range resolution, and pure aggregation functions over an already-fetched event array — not a Mongo `$group` pipeline, since the PRD's "test the aggregations with fixture events" literally describes pure-function testing), `POST /api/track` (admin-signed-in and bot requests are skipped, never a raw IP stored), a client `trackEvent`/`AnalyticsBeacon` (mounted once in `PageFrame`, so only public pages beacon), and a new `TrackedLink` wrapper used for every PRD-listed tracked link (GitHub/LinkedIn/Twitter, resume, project live/GitHub links) so the server components rendering them didn't need to become client components. Dashboard (Figma 53:2) built as KPI cards with sparklines, a views-over-time SVG line chart, top pages/referrers/countries, device/browser/OS breakdown, click tracking, and a recent-activity feed — the feed deliberately shows only real tracked events (messages + resume-download/contact-button clicks), not Figma's fabricated "Workspace viewed 24 times"/"Banner updated" sample rows, since this app has no per-project daily view counts or admin audit log.
+
+### 12. Media library
 - Status: not started
+
+### 13. Polish and launch
+- Status: not started
+
+## Not yet done (usage limit reached mid-session)
+Steps 12 (Media library) and 13 (Polish and launch), plus MASTER_PROMPT.md §7's final phase (clean-install re-verification, full e2e pass, Lighthouse, README accuracy pass, v1.0.0 tag) have not been started. See the session's final chat message for a summary of what's left and recommended next steps.
 
 ### 12. Media library
 - Status: not started

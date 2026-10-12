@@ -1,3 +1,5 @@
+import TrackedLink from "@/components/public/TrackedLink";
+
 // Matches Button's "dashed" variant classes (src/components/ui/Button.jsx)
 // without reaching for an <a> rendered through a <button>-only component —
 // step 1's primitives are out of scope for this step (docs/DECISIONS.md).
@@ -49,14 +51,15 @@ export default function ProfileIdentity({ profile }) {
         ) : null}
       </div>
       {profile?.resumeUrl ? (
-        <a
+        <TrackedLink
+          trackTarget="Resume download"
           href={profile.resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
           className={dashedLinkClass}
         >
           Resume
-        </a>
+        </TrackedLink>
       ) : null}
     </div>
   );
