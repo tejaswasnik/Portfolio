@@ -1,9 +1,10 @@
 /**
  * Inline icon set. Path data downloaded verbatim from Figma (assets under
  * contact row 10:1085, about footnote 5:5638, banner upload 5:5325, project
- * card actions 5:5651 — see docs/DECISIONS.md step 3), with the baked
- * `stroke` hex swapped for `currentColor` so each icon inherits its
- * wrapper's text color and works in both themes. No shape was redrawn.
+ * card actions 5:5651 — see docs/DECISIONS.md step 3 — plus icon/back and
+ * icon/expand from the project details page, 72:453/72:566, step 4), with
+ * the baked `stroke` hex swapped for `currentColor` so each icon inherits
+ * its wrapper's text color and works in both themes. No shape was redrawn.
  */
 
 function Icon({ size = 16, viewBox, children, className = "" }) {
@@ -104,6 +105,34 @@ export function CoffeeIcon(props) {
         d="M5.83333 1.1662V2.33287M8.16667 1.1662V2.33287M9.33333 4.6662C9.48804 4.6662 9.63642 4.72766 9.74581 4.83705C9.85521 4.94645 9.91667 5.09482 9.91667 5.24953V9.9162C9.91667 10.535 9.67083 11.1285 9.23325 11.5661C8.79566 12.0037 8.20217 12.2495 7.58333 12.2495H4.08333C3.46449 12.2495 2.871 12.0037 2.43342 11.5661C1.99583 11.1285 1.75 10.535 1.75 9.9162V5.24953C1.75 5.09482 1.81146 4.94645 1.92085 4.83705C2.03025 4.72766 2.17862 4.6662 2.33333 4.6662H10.5C11.1188 4.6662 11.7123 4.91203 12.1499 5.34962C12.5875 5.7872 12.8333 6.38069 12.8333 6.99953C12.8333 7.61837 12.5875 8.21186 12.1499 8.64945C11.7123 9.08703 11.1188 9.33287 10.5 9.33287H9.91667M3.5 1.1662V2.33287"
         stroke="currentColor"
         strokeLinecap="round"
+      />
+    </Icon>
+  );
+}
+
+export function BackIcon(props) {
+  return (
+    <Icon viewBox="0 0 12 12" {...props}>
+      <path
+        d="M9.5 6H2.5M6 2.5L2.5 6L6 9.5"
+        stroke="currentColor"
+        strokeWidth="0.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function ExpandIcon(props) {
+  return (
+    <Icon viewBox="0 0 12 12" {...props}>
+      <path
+        d="M10.5 4.5V1.5H7.5M10.5 1.5L7 5M1.5 7.5V10.5H4.5M1.5 10.5L5 7"
+        stroke="currentColor"
+        strokeWidth="0.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Icon>
   );

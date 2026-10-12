@@ -4,7 +4,7 @@ import { getProfile } from "./collections/profile.js";
 import { getSiteSettings } from "./collections/site-settings.js";
 import { findVisibleSections } from "./collections/sections.js";
 import { findVisibleSkills } from "./collections/skills.js";
-import { findPublicProjects } from "./collections/projects.js";
+import { findPublicProjects, findPublicProjectBySlug } from "./collections/projects.js";
 import { serializeDoc, serializeDocs } from "./serialize.js";
 
 /**
@@ -54,6 +54,12 @@ const cachedFeaturedProjects = unstable_cache(
 const cachedAllPublicProjects = unstable_cache(
   async () => serializeDocs(await findPublicProjects(await getDb(), {})),
   ["public-all-projects"],
+  { tags: [CACHE_TAGS.projects] },
+);
+
+const cachedProjectBySlug = unstable_cache(
+  async (slug) => serializeDoc(await findPublicProjectBySlug(await getDb(), slug)),
+  ["public-project-by-slug"],
   { tags: [CACHE_TAGS.projects] },
 );
 
@@ -111,5 +117,14 @@ export async function getPublicAllProjects() {
     return await cachedAllPublicProjects();
   } catch {
     return [];
+  }
+}
+
+/** @param {string} slug */
+export async function getPublicProjectBySlug(slug) {
+  try {
+    return await cachedProjectBySlug(slug);
+  } catch {
+    return null;
   }
 }

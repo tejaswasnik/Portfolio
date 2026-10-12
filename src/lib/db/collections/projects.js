@@ -38,3 +38,19 @@ export function findPublicProjects(db, options) {
 export function findPublicProjectBySlug(db, slug) {
   return projectsCollection(db).findOne({ slug, published: true });
 }
+
+/**
+ * Pure /projects list filter (step 4): narrows an already-fetched,
+ * already-public project array by the `?tag=<skillId>` and
+ * `?status=<ongoing|completed>` URL search params. "All" (or omitted)
+ * is represented by an empty/undefined value — matches everything.
+ * @param {Array<{ techIds: string[], status: string }>} projects
+ * @param {{ tag?: string, status?: string }} [filters]
+ */
+export function filterProjectsByTagAndStatus(projects, { tag, status } = {}) {
+  return projects.filter((project) => {
+    if (tag && !project.techIds.includes(tag)) return false;
+    if (status && project.status !== status) return false;
+    return true;
+  });
+}
