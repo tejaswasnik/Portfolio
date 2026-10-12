@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { siteSettingsSchema } from "./site-settings.js";
+import { siteSettingsSchema, settingsFormSchema, maintenanceToggleSchema } from "./site-settings.js";
 
 describe("siteSettingsSchema", () => {
   const valid = {
@@ -30,5 +30,38 @@ describe("siteSettingsSchema", () => {
     const { title, ...withoutTitle } = valid;
     const result = siteSettingsSchema.safeParse(withoutTitle);
     expect(result.success).toBe(false);
+  });
+});
+
+describe("settingsFormSchema (admin Settings form)", () => {
+  const valid = {
+    title: "Tejas Wasnik",
+    description: "Personal portfolio.",
+    notificationEmail: "owner@example.com",
+    adminEmail: "owner@example.com",
+  };
+
+  it("accepts a valid combined payload", () => {
+    expect(settingsFormSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("rejects an invalid adminEmail", () => {
+    expect(settingsFormSchema.safeParse({ ...valid, adminEmail: "nope" }).success).toBe(false);
+  });
+
+  it("strips footerText/githubUsername/maintenanceMode rather than requiring or validating them (owned elsewhere)", () => {
+    const result = settingsFormSchema.safeParse({ ...valid, maintenanceMode: "not-a-bool" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data).not.toHaveProperty("maintenanceMode");
+  });
+});
+
+describe("maintenanceToggleSchema (admin Settings instant toggle)", () => {
+  it("accepts a boolean value", () => {
+    expect(maintenanceToggleSchema.safeParse({ value: true }).success).toBe(true);
+  });
+
+  it("rejects a non-boolean value", () => {
+    expect(maintenanceToggleSchema.safeParse({ value: "yes" }).success).toBe(false);
   });
 });

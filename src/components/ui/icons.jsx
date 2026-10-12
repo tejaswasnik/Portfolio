@@ -139,6 +139,19 @@ export function ExpandIcon(props) {
   );
 }
 
+export function DownloadIcon(props) {
+  return (
+    <Icon viewBox="0 0 12 12" {...props}>
+      <path
+        d="M10.5 7.5V9.5C10.5 9.76522 10.3946 10.0196 10.2071 10.2071C10.0196 10.3946 9.76522 10.5 9.5 10.5H2.5C2.23478 10.5 1.98043 10.3946 1.79289 10.2071C1.60536 10.0196 1.5 9.76522 1.5 9.5V7.5M8.5 5L6 7.5L3.5 5M6 7.5V1.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
 export function LockIcon(props) {
   return (
     <Icon viewBox="0 0 16 16" {...props}>
@@ -503,6 +516,39 @@ export function CheckIcon(props) {
     <Icon viewBox="0 0 14 14" {...props}>
       <path
         d="M11.6667 3.5L5.25 9.91667L2.33333 7"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function ArchiveIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M12.25 1.75H1.75C1.42783 1.75 1.16667 2.01117 1.16667 2.33333V4.08333C1.16667 4.4055 1.42783 4.66667 1.75 4.66667H12.25C12.5722 4.66667 12.8333 4.4055 12.8333 4.08333V2.33333C12.8333 2.01117 12.5722 1.75 12.25 1.75Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2.33333 4.66667V11.0833C2.33333 11.3928 2.45625 11.6895 2.67504 11.9083C2.89383 12.1271 3.19058 12.25 3.5 12.25H10.5C10.8094 12.25 11.1062 12.1271 11.325 11.9083C11.5437 11.6895 11.6667 11.3928 11.6667 11.0833V4.66667M5.83333 7H8.16667"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function ReplyIcon(props) {
+  return (
+    <Icon viewBox="0 0 12 12" {...props}>
+      <path d="M4.5 8.5L2 6L4.5 3.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M10 9V8C10 7.46957 9.78929 6.96086 9.41421 6.58579C9.03914 6.21071 8.53043 6 8 6H2"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"

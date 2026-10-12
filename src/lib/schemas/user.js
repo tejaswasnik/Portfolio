@@ -15,3 +15,21 @@ export const userSchema = z.object({
   tokenVersion: z.number().int().nonnegative().default(0),
   createdAt: z.date().optional(),
 });
+
+/**
+ * Admin Settings' "Update password" form (step 10, Figma 71:7's "At
+ * least 12 characters" copy, taken literally). `currentPassword` is
+ * verified against the session user's real hash server-side, not by
+ * this schema — it only checks shape and that the two new-password
+ * fields match.
+ */
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1),
+    newPassword: z.string().min(12),
+    confirmPassword: z.string().min(1),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match.",
+    path: ["confirmPassword"],
+  });

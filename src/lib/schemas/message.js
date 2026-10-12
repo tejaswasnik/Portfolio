@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { objectIdStringSchema } from "./common.js";
 
 /** Hidden form field name; a real submission must leave it empty. */
 export const honeypotFieldName = "company";
@@ -24,3 +25,9 @@ export const messageSchema = z.object({
   ipHash: z.string().min(1),
   createdAt: z.date().optional(),
 });
+
+/** Admin inbox's id-only actions: delete, retry email. */
+export const messageIdSchema = z.object({ id: objectIdStringSchema });
+
+/** Admin inbox's read/archived quick toggles. */
+export const messageToggleSchema = z.object({ id: objectIdStringSchema, value: z.boolean() });
