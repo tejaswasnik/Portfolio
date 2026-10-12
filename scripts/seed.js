@@ -43,12 +43,12 @@ const siteSettings = {
 };
 
 const skills = [
-  { name: "JavaScript", icon: "javascript", category: "Language", visible: true, order: 0 },
-  { name: "React", icon: "react", category: "Framework", visible: true, order: 1 },
-  { name: "Next.js", icon: "nextjs", category: "Framework", visible: true, order: 2 },
-  { name: "Node.js", icon: "nodejs", category: "Runtime", visible: true, order: 3 },
-  { name: "MongoDB", icon: "mongodb", category: "Database", visible: true, order: 4 },
-  { name: "Tailwind CSS", icon: "tailwindcss", category: "Styling", visible: true, order: 5 },
+  { name: "JavaScript", iconSlug: "javascript", category: "Language", visible: true, order: 0 },
+  { name: "React", iconSlug: "react", category: "Framework", visible: true, order: 1 },
+  { name: "Next.js", iconSlug: "nextdotjs", category: "Framework", visible: true, order: 2 },
+  { name: "Node.js", iconSlug: "nodedotjs", category: "Runtime", visible: true, order: 3 },
+  { name: "MongoDB", iconSlug: "mongodb", category: "Database", visible: true, order: 4 },
+  { name: "Tailwind CSS", iconSlug: "tailwindcss", category: "Styling", visible: true, order: 5 },
 ];
 
 const now = new Date();

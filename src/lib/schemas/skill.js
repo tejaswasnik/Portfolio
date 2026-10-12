@@ -1,9 +1,17 @@
 import { z } from "zod";
-import { objectIdStringSchema } from "./common.js";
+import { objectIdStringSchema, optionalUrlSchema } from "./common.js";
+
+/** A simple-icons slug: lowercase letters, digits and hyphens, 1-40 chars. Never a fixed-length abbreviation (docs/DECISIONS.md, fixes round 2). */
+const iconSlugSchema = z
+  .string()
+  .trim()
+  .regex(/^[a-z0-9-]{1,40}$/, "Use a lowercase slug (letters, digits, hyphens)")
+  .or(z.literal(""));
 
 export const skillSchema = z.object({
   name: z.string().trim().min(1),
-  icon: z.string().trim().min(1),
+  iconSlug: iconSlugSchema.default(""),
+  iconUrl: optionalUrlSchema.default(""),
   category: z.string().trim().default(""),
   visible: z.boolean().default(true),
   order: z.number().int().default(0),

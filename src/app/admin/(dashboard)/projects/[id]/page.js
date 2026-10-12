@@ -4,6 +4,8 @@ import { findAllProjects, findProjectById } from "@/lib/db/collections/projects.
 import { findAllSkills } from "@/lib/db/collections/skills.js";
 import { serializeDoc, serializeDocs } from "@/lib/db/serialize.js";
 import ProjectForm from "@/components/admin/ProjectForm";
+import SkillIcon from "@/components/ui/SkillIcon";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 export const metadata = { title: "Admin — Edit project" };
 
@@ -33,7 +35,10 @@ export default async function EditProjectPage({ params }) {
     <ProjectForm
       mode="edit"
       project={serializeDoc(project)}
-      skills={serializeDocs(skills)}
+      skills={serializeDocs(skills).map((skill) => ({
+        ...skill,
+        iconNode: <SkillIcon {...resolveSkillIcon(skill)} size={12} />,
+      }))}
       totalCount={totalCount}
     />
   );

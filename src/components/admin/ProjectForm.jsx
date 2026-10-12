@@ -35,7 +35,7 @@ const cardClass =
  * @param {{
  *   mode: 'create' | 'edit',
  *   project: null | {id: string, name: string, slug: string, shortDescription: string, longDescription: string, coverImage?: string, screenshots?: string[], liveUrl?: string, githubUrl?: string, techIds?: string[], status: string, featured: boolean, published: boolean, order: number, seo?: {title?: string, description?: string, ogImage?: string}},
- *   skills: Array<{id: string, name: string}>,
+ *   skills: Array<{id: string, name: string, iconNode?: React.ReactNode}>,
  *   totalCount: number,
  * }} props
  */
@@ -353,6 +353,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
                       key={id}
                       className="inline-flex items-center gap-1.5 rounded-pill border border-dashed border-border-default py-1 pl-2.5 pr-1.5 font-mono text-[10px] text-text-secondary"
                     >
+                      {skill?.iconNode}
                       {skill?.name ?? id}
                       <button
                         type="button"

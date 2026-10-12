@@ -18,7 +18,14 @@ const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-m
 const fieldInput =
   "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent";
 
-const emptyForm = { name: "", icon: "", category: "", visible: true, orderChoice: "last" };
+const emptyForm = {
+  name: "",
+  iconSlug: "",
+  iconUrl: "",
+  category: "",
+  visible: true,
+  orderChoice: "last",
+};
 
 /**
  * Admin Skills screen (Figma 67:7): list column (search, category
@@ -27,14 +34,12 @@ const emptyForm = { name: "", icon: "", category: "", visible: true, orderChoice
  * pencil loads that skill into the same panel, matching the single
  * frame Figma gives for "Add skill" (no separate Edit frame exists).
  *
- * The real frame's Icon field is a "pick from a library or upload"
- * control, but no icon-library data source or ImageKit upload (step 9)
- * exists yet, so Icon is a short text abbreviation the admin types
- * directly — matching exactly what the list's existing rows already
- * render (see docs/DECISIONS.md step 8).
+ * Icon is a simple-icons slug (`iconSlug`) rendered via `SkillIcon`
+ * (fixes round 2, Fix 1) — the full search-and-pick UI from design.md
+ * §20 is Fix 2's commit; this field is still a plain text input here.
  *
  * @param {{
- *   skills: Array<{id: string, name: string, icon: string, category: string, visible: boolean, order: number}>,
+ *   skills: Array<{id: string, name: string, iconSlug?: string, iconUrl?: string, iconNode: React.ReactNode, category: string, visible: boolean, order: number}>,
  *   totalCount: number,
  *   categories: string[],
  *   reorderDisabled: boolean,
@@ -62,7 +67,8 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     setEditingId(skill.id);
     setForm({
       name: skill.name,
-      icon: skill.icon,
+      iconSlug: skill.iconSlug || "",
+      iconUrl: skill.iconUrl || "",
       category: skill.category || "",
       visible: skill.visible,
       orderChoice: skill.order + 1,
@@ -147,7 +153,8 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     const payload = {
       name: form.name,
-      icon: form.icon,
+      iconSlug: form.iconSlug,
+      iconUrl: form.iconUrl,
       category: form.category,
       visible: form.visible,
       orderChoice: form.orderChoice,
@@ -218,8 +225,8 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
                   />
                 </div>
                 <div className="flex w-8 items-center">
-                  <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt font-mono text-[10px] font-bold text-text-chip">
-                    {skill.icon}
+                  <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+                    {skill.iconNode}
                   </span>
                 </div>
                 <div className="flex-1 text-[13px] font-medium text-text-primary">
@@ -297,17 +304,15 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
         </label>
 
         <label className="flex w-full flex-col gap-1.5">
-          <span className={fieldLabel}>Icon · short abbreviation (e.g. &quot;TS&quot;, &quot;Nx&quot;)</span>
+          <span className={fieldLabel}>Icon slug (simple-icons, e.g. &quot;html5&quot;, &quot;nextdotjs&quot;)</span>
           <input
-            value={form.icon}
-            onChange={(event) => setForm((f) => ({ ...f, icon: event.target.value }))}
-            placeholder="e.g. Gq"
-            maxLength={3}
-            required
+            value={form.iconSlug}
+            onChange={(event) => setForm((f) => ({ ...f, iconSlug: event.target.value }))}
+            placeholder="e.g. graphql"
             className={`${fieldInput} font-mono`}
           />
-          {fieldErrors.icon ? (
-            <span className="text-[11px] text-text-secondary">{fieldErrors.icon[0]}</span>
+          {fieldErrors.iconSlug ? (
+            <span className="text-[11px] text-text-secondary">{fieldErrors.iconSlug[0]}</span>
           ) : null}
         </label>
 
