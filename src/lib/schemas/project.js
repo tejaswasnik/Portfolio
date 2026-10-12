@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { slugSchema, optionalUrlSchema } from "./common.js";
+import { objectIdStringSchema, slugSchema, optionalUrlSchema } from "./common.js";
 import { seoSchema } from "./seo.js";
 
 /**
@@ -23,4 +23,20 @@ export const projectSchema = z.object({
   published: z.boolean().default(false),
   order: z.number().int().default(0),
   seo: seoSchema.optional(),
+});
+
+/** Admin list quick-toggle actions (featured/published), step 8. */
+export const projectToggleSchema = z.object({
+  id: objectIdStringSchema,
+  value: z.boolean(),
+});
+
+/** Admin list delete action, step 8. */
+export const projectIdSchema = z.object({
+  id: objectIdStringSchema,
+});
+
+/** Admin list drag-to-reorder: the project ids in their new display order. */
+export const projectReorderSchema = z.object({
+  orderedIds: z.array(objectIdStringSchema).min(1),
 });

@@ -61,7 +61,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for the two-layer trust model (middleware = edge signature/expiry + sliding refresh, requireAdmin() = authoritative DB-backed tokenVersion check), lockout thresholds (5 attempts / 15 min, taken from the real Figma copy), CSRF Origin check, route-group split (`admin/(dashboard)` vs `admin/login`), and the `next build` "middleware deprecated, use proxy" notice flagged for step 13.
 
 ### 8. Admin content management
-- Status: not started
+- Status: in progress — screen 1 of 5 done (Projects list), stopped for review per docs/PROMPTS.md step 8 ("Do them in that order and stop for my review after each one.")
+- Date: 2026-10-12
+- Commit: (pending)
+- Verification: `npm run lint && npm test && npm run build` all pass (143 tests, +14 new: `projectToggleSchema`/`projectIdSchema`/`projectReorderSchema` and the pure `filterAdminProjects` search/status/featured/published helper). `next build` shows `/admin/projects` as dynamic (`ƒ`). Live dev-server check: unauthenticated `GET /admin/projects` → 307 to `/admin/login`, same as every other `/admin/*` route (confirms the shared `(dashboard)` layout's `requireAdmin()` protects it) — a full authenticated visual pass against Figma 65:11 wasn't possible in this sandbox (no outbound network to the real Mongo Atlas cluster, same limitation noted in step 7), so the page was instead built directly from `get_design_context`'s pixel values (spacing, colors via tokens, font sizes) and the rendered screenshot.
+- Notes: see docs/DECISIONS.md step 8 for deviations (admin list reads `findAllProjects` directly, not the public cache; server actions in `src/app/admin/projects/actions.js` return `{ok,error}` instead of redirecting; explicit toggle values for idempotency; drag-reorder disabled while a filter/search is active; Figma's "DRAFT" status-tag sample content not reproduced since status/published are independent fields; delete-confirmation dialog reuses neutral `Button` variants, no danger token exists; `icon/up` reuses the existing `ArrowUpRightIcon`). New project (66:700), Edit project (66:9), Skills (67:7), Sections (67:836) and Profile & About (69:612) remain — each needs its own review stop per the step prompt.
 
 ### 9. Images: ImageKit and banner
 - Status: not started

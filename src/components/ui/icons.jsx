@@ -388,6 +388,97 @@ export function LogOutIcon(props) {
   );
 }
 
+export function SearchIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M6.41667 11.0833C8.994 11.0833 11.0833 8.994 11.0833 6.41667C11.0833 3.83934 8.994 1.75 6.41667 1.75C3.83934 1.75 1.75 3.83934 1.75 6.41667C1.75 8.994 3.83934 11.0833 6.41667 11.0833Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M12.25 12.25L9.74167 9.74167" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function PlusIcon(props) {
+  return (
+    <Icon viewBox="0 0 12 12" {...props}>
+      <path d="M2.5 6H9.5M6 2.5V9.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function GripIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M5.25 4.08333C5.57217 4.08333 5.83333 3.82217 5.83333 3.5C5.83333 3.17783 5.57217 2.91667 5.25 2.91667C4.92783 2.91667 4.66667 3.17783 4.66667 3.5C4.66667 3.82217 4.92783 4.08333 5.25 4.08333Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.25 7.58333C5.57217 7.58333 5.83333 7.32217 5.83333 7C5.83333 6.67783 5.57217 6.41667 5.25 6.41667C4.92783 6.41667 4.66667 6.67783 4.66667 7C4.66667 7.32217 4.92783 7.58333 5.25 7.58333Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.25 11.0833C5.57217 11.0833 5.83333 10.8222 5.83333 10.5C5.83333 10.1778 5.57217 9.91667 5.25 9.91667C4.92783 9.91667 4.66667 10.1778 4.66667 10.5C4.66667 10.8222 4.92783 11.0833 5.25 11.0833Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.75 4.08333C9.07217 4.08333 9.33333 3.82217 9.33333 3.5C9.33333 3.17783 9.07217 2.91667 8.75 2.91667C8.42783 2.91667 8.16667 3.17783 8.16667 3.5C8.16667 3.82217 8.42783 4.08333 8.75 4.08333Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.75 7.58333C9.07217 7.58333 9.33333 7.32217 9.33333 7C9.33333 6.67783 9.07217 6.41667 8.75 6.41667C8.42783 6.41667 8.16667 6.67783 8.16667 7C8.16667 7.32217 8.42783 7.58333 8.75 7.58333Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.75 11.0833C9.07217 11.0833 9.33333 10.8222 9.33333 10.5C9.33333 10.1778 9.07217 9.91667 8.75 9.91667C8.42783 9.91667 8.16667 10.1778 8.16667 10.5C8.16667 10.8222 8.42783 11.0833 8.75 11.0833Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function PencilIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M9.91667 1.75C10.0652 1.57444 10.249 1.43153 10.4563 1.3304C10.6635 1.22926 10.8897 1.17211 11.1205 1.16259C11.3512 1.15307 11.5814 1.19139 11.7964 1.2751C12.0114 1.35881 12.2065 1.48609 12.3692 1.6488C12.5319 1.81152 12.6587 2.00612 12.7415 2.22019C12.8243 2.43426 12.8612 2.66311 12.85 2.89215C12.8388 3.1212 12.7797 3.34541 12.6764 3.5505C12.573 3.75559 12.4278 3.93705 12.25 4.08333L4.375 11.9583L1.16667 12.8333L2.04167 9.625L9.91667 1.75Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
+export function TrashIcon(props) {
+  return (
+    <Icon viewBox="0 0 14 14" {...props}>
+      <path
+        d="M1.75 3.5H12.25M11.0833 3.5V11.6667C11.0833 11.9761 10.9604 12.2728 10.7416 12.4916C10.5228 12.7104 10.2261 12.8333 9.91667 12.8333H4.08333C3.77391 12.8333 3.47717 12.7104 3.25838 12.4916C3.03958 12.2728 2.91667 11.9761 2.91667 11.6667V3.5M4.66667 3.5V2.33333C4.66667 2.02391 4.78958 1.72717 5.00838 1.50838C5.22717 1.28958 5.52391 1.16667 5.83333 1.16667H8.16667C8.47609 1.16667 8.77283 1.28958 8.99162 1.50838C9.21042 1.72717 9.33333 2.02391 9.33333 2.33333V3.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}
+
 export function UploadIcon(props) {
   return (
     <Icon viewBox="0 0 16 16" {...props}>

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { COLLECTIONS } from "./names.js";
 
 /** @param {import('mongodb').Db} db */
@@ -51,6 +52,75 @@ export function filterProjectsByTagAndStatus(projects, { tag, status } = {}) {
   return projects.filter((project) => {
     if (tag && !project.techIds.includes(tag)) return false;
     if (status && project.status !== status) return false;
+    return true;
+  });
+}
+
+/** All projects, in display order (admin list — includes unpublished). */
+export function findAllProjects(db) {
+  return projectsCollection(db).find({}).sort({ order: 1 }).toArray();
+}
+
+/** @param {import('mongodb').Db} db @param {string} id */
+export function findProjectById(db, id) {
+  return projectsCollection(db).findOne({ _id: new ObjectId(id) });
+}
+
+/**
+ * @param {import('mongodb').Db} db
+ * @param {Record<string, unknown>} data Parsed `projectSchema` output.
+ */
+export function insertProject(db, data) {
+  return projectsCollection(db).insertOne(data);
+}
+
+/**
+ * @param {import('mongodb').Db} db
+ * @param {string} id
+ * @param {Record<string, unknown>} patch
+ */
+export function updateProjectById(db, id, patch) {
+  return projectsCollection(db).updateOne({ _id: new ObjectId(id) }, { $set: patch });
+}
+
+/** @param {import('mongodb').Db} db @param {string} id */
+export function deleteProjectById(db, id) {
+  return projectsCollection(db).deleteOne({ _id: new ObjectId(id) });
+}
+
+/**
+ * Bulk-writes a new `order` (0-based, by array position) for every id in
+ * `orderedIds` — the admin list's drag-to-reorder action.
+ * @param {import('mongodb').Db} db
+ * @param {string[]} orderedIds
+ */
+export function reorderProjects(db, orderedIds) {
+  return projectsCollection(db).bulkWrite(
+    orderedIds.map((id, index) => ({
+      updateOne: { filter: { _id: new ObjectId(id) }, update: { $set: { order: index } } },
+    })),
+  );
+}
+
+/**
+ * Pure admin-list filter (step 8): narrows an already-fetched project
+ * array by search text (name/slug, case-insensitive) and the status/
+ * featured/published segmented controls. "all"/"any" (or omitted) means
+ * no filtering on that dimension — matches everything.
+ * @param {Array<{name: string, slug: string, status: string, featured: boolean, published: boolean}>} projects
+ * @param {{search?: string, status?: string, featured?: string, published?: string}} [filters]
+ */
+export function filterAdminProjects(projects, { search, status, featured, published } = {}) {
+  const needle = search?.trim().toLowerCase();
+  return projects.filter((project) => {
+    if (needle && !project.name.toLowerCase().includes(needle) && !project.slug.includes(needle)) {
+      return false;
+    }
+    if (status && status !== "all" && project.status !== status) return false;
+    if (featured === "featured" && !project.featured) return false;
+    if (featured === "not-featured" && project.featured) return false;
+    if (published === "published" && !project.published) return false;
+    if (published === "draft" && project.published) return false;
     return true;
   });
 }

@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { projectSchema } from "./project.js";
+import {
+  projectSchema,
+  projectToggleSchema,
+  projectIdSchema,
+  projectReorderSchema,
+} from "./project.js";
+
+const validId = "507f1f77bcf86cd799439011";
 
 const valid = {
   name: "Fieldnote",
@@ -69,5 +76,47 @@ describe("projectSchema", () => {
       githubUrl: "",
     });
     expect(result.success).toBe(true);
+  });
+});
+
+describe("projectToggleSchema (admin list quick featured/published toggles)", () => {
+  it("accepts a valid id and boolean value", () => {
+    expect(projectToggleSchema.safeParse({ id: validId, value: true }).success).toBe(true);
+  });
+
+  it("rejects a malformed id", () => {
+    expect(projectToggleSchema.safeParse({ id: "not-an-id", value: true }).success).toBe(false);
+  });
+
+  it("rejects a non-boolean value", () => {
+    expect(projectToggleSchema.safeParse({ id: validId, value: "true" }).success).toBe(false);
+  });
+});
+
+describe("projectIdSchema (admin list delete action)", () => {
+  it("accepts a valid id", () => {
+    expect(projectIdSchema.safeParse({ id: validId }).success).toBe(true);
+  });
+
+  it("rejects a malformed id", () => {
+    expect(projectIdSchema.safeParse({ id: "123" }).success).toBe(false);
+  });
+});
+
+describe("projectReorderSchema (admin list drag-to-reorder)", () => {
+  it("accepts a non-empty array of valid ids", () => {
+    expect(
+      projectReorderSchema.safeParse({ orderedIds: [validId, validId] }).success,
+    ).toBe(true);
+  });
+
+  it("rejects an empty array", () => {
+    expect(projectReorderSchema.safeParse({ orderedIds: [] }).success).toBe(false);
+  });
+
+  it("rejects an array containing a malformed id", () => {
+    expect(
+      projectReorderSchema.safeParse({ orderedIds: [validId, "bad-id"] }).success,
+    ).toBe(false);
   });
 });
