@@ -19,7 +19,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (no tailwind.config.js, light theme tokens partly derived from screenshot since Figma variables only exposed text colors, --cta-bg/--cta-text kept constant across themes, added --border-hover token).
 
 ### 2. Database and schemas
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: (recorded after commit)
+- Verification: `npm run lint && npm test && npm run build` all pass (47 tests); confirmed no top-level `getEnv()`/`getClient()`/`getDb()` calls, so the build succeeds with no `.env.local` present.
+- Notes: see docs/DECISIONS.md for deviations (lowercase project status enum, relative imports in src/lib/db for plain-node script compatibility, `node --env-file` instead of dotenv, 24-month events TTL, thin collection helpers vs. full CRUD, a real `.env` appeared on disk but db:seed/db:ensure-indexes were not run against it).
 
 ### 3. Public home page
 - Status: not started
