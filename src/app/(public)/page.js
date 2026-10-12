@@ -10,6 +10,7 @@ import StackSection from "@/components/public/StackSection";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import SideIndex from "@/components/public/SideIndex";
 import { getContributionCalendar } from "@/lib/github/contributions";
+import { SECTION_INDEX_META } from "@/lib/sections.js";
 import {
   getPublicProfile,
   getPublicSiteSettings,
@@ -23,21 +24,6 @@ export const metadata = {
   description: "Portfolio",
 };
 
-/**
- * Maps a sections-collection key to the DOM id each section actually
- * renders (the short Figma-derived names, not the sections-collection
- * key spelling) and its side-index label (figma-map.md "Deliberate
- * differences": About, Contact, Activity, Projects, Stack —
- * banner/profile/lets-talk don't get their own index entries, matching
- * the Figma side index's five rows).
- */
-const INDEX_META = {
-  about: { id: "about", label: "About" },
-  "contact-links": { id: "contact", label: "Contact" },
-  "github-heatmap": { id: "activity", label: "Activity" },
-  projects: { id: "projects", label: "Projects" },
-  "tech-stack": { id: "stack", label: "Stack" },
-};
 
 export default async function Home() {
   const [profile, siteSettings, visibleSections, skills, featuredProjects] =
@@ -67,8 +53,8 @@ export default async function Home() {
   };
 
   const indexEntries = visibleSections
-    .filter((section) => sectionRendered[section.key] && INDEX_META[section.key])
-    .map((section) => INDEX_META[section.key]);
+    .filter((section) => sectionRendered[section.key] && SECTION_INDEX_META[section.key])
+    .map((section) => SECTION_INDEX_META[section.key]);
 
   return (
     <PageFrame>
