@@ -1,5 +1,6 @@
 import SectionDivider from "@/components/ui/SectionDivider";
 import MessageMeTrigger from "@/components/public/MessageMeTrigger";
+import TrackedLink from "@/components/public/TrackedLink";
 import {
   MailIcon,
   GithubIcon,
@@ -26,6 +27,7 @@ export default function ContactLinksRow({ socialLinks }) {
           icon: <GithubIcon size={16} />,
           label: "GitHub",
           external: true,
+          target: "GitHub profile",
         }
       : null,
     links.linkedin
@@ -35,6 +37,7 @@ export default function ContactLinksRow({ socialLinks }) {
           icon: <LinkedinIcon size={16} />,
           label: "LinkedIn",
           external: true,
+          target: "LinkedIn",
         }
       : null,
     links.twitter
@@ -44,6 +47,7 @@ export default function ContactLinksRow({ socialLinks }) {
           icon: <TwitterIcon size={14} />,
           label: "Twitter",
           external: true,
+          target: "Twitter / X",
         }
       : null,
   ].filter(Boolean);
@@ -54,8 +58,9 @@ export default function ContactLinksRow({ socialLinks }) {
       <div className="flex divide-x divide-border-subtle">
         <MessageMeTrigger icon={<MailIcon size={16} />} label="Message me" />
         {cells.map((cell) => (
-          <a
+          <TrackedLink
             key={cell.key}
+            trackTarget={cell.target}
             href={cell.href}
             target={cell.external ? "_blank" : undefined}
             rel={cell.external ? "noopener noreferrer" : undefined}
@@ -78,7 +83,7 @@ export default function ContactLinksRow({ socialLinks }) {
             {cell.external ? (
               <ArrowUpRightIcon size={14} className="text-text-secondary" />
             ) : null}
-          </a>
+          </TrackedLink>
         ))}
       </div>
     </section>

@@ -1,4 +1,5 @@
 import Chip from "@/components/ui/Chip";
+import TrackedLink from "@/components/public/TrackedLink";
 import { GithubIcon, ArrowUpRightIcon, ArrowRightIcon } from "@/components/ui/icons";
 
 // Matches Button's "icon" variant classes (src/components/ui/Button.jsx)
@@ -50,7 +51,8 @@ export default function ProjectCard({ project, skillsById }) {
           </h3>
           <div className="flex items-center gap-1.5">
             {project.githubUrl ? (
-              <a
+              <TrackedLink
+                trackTarget={`${project.name} · GitHub`}
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -58,10 +60,11 @@ export default function ProjectCard({ project, skillsById }) {
                 className={iconLinkClass}
               >
                 <GithubIcon size={14} />
-              </a>
+              </TrackedLink>
             ) : null}
             {project.liveUrl ? (
-              <a
+              <TrackedLink
+                trackTarget={`${project.name} · live link`}
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -69,7 +72,7 @@ export default function ProjectCard({ project, skillsById }) {
                 className={iconLinkClass}
               >
                 <ArrowUpRightIcon size={14} />
-              </a>
+              </TrackedLink>
             ) : null}
           </div>
         </div>

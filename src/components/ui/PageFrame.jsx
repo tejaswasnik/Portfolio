@@ -1,4 +1,5 @@
 import ContactModalProvider from "@/components/public/ContactModalProvider";
+import AnalyticsBeacon from "@/components/public/AnalyticsBeacon";
 
 /**
  * The "drafting table" page chrome (docs/design.md §5): two full-height
@@ -8,12 +9,15 @@ import ContactModalProvider from "@/components/public/ContactModalProvider";
  *
  * Also mounts the single contact modal (step 5) for the whole page via
  * ContactModalProvider, so every public page gets "Message me"/"Let's
- * Talk" wiring for free without each page managing its own modal state.
+ * Talk" wiring for free without each page managing its own modal state,
+ * and the page-view analytics beacon (step 11) for the same reason —
+ * only public pages use `PageFrame`, so admin pages never beacon.
  */
 export default function PageFrame({ children, className = "" }) {
   return (
     <div className={`relative mx-auto max-w-column ${className}`.trim()}>
       <Rails />
+      <AnalyticsBeacon />
       <ContactModalProvider>{children}</ContactModalProvider>
     </div>
   );

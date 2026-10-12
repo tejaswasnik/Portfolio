@@ -1,6 +1,7 @@
 "use client";
 
 import { useOpenContactModal } from "./ContactModalProvider";
+import { trackEvent } from "@/lib/analytics/trackEvent.js";
 
 // Matches Button's "primary" variant classes (src/components/ui/Button.jsx);
 // kept as a plain <button> here as well since Button already renders one.
@@ -12,7 +13,14 @@ export default function LetsTalkTrigger() {
   const openContactModal = useOpenContactModal();
 
   return (
-    <button type="button" onClick={openContactModal} className={ctaClass}>
+    <button
+      type="button"
+      onClick={(event) => {
+        trackEvent("click", { target: "Contact button" });
+        openContactModal(event);
+      }}
+      className={ctaClass}
+    >
       Let&apos;s Talk →
     </button>
   );
