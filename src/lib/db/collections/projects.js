@@ -102,24 +102,9 @@ export function reorderProjects(db, orderedIds) {
   );
 }
 
-/**
- * Turns the New/Edit project form's 1-based "Display order" choice into
- * a full re-sequenced id list, ready for `reorderProjects`. Pure —
- * `existingIds` must already exclude `id` (the project being placed).
- * @param {string[]} existingIds
- * @param {string} id
- * @param {number | "last"} position
- */
-export function insertIdAtPosition(existingIds, id, position) {
-  const next = existingIds.filter((existingId) => existingId !== id);
-  if (position === "last") {
-    next.push(id);
-    return next;
-  }
-  const index = Math.min(Math.max(position - 1, 0), next.length);
-  next.splice(index, 0, id);
-  return next;
-}
+// `insertIdAtPosition` moved to `src/lib/db/order.js` (shared with
+// Skills/Sections) — re-exported here so existing imports/tests still work.
+export { insertIdAtPosition } from "../order.js";
 
 /**
  * Pure admin-list filter (step 8): narrows an already-fetched project

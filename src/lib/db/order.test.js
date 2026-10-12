@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { insertIdAtPosition } from "./projects.js";
+import { insertIdAtPosition } from "./order.js";
 
-describe("insertIdAtPosition (New/Edit project form's Display order field)", () => {
+describe("insertIdAtPosition (shared Display-order helper — Projects, Skills, Sections)", () => {
   const existing = ["a", "b", "c"];
 
   it("inserts at the start (position 1)", () => {
