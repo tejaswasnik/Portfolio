@@ -35,7 +35,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ### 4. Projects pages
 - Status: done
 - Date: 2026-10-12
-- Commit: (recorded after commit below)
+- Commit: 752b581
 - Verification: `npm run lint && npm test && npm run build` all pass (63 tests, +9 new: a pure tag/status filter helper and a slug-lookup/404 helper, both DB-mock-free per docs/MASTER_PROMPT.md §5). `next build` confirms `/projects` and `/projects/[slug]` are dynamic (`ƒ`), not statically prerendered. Dev server checked: `/projects` → 200, `/projects/nonexistent-slug` → 404, no server errors in the log.
 - Notes: see docs/DECISIONS.md for deviations (markdown-it for sanitised rendering, tag filter keyed by skill id not slug, lightbox has no Figma frame, index-only screenshot captions, prev/next by shared `order` field, shared LetsTalkSection/ProjectCard reuse, more Button-class-string duplication for links, two new icons downloaded verbatim).
 
