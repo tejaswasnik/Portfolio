@@ -27,9 +27,9 @@ export default function AdminLoginPage() {
 
       <SectionDivider />
 
-      <div className="flex flex-1 items-center justify-center px-6 py-16">
+      <main className="flex flex-1 items-center justify-center px-6 py-16">
         <LoginForm />
-      </div>
+      </main>
 
       <div className="flex h-16 items-center justify-between border-t border-dashed border-rail px-6 font-mono text-[10px] text-text-muted sm:px-10">
         <p>© {new Date().getFullYear()} · Built with care.</p>
