@@ -12,7 +12,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (Tailwind v4 config, dropped experimental cache flags, lazy env loader, npm audit advisories left unresolved).
 
 ### 1. Design tokens and theme
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: (pending — see commit after this file)
+- Verification: `npm run lint && npm test && npm run build` all pass; dev server checked at /dev/ui — compiled CSS inlines `var(--token)` into utility rules (no hard-coded hex); no-flash theme script and font variables confirmed present in rendered HTML.
+- Notes: see docs/DECISIONS.md for deviations (no tailwind.config.js, light theme tokens partly derived from screenshot since Figma variables only exposed text colors, --cta-bg/--cta-text kept constant across themes, added --border-hover token).
 
 ### 2. Database and schemas
 - Status: not started
@@ -51,7 +55,8 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Status: not started
 
 ## Designed by me
-(Screens/states with no Figma frame, built from tokens + components.)
+- `Toggle` (switch) primitive — no Figma frame anywhere in the file (home page has none; admin section/skill toggles come in step 8). Built from tokens; revisit against the real `67:836` frame in step 8.
+- `Dialog` primitive's focus-trap/Esc/aria wiring — the contact modal (`74:1105`) gave the visual chrome (panel, header, ESC label, inputs), but the interactive behavior itself has no design reference.
 
 ## Blocked
 (Failures that survived 3 distinct fix attempts.)
