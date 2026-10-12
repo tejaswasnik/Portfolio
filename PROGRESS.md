@@ -5,11 +5,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 ## Steps
 
 ### 0. Scaffold
-- Status: in progress
-- Date:
-- Commit:
-- Verification:
-- Notes:
+- Status: done
+- Date: 2026-10-12
+- Commit: f74dc81
+- Verification: `npm run lint && npm test && npm run build` all pass
+- Notes: see docs/DECISIONS.md for deviations (Tailwind v4 config, dropped experimental cache flags, lazy env loader, npm audit advisories left unresolved).
 
 ### 1. Design tokens and theme
 - Status: not started
