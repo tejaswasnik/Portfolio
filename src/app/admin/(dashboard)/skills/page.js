@@ -4,6 +4,8 @@ import { serializeDocs } from "@/lib/db/serialize.js";
 import AdminSearchInput from "@/components/admin/AdminSearchInput";
 import SegmentedFilter from "@/components/admin/SegmentedFilter";
 import SkillsManager from "@/components/admin/SkillsManager";
+import SkillIcon from "@/components/ui/SkillIcon";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 export const metadata = { title: "Admin — Skills" };
 
@@ -39,7 +41,10 @@ export default async function AdminSkillsPage({ searchParams }) {
   const categories = [...new Set(allSkills.map((s) => s.category).filter(Boolean))].sort();
   const category = categories.includes(resolved.category) ? resolved.category : "all";
 
-  const filtered = filterAdminSkills(allSkills, { search, category });
+  const filtered = filterAdminSkills(allSkills, { search, category }).map((skill) => ({
+    ...skill,
+    iconNode: <SkillIcon {...resolveSkillIcon(skill)} size={16} />,
+  }));
   const filtersActive = Boolean(search) || category !== "all";
 
   const categoryOptions = [{ value: "all", label: "All" }, ...categories.map((c) => ({ value: c, label: c }))];

@@ -8,6 +8,7 @@ import Lightbox from "@/components/public/Lightbox";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import TrackedLink from "@/components/public/TrackedLink";
 import Chip from "@/components/ui/Chip";
+import SkillIcon from "@/components/ui/SkillIcon";
 import { BackIcon, GithubIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import {
   getPublicProjectBySlug,
@@ -17,6 +18,7 @@ import {
   getPublicSiteSettings,
 } from "@/lib/db/cache";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 // Matches Button's primary/dashed variant classes as links (Button only
 // renders a <button> — see docs/DECISIONS.md step 3 for why these stay
@@ -208,7 +210,7 @@ export default async function ProjectDetailPage({ params }) {
                 const skill = skillsById.get(id);
                 if (!skill) return null;
                 return (
-                  <Chip key={id} variant="skill">
+                  <Chip key={id} variant="skill" icon={<SkillIcon {...resolveSkillIcon(skill)} />}>
                     {skill.name}
                   </Chip>
                 );
