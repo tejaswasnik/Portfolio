@@ -31,7 +31,7 @@ npm run dev                  # http://localhost:3000
 
 ### Environment variables
 
-`MONGODB_URI` · `JWT_SECRET` · `ADMIN_EMAIL` · `IMAGEKIT_PUBLIC_KEY` · `IMAGEKIT_PRIVATE_KEY` · `IMAGEKIT_URL_ENDPOINT` · `GOOGLE_CLIENT_ID` · `GOOGLE_CLIENT_SECRET` · `GOOGLE_REFRESH_TOKEN` · `GMAIL_USER` · `GITHUB_TOKEN` · `ANALYTICS_SALT`
+`MONGODB_URI` · `JWT_SECRET` · `ADMIN_EMAIL` · `IMAGEKIT_PUBLIC_KEY` · `IMAGEKIT_PRIVATE_KEY` · `IMAGEKIT_URL_ENDPOINT` · `GOOGLE_CLIENT_ID` · `GOOGLE_CLIENT_SECRET` · `GOOGLE_REFRESH_TOKEN` · `GMAIL_USER` · `GITHUB_TOKEN` · `ANALYTICS_SALT` · `SITE_URL` (absolute origin for sitemap.xml/robots.txt/OG images, e.g. `https://tejaswasnik.dev`; defaults to `http://localhost:3000`)
 
 **Gmail OAuth2 setup (one time):** create an OAuth client in Google Cloud Console, enable the Gmail API, authorise the `https://mail.google.com/` scope once (for example via the OAuth Playground with your own client credentials) to get a refresh token, and put it in `GOOGLE_REFRESH_TOKEN`. Nodemailer exchanges it for access tokens automatically. Set the OAuth consent screen to *In production*, otherwise refresh tokens expire after 7 days.
 

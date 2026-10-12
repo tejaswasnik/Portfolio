@@ -21,6 +21,11 @@ const envSchema = z.object({
   GMAIL_USER: z.string().default(""),
   GITHUB_TOKEN: z.string().default(""),
   ANALYTICS_SALT: z.string().default(""),
+  // Absolute origin for sitemap.xml/robots.txt/OG image resolution
+  // (step 6). Not read through getEnv() by src/lib/site-url.js itself
+  // (see that file for why), but documented here as part of the app's
+  // full env surface.
+  SITE_URL: z.string().default("http://localhost:3000"),
 
   NODE_ENV: z
     .enum(["development", "production", "test"])

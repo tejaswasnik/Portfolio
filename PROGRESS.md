@@ -47,7 +47,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (fixed a pre-existing getEnv() bug that broke the Mongo client for any missing optional var; IP-hash salt source; atomic rate-limit upsert; honeypot returns silent success; client always sees success once the message is saved regardless of email outcome; ContactModalProvider mounted in PageFrame; Message me/Let's Talk no longer gated on a social email).
 
 ### 6. Maintenance, 404, SEO
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: (recorded after commit, see below)
+- Verification: `npm run lint && npm test && npm run build` all pass (96 tests, +9 new: `getSiteUrl`, `resolveSiteMeta`, `isMaintenanceModeOn`). Dev server checked: an unmatched URL → 404 (body has "ERROR 404"/"This page wandered off"/"Go home"/"View projects"), `/maintenance` → 200 (body has "MAINTENANCE MODE"/"Back soon"), `/sitemap.xml` and `/robots.txt` both 200 and well-formed (sitemap degrades to just `/` and `/projects` since the DB is unseeded; robots disallows `/admin` and `/api`, links the sitemap).
+- Notes: see docs/DECISIONS.md for deviations (no `src/middleware.js` — maintenance mode and SEO metadata both implemented in a new `src/app/(public)/layout.js` instead, since `/admin` has no pages yet; a single root `src/app/not-found.js` instead of `(public)/not-found.js` per ARCHITECTURE.md's diagram, since only a root boundary reliably catches a genuinely unmatched URL; new `SITE_URL` env var; maintenance page uses the real full nav, not Figma-map's claimed "logo-only" nav).
 
 ### 7. Auth and admin shell
 - Status: not started
