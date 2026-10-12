@@ -33,7 +33,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (home-page reads hit the real `.env` Mongo cluster read-only at build time since `/` is statically prerendered; Banner/Profile split into independently toggleable pieces; project cards render `coverImage` not bespoke illustration; icons inlined with `currentColor` instead of `<img src>`; Message me/Let's Talk degrade to `mailto:`; a few spots duplicate Button's class strings for `<a>` links since editing step 1's primitives was out of scope).
 
 ### 4. Projects pages
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: (recorded after commit below)
+- Verification: `npm run lint && npm test && npm run build` all pass (63 tests, +9 new: a pure tag/status filter helper and a slug-lookup/404 helper, both DB-mock-free per docs/MASTER_PROMPT.md §5). `next build` confirms `/projects` and `/projects/[slug]` are dynamic (`ƒ`), not statically prerendered. Dev server checked: `/projects` → 200, `/projects/nonexistent-slug` → 404, no server errors in the log.
+- Notes: see docs/DECISIONS.md for deviations (markdown-it for sanitised rendering, tag filter keyed by skill id not slug, lightbox has no Figma frame, index-only screenshot captions, prev/next by shared `order` field, shared LetsTalkSection/ProjectCard reuse, more Button-class-string duplication for links, two new icons downloaded verbatim).
 
 ### 5. Contact form
 - Status: not started
@@ -67,6 +71,7 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - `Dialog` primitive's focus-trap/Esc/aria wiring — the contact modal (`74:1105`) gave the visual chrome (panel, header, ESC label, inputs), but the interactive behavior itself has no design reference.
 - GitHub heatmap section heading text ("Activity") — the Figma `get_design_context` response for that section was truncated before a heading node appeared; used the side index's own label for consistency.
 - Public-facing empty states for the avatar ("no caption" instead of Figma's "YOUR PHOTO") and banner ("Banner coming soon" instead of Figma's "Upload GIF banner") — the Figma copy reads as an editor-facing hint, not public copy.
+- Screenshot lightbox (`src/components/public/Lightbox.jsx`) — no Figma frame for the overlay itself; gallery grid/caption-row chrome follows the real frame, focus-trap/Esc/arrow-key interaction reuses `Dialog`'s pattern from step 1.
 
 ## Blocked
 (Failures that survived 3 distinct fix attempts.)

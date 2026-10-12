@@ -71,3 +71,25 @@ Deviations from the docs and ambiguous calls made while executing `docs/PROMPTS.
 **GitHub heatmap heading text ("Activity") has no confirmed Figma frame** — `get_design_context` on the Activity section's editorial column (`10:11`) was truncated by the tool's own output-size limit before any heading node appeared (the contribution-calendar grid alone is ~180 day cells). Used "Activity" to match the side index's own label for this section (confirmed from `10:1057`). Logged under "Designed by me" in PROGRESS.md.
 
 **Avatar's "YOUR PHOTO" caption and the banner's "Upload GIF banner" copy are editor-facing hints in the Figma file, not public copy** — both read as instructions to the person filling the field in, not something a site visitor should see. The public empty states instead show just the initials avatar (no caption) and a neutral "Banner coming soon" line.
+
+## Step 4 — Projects pages
+
+**`markdown-it` chosen for sanitised markdown rendering**, one dependency instead of a parser + separate sanitizer. `html: false` (the default-off setting kept explicit) makes it escape any raw HTML in the source as literal text rather than render it — the PRD's "sanitised markdown rendering" requirement, with no DOM-based sanitizer (e.g. DOMPurify, which needs jsdom server-side) needed.
+
+**Tag filter uses the skill's Mongo id as the `?tag=` value, not a slug.** `skillSchema` (step 2) has no slug field, and adding one is a schema change outside this step's scope. `/projects?tag=<skillId>` works identically to a slug for filtering/linking purposes; it's just less readable in the address bar. Revisit if skills ever get a slug for other reasons.
+
+**Lightbox has no Figma frame** (confirmed in `docs/figma-map.md`'s "Known gaps"). Built `src/components/public/Lightbox.jsx` reusing the same focus-trap/Esc interaction pattern as `Dialog` (step 1), plus Left/Right arrow-key navigation between screenshots — the gallery grid and caption-row chrome *do* follow the real frame (`72:536`/`72:564`). Listed under "Designed by me".
+
+**Screenshot captions are index-only ("01 · N total"), not per-image captions like Figma's sample "01 · Editor".** `project.screenshots` (step 2 schema) is a plain `string[]` of URLs with no caption field — Figma's captions are illustrated-mockup sample copy, not real data the admin enters. Revisit if a future step adds per-screenshot captions to the schema.
+
+**Prev/next ordering uses the same `order` field the list/home page already sort by** (`getPublicAllProjects`, step 2/3), found by index around the current slug in that same array — not a separate query. Keeps one definition of "project order" across the whole site.
+
+**`/projects` and `/projects/[slug]` reuse `LetsTalkSection` (step 3) as their footer**, fed the same `profile`/`siteSettings` fields as the home page. Figma's "Connect and footer" frame on both pages (`72:391`, `72:700`) has the identical heading-block/CTA/colophon structure as the home page's version — confirmed by metadata shape, not a re-fetch of the full frame (to stay under the per-call token budget established in steps 1/3).
+
+**`/projects` grid reuses `ProjectCard` (step 3) directly**, in a `grid grid-cols-1 sm:grid-cols-2` layout instead of the home page's `flex` row — PRD 2.3 explicitly calls for "same card design" on this page.
+
+**More internal nav links duplicate `Button`'s dashed/primary class strings as `<a>`/`Link`** (live-site/GitHub buttons, pager cards, back-to-projects), continuing the step 3 precedent rather than adding `href`/`asChild` support to the `Button` primitive, which is still out of this step's scope.
+
+**`BackIcon`/`ExpandIcon` added to `src/components/ui/icons.jsx`**, path data downloaded verbatim from Figma (`72:453` icon/back, `72:566` icon/expand) with the baked stroke hex swapped for `currentColor`, matching the step 3 icon convention exactly.
+
+**`/projects` and `/projects/[slug]` render dynamically (`ƒ`), not statically prerendered** — confirmed in the `next build` route output. Unlike `/` (static, step 3), these read `searchParams`/`params` at request time, so they don't hit the live Mongo cluster during `npm run build`/CI the way the home page currently does.
