@@ -1,4 +1,5 @@
 import SectionDivider from "@/components/ui/SectionDivider";
+import MessageMeTrigger from "@/components/public/MessageMeTrigger";
 import {
   MailIcon,
   GithubIcon,
@@ -8,25 +9,16 @@ import {
 } from "@/components/ui/icons";
 
 /**
- * Contact links row (Figma 10:1085). "Message me" opens the contact
- * modal once step 5 builds it; until then it degrades to a mailto link
- * against profile.socialLinks.email (docs/DECISIONS.md). Empty links
- * are skipped entirely per PRD 2.2.4 — including "Message me" itself
- * when no email is set.
+ * Contact links row (Figma 10:1085). "Message me" opens the real
+ * contact modal (step 5) unconditionally — it doesn't need a visitor-
+ * facing email on file, since it emails siteSettings.notificationEmail,
+ * not profile.socialLinks.email. The social cells still skip empty
+ * links entirely per PRD 2.2.4.
  * @param {{ socialLinks: { email?: string, github?: string, linkedin?: string, twitter?: string } | undefined }} props
  */
 export default function ContactLinksRow({ socialLinks }) {
   const links = socialLinks ?? {};
   const cells = [
-    links.email
-      ? {
-          key: "message",
-          href: `mailto:${links.email}`,
-          icon: <MailIcon size={16} />,
-          label: "Message me",
-          accent: true,
-        }
-      : null,
     links.github
       ? {
           key: "github",
@@ -56,12 +48,11 @@ export default function ContactLinksRow({ socialLinks }) {
       : null,
   ].filter(Boolean);
 
-  if (cells.length === 0) return null;
-
   return (
     <section id="contact" aria-label="Contact links">
       <SectionDivider />
       <div className="flex divide-x divide-border-subtle">
+        <MessageMeTrigger icon={<MailIcon size={16} />} label="Message me" />
         {cells.map((cell) => (
           <a
             key={cell.key}

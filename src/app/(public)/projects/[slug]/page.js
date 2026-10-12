@@ -244,7 +244,6 @@ export default async function ProjectDetailPage({ params }) {
       <LetsTalkSection
         heading={profile?.letsTalkHeading}
         subtext={profile?.letsTalkSubtext}
-        email={profile?.socialLinks?.email}
         footerText={siteSettings?.footerText}
       />
     </PageFrame>

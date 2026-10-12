@@ -120,7 +120,6 @@ export default async function ProjectsPage({ searchParams }) {
       <LetsTalkSection
         heading={profile?.letsTalkHeading}
         subtext={profile?.letsTalkSubtext}
-        email={profile?.socialLinks?.email}
         footerText={siteSettings?.footerText}
       />
     </PageFrame>
