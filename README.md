@@ -6,12 +6,12 @@ A personal portfolio with a private admin panel, built with Next.js. The public 
 - **Designs:** all screens are already designed in Figma → see [`docs/figma-map.md`](docs/figma-map.md)
 - **Design tokens and components:** [`docs/design.md`](docs/design.md)
 - **Architecture, data model, API:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- **Build order:** [`docs/ROADMAP.md`](docs/ROADMAP.md) · **Prompts:** [`docs/PROMPTS.md`](docs/PROMPTS.md)
+- **Build order:** [`docs/ROADMAP.md`](docs/ROADMAP.md) · **Prompts:** [`docs/PROMPTS.md`](docs/PROMPTS.md) · **Run it all:** [`docs/MASTER_PROMPT.md`](docs/MASTER_PROMPT.md)
 - **Agent instructions:** [`CLAUDE.md`](CLAUDE.md)
 
 ## Stack
 
-Next.js (App Router) + TypeScript · Tailwind CSS · MongoDB Atlas (official `mongodb` driver) · JWT auth (`jose`, HTTP-only cookie, single admin) · ImageKit · Nodemailer with Google OAuth2 (Gmail) · Zod · npm
+Next.js (App Router) + **JavaScript (no TypeScript)** · Tailwind CSS · MongoDB Atlas (official `mongodb` driver) · JWT auth (`jose`, HTTP-only cookie, single admin) · ImageKit · Nodemailer with Google OAuth2 (Gmail) · Zod · npm
 
 ## Getting started
 
@@ -26,7 +26,6 @@ npm run dev                  # http://localhost:3000
 | `npm run dev` | Start the dev server |
 | `npm run build` / `npm start` | Production build / serve |
 | `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc --noEmit` |
 | `npm test` | Unit tests |
 | `npm run seed:admin` | Create the admin user from `ADMIN_EMAIL` and a prompted password |
 

@@ -10,7 +10,7 @@ Next.js portfolio with a private admin panel. Public site follows the Field Note
 ## 1. Tech stack
 | Layer | Choice |
 |---|---|
-| Framework | Next.js (App Router) + TypeScript |
+| Framework | Next.js (App Router), JavaScript only |
 | Styling | Tailwind CSS, dark/light tokens |
 | Database | MongoDB Atlas (official `mongodb` driver) |
 | Auth | JWT (`jose`) in an HTTP-only cookie, single admin, bcrypt-hashed password |
@@ -102,7 +102,7 @@ Browse every ImageKit upload (banner, photo, resume, covers, screenshots) with t
 See `ARCHITECTURE.md`. Environment variables: `MONGODB_URI`, `JWT_SECRET`, `ADMIN_EMAIL`, `IMAGEKIT_PUBLIC_KEY`, `IMAGEKIT_PRIVATE_KEY`, `IMAGEKIT_URL_ENDPOINT`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GMAIL_USER`, `GITHUB_TOKEN`, `ANALYTICS_SALT`.
 
 ## 5. Non-functional
-Security: input validation everywhere, CSRF-safe auth, rate limiting, sanitised markdown, security headers, secrets in env · Privacy: no analytics cookies, no raw IPs · Performance: static/ISR public pages, lazy images, small first-load JS · Accessibility: WCAG AA, keyboard nav, alt text, reduced-motion for the GIF · Reliability: fallbacks for GitHub, ImageKit, email · Maintainability: TypeScript throughout, shared Zod schemas.
+Security: input validation everywhere, CSRF-safe auth, rate limiting, sanitised markdown, security headers, secrets in env · Privacy: no analytics cookies, no raw IPs · Performance: static/ISR public pages, lazy images, small first-load JS · Accessibility: WCAG AA, keyboard nav, alt text, reduced-motion for the GIF · Reliability: fallbacks for GitHub, ImageKit, email · Maintainability: JavaScript throughout (JSDoc where useful), shared Zod schemas.
 
 ## 6. Release plan
 **Phase 1 (MVP):** public home, projects, details · admin auth, projects CRUD with featured/published toggles, skills CRUD, section toggles, banner upload · contact form with DB save, email and inbox · first-party analytics with core widgets · GitHub heatmap with toggle, profile editor with resume, SEO settings, section reordering.
