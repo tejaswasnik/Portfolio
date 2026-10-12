@@ -12,9 +12,9 @@ export default async function AdminSectionsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
             Sections
           </h1>
           <p className="font-mono text-[11px] text-text-muted">

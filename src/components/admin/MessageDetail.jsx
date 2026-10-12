@@ -110,9 +110,9 @@ export default function MessageDetail({ message }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">Message</h1>
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">Message</h1>
           <p className="font-mono text-[11px] text-text-muted">
             From {message.name} · received {receivedAt}
           </p>
@@ -144,7 +144,7 @@ export default function MessageDetail({ message }) {
         </p>
       ) : null}
 
-      <div className="flex w-full items-start gap-6">
+      <div className="flex w-full flex-col-reverse items-start gap-6 lg:flex-row">
         <div className="flex-1 rounded-xl border border-border-subtle bg-surface-1 p-6">
           <div className="flex w-full items-center gap-3">
             <span className="flex size-11 items-center justify-center rounded-full border border-border-default bg-surface-3 font-serif text-lg text-accent">
@@ -180,7 +180,7 @@ export default function MessageDetail({ message }) {
           </div>
         </div>
 
-        <div className="flex w-[344px] flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 lg:w-[344px]">
           <div className="flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5">
             <p className="font-serif text-[22px] text-text-primary">Actions</p>
             <a

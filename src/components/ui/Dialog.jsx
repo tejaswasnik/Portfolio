@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useId, useRef } from "react";
+import { useFocusTrap } from "@/lib/hooks/useFocusTrap.js";
 
 /**
  * Accessible modal dialog. Chrome (overlay, panel radius/border, header
@@ -19,40 +20,7 @@ export default function Dialog({ open, onClose, title, children }) {
   const panelRef = useRef(null);
   const titleId = useId();
 
-  useEffect(() => {
-    if (!open) return;
-
-    const panel = panelRef.current;
-    const previouslyFocused = document.activeElement;
-    const focusable = panel?.querySelectorAll(
-      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])',
-    );
-    focusable?.[0]?.focus();
-
-    function onKeyDown(event) {
-      if (event.key === "Escape") {
-        onClose();
-        return;
-      }
-      if (event.key !== "Tab" || !focusable?.length) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
-    };
-  }, [open, onClose]);
+  useFocusTrap(panelRef, open, onClose);
 
   if (!open) return null;
 

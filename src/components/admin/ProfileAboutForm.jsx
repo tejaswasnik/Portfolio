@@ -138,9 +138,9 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
             Profile &amp; About
           </h1>
           <p className="font-mono text-[11px] text-text-muted">
@@ -174,7 +174,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
         </p>
       ) : null}
 
-      <div className="flex w-full items-start gap-6">
+      <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
@@ -385,7 +385,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
           </div>
         </div>
 
-        <div className="flex w-[344px] flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 lg:w-[344px]">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
               <p className="font-serif text-[22px] text-text-primary">Resume</p>
