@@ -14,3 +14,16 @@ export const slugSchema = z
 
 /** A URL, or an empty string for "not set yet" (common in optional image/link fields). */
 export const optionalUrlSchema = z.union([z.string().url(), z.literal("")]);
+
+/**
+ * Derives a `slugSchema`-valid slug from free text (admin forms auto-fill
+ * the slug field from the name until the admin edits it directly).
+ * @param {string} text
+ */
+export function slugify(text) {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}

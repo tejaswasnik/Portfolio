@@ -103,6 +103,25 @@ export function reorderProjects(db, orderedIds) {
 }
 
 /**
+ * Turns the New/Edit project form's 1-based "Display order" choice into
+ * a full re-sequenced id list, ready for `reorderProjects`. Pure —
+ * `existingIds` must already exclude `id` (the project being placed).
+ * @param {string[]} existingIds
+ * @param {string} id
+ * @param {number | "last"} position
+ */
+export function insertIdAtPosition(existingIds, id, position) {
+  const next = existingIds.filter((existingId) => existingId !== id);
+  if (position === "last") {
+    next.push(id);
+    return next;
+  }
+  const index = Math.min(Math.max(position - 1, 0), next.length);
+  next.splice(index, 0, id);
+  return next;
+}
+
+/**
  * Pure admin-list filter (step 8): narrows an already-fetched project
  * array by search text (name/slug, case-insensitive) and the status/
  * featured/published segmented controls. "all"/"any" (or omitted) means

@@ -40,3 +40,18 @@ export const projectIdSchema = z.object({
 export const projectReorderSchema = z.object({
   orderedIds: z.array(objectIdStringSchema).min(1),
 });
+
+/**
+ * New/Edit project form (step 8). Same fields as `projectSchema` except
+ * `order`: the form offers a 1-based "Display order" position (or
+ * "last"), which the create/update actions turn into a real `order` by
+ * re-sequencing every project — see `insertIdAtPosition`.
+ */
+export const projectFormSchema = projectSchema.omit({ order: true }).extend({
+  orderChoice: z.union([z.number().int().min(1), z.literal("last")]),
+});
+
+/** `projectFormSchema` plus the id of the project being edited. */
+export const projectUpdateFormSchema = projectFormSchema.extend({
+  id: objectIdStringSchema,
+});
