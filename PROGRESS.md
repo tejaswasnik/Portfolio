@@ -54,7 +54,11 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 - Notes: see docs/DECISIONS.md for deviations (no `src/middleware.js` — maintenance mode and SEO metadata both implemented in a new `src/app/(public)/layout.js` instead, since `/admin` has no pages yet; a single root `src/app/not-found.js` instead of `(public)/not-found.js` per ARCHITECTURE.md's diagram, since only a root boundary reliably catches a genuinely unmatched URL; new `SITE_URL` env var; maintenance page uses the real full nav, not Figma-map's claimed "logo-only" nav).
 
 ### 7. Auth and admin shell
-- Status: not started
+- Status: done
+- Date: 2026-10-12
+- Commit: 62bac7d
+- Verification: `npm run lint && npm test && npm run build` all pass (129 tests, +33 new: lockout, JWT sign/verify/tamper/expiry, password hashing, CSRF origin check, requireAdmin's DB-backed tokenVersion check, the login/logout route handlers, nav-item active-route/breadcrumb logic). `next build` shows `/admin` and the login/logout routes as dynamic (`ƒ`), `/admin/login` as static (`○`). Dev server checked live: unauthenticated `GET /admin` → 307 to `/admin/login`; `/admin/login` renders the real copy ("Welcome back.", "Back to site", etc.); cross-origin `POST /api/admin/login` → 403. A direct Mongo connection attempt from this sandbox's shell failed (`querySrv ECONNREFUSED` — no outbound network to Atlas here), so the live same-origin login attempt correctly hit the graceful 503 path rather than reaching real credential checks; the credential/lockout logic itself is fully covered by mocked tests instead.
+- Notes: see docs/DECISIONS.md for the two-layer trust model (middleware = edge signature/expiry + sliding refresh, requireAdmin() = authoritative DB-backed tokenVersion check), lockout thresholds (5 attempts / 15 min, taken from the real Figma copy), CSRF Origin check, route-group split (`admin/(dashboard)` vs `admin/login`), and the `next build` "middleware deprecated, use proxy" notice flagged for step 13.
 
 ### 8. Admin content management
 - Status: not started
@@ -86,3 +90,4 @@ Tracks execution of `docs/PROMPTS.md` steps 0–13, per `docs/MASTER_PROMPT.md`.
 
 ## Needs from you
 - Real credentials for `.env.local` (MongoDB URI, ImageKit keys, Google OAuth client id/secret/refresh token, Gmail user, GitHub token, analytics salt, JWT secret, admin email) — building against mocks/placeholders until supplied.
+- Run `npm run seed:admin` against a reachable database and do a full manual login → `/admin` dashboard → sign-out pass — not exercisable in this sandbox (no outbound network to MongoDB Atlas; see step 7's notes).
