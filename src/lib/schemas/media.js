@@ -1,6 +1,14 @@
 import { z } from "zod";
+import { objectIdStringSchema } from "./common.js";
 
-/** Where an uploaded file is used, so the media library can block unsafe deletes. */
+/**
+ * Historical "uploaded for" tag. The media library (step 12) doesn't rely
+ * on this for deletion safety or display — it computes live usage by
+ * matching url against the real profile/siteSettings/projects documents
+ * instead (`src/lib/media/usage.js`), since covers/screenshots/photo
+ * never persist a fileId back onto their owning document. Kept so the
+ * field shape matches docs/ARCHITECTURE.md's data model.
+ */
 export const mediaUsageValues = [
   "banner",
   "profile-photo",
@@ -17,4 +25,12 @@ export const mediaSchema = z.object({
   size: z.number().int().nonnegative(),
   usedIn: z.array(z.enum(mediaUsageValues)).default([]),
   createdAt: z.date().optional(),
+});
+
+/** Validates one `recordMediaUpload` call (step 12) — everything `mediaSchema` needs except `createdAt`, which the collection helper stamps. */
+export const mediaUploadSchema = mediaSchema.omit({ createdAt: true });
+
+/** Media library delete action, step 12. */
+export const mediaIdSchema = z.object({
+  id: objectIdStringSchema,
 });
