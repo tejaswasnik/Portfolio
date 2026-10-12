@@ -6,6 +6,7 @@ import { useImageKitUpload } from "@/lib/imagekit/useImageKitUpload.js";
 import { deleteImageKitFileAction } from "@/lib/imagekit/actions.js";
 import { recordMediaUpload } from "@/app/admin/(dashboard)/media/actions.js";
 import MediaPickerDialog from "@/components/admin/MediaPickerDialog";
+import { useToast } from "@/components/ui/Toaster";
 
 /**
  * Reusable single-file ImageKit uploader (CLAUDE.md step 9): drag/drop
@@ -49,16 +50,22 @@ export default function Dropzone({
   const [dragOver, setDragOver] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const { upload, uploading, progress, error, setError } = useImageKitUpload({ folder });
+  const toast = useToast();
 
   async function handleFile(file) {
     if (!file) return;
     if (file.size > maxSizeMB * 1024 * 1024) {
-      setError(`File is ${(file.size / 1024 / 1024).toFixed(1)} MB, over the ${maxSizeMB} MB limit.`);
+      const message = `File is ${(file.size / 1024 / 1024).toFixed(1)} MB, over the ${maxSizeMB} MB limit.`;
+      setError(message);
+      toast.error("Upload failed", { detail: message });
       return;
     }
 
     const result = await upload(file);
-    if (!result.ok) return;
+    if (!result.ok) {
+      toast.error("Upload failed");
+      return;
+    }
 
     recordMediaUpload({
       fileId: result.fileId,
@@ -70,6 +77,9 @@ export default function Dropzone({
 
     if (fileId) deleteImageKitFileAction({ fileId }).catch(() => {});
     onChange({ url: result.url, fileId: result.fileId });
+    // Upload progress stays in the dropzone (design.md §21); the toast
+    // fires once, on completion, labeled with whatever field this is.
+    toast.success(`${label} uploaded`);
   }
 
   async function handleRemove() {

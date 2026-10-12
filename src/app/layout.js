@@ -1,5 +1,6 @@
 import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
+import { ToastProvider } from "@/components/ui/Toaster";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -55,7 +56,9 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <ToastProvider>{children}</ToastProvider>
+      </body>
     </html>
   );
 }

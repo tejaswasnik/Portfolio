@@ -6,6 +6,7 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
 import { ArchiveIcon, TrashIcon } from "@/components/ui/icons.jsx";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   deleteMessage,
   setMessageArchived,
@@ -49,6 +50,7 @@ export default function MessagesTable({ messages }) {
   const [items, setItems] = useState(messages);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
+  const notify = useActionToast();
 
   async function handleArchiveToggle(event, message) {
     event.preventDefault();
@@ -63,7 +65,9 @@ export default function MessagesTable({ messages }) {
         current.map((m) => (m.id === message.id ? { ...m, archived: !next } : m)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
     } else {
+      notify(result, next ? "Message archived" : "Message unarchived");
       router.refresh();
     }
   }
@@ -74,9 +78,11 @@ export default function MessagesTable({ messages }) {
     if (result.ok) {
       setItems((current) => current.filter((m) => m.id !== deleteTarget.id));
       setDeleteTarget(null);
+      notify(result, "Message deleted");
       router.refresh();
     } else {
       setError(result.error || "Could not delete this message.");
+      notify(result);
     }
   }
 

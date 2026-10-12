@@ -7,6 +7,7 @@ import Toggle from "@/components/ui/Toggle";
 import { ArrowUpRightIcon, MailIcon } from "@/components/ui/icons.jsx";
 import { toggleSectionVisible } from "@/app/admin/(dashboard)/sections/actions.js";
 import { saveProfileAndAbout } from "@/app/admin/(dashboard)/profile/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
@@ -67,6 +68,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
   const [heatmapVisible, setHeatmapVisible] = useState(heatmapSection?.visible ?? false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
+  const notify = useActionToast();
   const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -91,7 +93,9 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
     if (!result.ok) {
       setHeatmapVisible(!nextValue);
       setError(result.error || "Could not update the heatmap toggle.");
+      notify(result);
     } else {
+      notify(result, nextValue ? "Section shown" : "Section hidden");
       router.refresh();
     }
   }
@@ -129,10 +133,12 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
     if (!result.ok) {
       setError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
     setSaved(true);
+    notify(result, "Changes saved");
     router.refresh();
   }
 

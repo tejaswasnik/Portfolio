@@ -7,6 +7,7 @@ import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
 import MoveButtons from "@/components/admin/MoveButtons";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   createSkill,
   deleteSkill,
@@ -53,6 +54,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const notify = useActionToast();
 
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
@@ -95,6 +97,9 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
         current.map((s) => (s.id === skill.id ? { ...s, visible: !nextValue } : s)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
+    } else {
+      notify(result, nextValue ? "Skill shown" : "Skill hidden");
     }
   }
 
@@ -124,12 +129,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     startTransition(async () => {
       const result = await reorderSkills({ orderedIds: next.map((s) => s.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
   }
 
@@ -151,13 +151,20 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     startTransition(async () => {
       const result = await reorderSkills({ orderedIds: next.map((s) => s.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
+  }
+
+  /** Shared by `handleDrop` and `moveItem`: rolls back on failure, toasts either way. */
+  function applyReorderResult(result, previousItems) {
+    if (!result.ok) {
+      setItems(previousItems);
+      setError(result.error || "Could not save the new order.");
+      notify(result);
+    } else {
+      notify(result, "Order saved");
+      router.refresh();
+    }
   }
 
   async function confirmDelete() {
@@ -167,9 +174,11 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
       setItems((current) => current.filter((s) => s.id !== deleteTarget.id));
       if (editingId === deleteTarget.id) cancelEdit();
       setDeleteTarget(null);
+      notify(result, "Skill deleted");
       router.refresh();
     } else {
       setError(result.error || "Could not delete this skill.");
+      notify(result);
     }
   }
 
@@ -197,9 +206,11 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     if (!result.ok) {
       setError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
+    notify(result, editingId ? "Changes saved" : "Skill added");
     cancelEdit();
     router.refresh();
   }

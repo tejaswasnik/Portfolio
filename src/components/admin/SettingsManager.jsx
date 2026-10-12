@@ -6,6 +6,7 @@ import Dropzone from "@/components/admin/Dropzone";
 import Toggle from "@/components/ui/Toggle";
 import { CheckIcon, DownloadIcon, LockIcon } from "@/components/ui/icons.jsx";
 import { saveSettings, toggleMaintenanceMode, changePassword, exportSiteData } from "@/app/admin/(dashboard)/settings/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
@@ -54,6 +55,7 @@ export default function SettingsManager({ settings, adminEmail }) {
   const [passwordSubmitting, setPasswordSubmitting] = useState(false);
 
   const [exporting, setExporting] = useState(false);
+  const notify = useActionToast();
 
   function set(key) {
     return (event) => setForm((f) => ({ ...f, [key]: event.target.value }));
@@ -71,7 +73,9 @@ export default function SettingsManager({ settings, adminEmail }) {
     if (!result.ok) {
       setMaintenanceMode(!next);
       setError(result.error || "Could not update maintenance mode.");
+      notify(result);
     } else {
+      notify(result, next ? "Maintenance mode on" : "Maintenance mode off");
       router.refresh();
     }
   }
@@ -88,9 +92,11 @@ export default function SettingsManager({ settings, adminEmail }) {
     if (!result.ok) {
       setError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
+    notify(result, "Changes saved");
     if (result.requiresReauth) {
       router.replace("/admin/login");
       return;
@@ -108,9 +114,11 @@ export default function SettingsManager({ settings, adminEmail }) {
 
     if (!result.ok) {
       setPasswordError(result.error || "Something went wrong.");
+      notify(result);
       return;
     }
 
+    notify(result, "Password changed");
     router.replace("/admin/login");
   }
 
@@ -120,6 +128,7 @@ export default function SettingsManager({ settings, adminEmail }) {
     setExporting(false);
     if (!result.ok) {
       setError(result.error || "Could not export data.");
+      notify(result);
       return;
     }
 
@@ -130,6 +139,7 @@ export default function SettingsManager({ settings, adminEmail }) {
     a.download = `portfolio-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    notify(result, "Export ready");
   }
 
   return (

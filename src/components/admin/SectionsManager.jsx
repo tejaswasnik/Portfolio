@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Toggle from "@/components/ui/Toggle";
 import MoveButtons from "@/components/admin/MoveButtons";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import { CheckIcon, GripIcon } from "@/components/ui/icons.jsx";
 import { SECTION_DESCRIPTIONS, SECTION_INDEX_META } from "@/lib/sections.js";
 import {
@@ -26,6 +27,7 @@ export default function SectionsManager({ sections }) {
   const [dragId, setDragId] = useState(null);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const notify = useActionToast();
 
   const indexEntries = items
     .filter((section) => section.visible && SECTION_INDEX_META[section.key])
@@ -41,7 +43,9 @@ export default function SectionsManager({ sections }) {
         current.map((s) => (s.id === section.id ? { ...s, visible: !nextValue } : s)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
     } else {
+      notify(result, nextValue ? "Section shown" : "Section hidden");
       router.refresh();
     }
   }
@@ -71,12 +75,7 @@ export default function SectionsManager({ sections }) {
 
     startTransition(async () => {
       const result = await reorderSections({ orderedIds: next.map((s) => s.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
   }
 
@@ -97,13 +96,20 @@ export default function SectionsManager({ sections }) {
 
     startTransition(async () => {
       const result = await reorderSections({ orderedIds: next.map((s) => s.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
+  }
+
+  /** Shared by `handleDrop` and `moveItem`: rolls back on failure, toasts either way. */
+  function applyReorderResult(result, previousItems) {
+    if (!result.ok) {
+      setItems(previousItems);
+      setError(result.error || "Could not save the new order.");
+      notify(result);
+    } else {
+      notify(result, "Order saved");
+      router.refresh();
+    }
   }
 
   return (
