@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "db:ensure-indexes": "node --env-file=.env.local scripts/ensure-indexes.js",
-    "db:seed": "node --env-file=.env.local scripts/seed.js"
+    "db:seed": "node --env-file=.env.local scripts/seed.js",
+    "seed:admin": "node --env-file=.env.local scripts/seed-admin.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
