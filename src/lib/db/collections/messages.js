@@ -11,6 +11,11 @@ export function findMessages(db, filter = {}) {
   return messagesCollection(db).find(filter).sort({ createdAt: -1 }).toArray();
 }
 
+/** Unread, non-archived count for the admin sidebar badge (Figma 53:16). */
+export function countUnreadMessages(db) {
+  return messagesCollection(db).countDocuments({ read: false, archived: false });
+}
+
 /**
  * Saves a new contact-form submission. Callers pass the already-Zod-
  * validated fields plus `ipHash`; `read`/`archived`/`emailFailed`
