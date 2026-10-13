@@ -214,7 +214,7 @@ describe("classifyTarget / computeClickTracking", () => {
   it("classifies known target strings into Social/CTA/File/Project", () => {
     expect(classifyTarget("GitHub profile")).toBe("Social");
     expect(classifyTarget("LinkedIn")).toBe("Social");
-    expect(classifyTarget("Twitter / X")).toBe("Social");
+    expect(classifyTarget("X")).toBe("Social");
     expect(classifyTarget("Contact button")).toBe("CTA");
     expect(classifyTarget("Resume download")).toBe("File");
     expect(classifyTarget("Workspace · live link")).toBe("Project");

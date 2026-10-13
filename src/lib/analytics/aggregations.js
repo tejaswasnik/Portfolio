@@ -171,7 +171,7 @@ export function computeDeviceBreakdown(events) {
  * formatted as "<Project name> · live link"/"<Project name> · GitHub".
  */
 export function classifyTarget(target) {
-  if (target === "GitHub profile" || target === "LinkedIn" || target === "Twitter / X") {
+  if (target === "GitHub profile" || target === "LinkedIn" || target === "X") {
     return "Social";
   }
   if (target === "Contact button") return "CTA";

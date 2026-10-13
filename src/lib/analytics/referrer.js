@@ -6,9 +6,9 @@ const KNOWN_LABELS = {
   "linkedin.com": "LinkedIn",
   "www.linkedin.com": "LinkedIn",
   "github.com": "GitHub",
-  "twitter.com": "Twitter / X",
-  "x.com": "Twitter / X",
-  "t.co": "Twitter / X",
+  "twitter.com": "X",
+  "x.com": "X",
+  "t.co": "X",
 };
 
 /**

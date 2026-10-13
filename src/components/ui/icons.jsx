@@ -66,11 +66,11 @@ export function LinkedinIcon(props) {
   );
 }
 
-export function TwitterIcon(props) {
+export function XIcon(props) {
   return (
     <Icon viewBox="0 0 14 14" {...props}>
       <path
-        d="M11.667 4.31619C12.4254 3.55783 12.8338 2.33277 12.8338 2.33277C12.8338 2.33277 11.7254 3.0328 11.0837 3.0328C9.33352 1.39939 6.47496 2.79946 7 5.24957C5.01651 5.30791 3.03302 4.43287 1.74958 2.91613C0.29113 5.59959 1.74958 9.04141 4.66648 9.91645C3.73307 10.7332 2.44964 11.1415 1.1662 11.0832C6.18327 14.4083 12.6004 10.1498 11.667 4.31619Z"
+        d="M1.75 1.75L12.25 12.25M12.25 1.75L1.75 12.25"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
