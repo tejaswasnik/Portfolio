@@ -10,9 +10,14 @@ import { useEffect, useRef, useState } from "react";
  * needs timeline sequencing or scroll-scrubbing (see motion.md §6's GSAP
  * decision). The global `prefers-reduced-motion` CSS override already
  * collapses the transition to near-instant, so content just appears.
- * @param {{ children: React.ReactNode }} props
+ *
+ * `baseClass` swaps the CSS driving the reveal — e.g. GithubHeatmap uses
+ * `"heatmap-wipe"` for its left-to-right clip-path sweep (signature
+ * moment #2) instead of the default fade+slide, reusing this same
+ * observer rather than duplicating it.
+ * @param {{ children: React.ReactNode, baseClass?: string }} props
  */
-export default function Reveal({ children }) {
+export default function Reveal({ children, baseClass = "reveal" }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -34,7 +39,7 @@ export default function Reveal({ children }) {
   }, []);
 
   return (
-    <div ref={ref} className={`reveal${visible ? " is-visible" : ""}`}>
+    <div ref={ref} className={`${baseClass}${visible ? " is-visible" : ""}`}>
       {children}
     </div>
   );
