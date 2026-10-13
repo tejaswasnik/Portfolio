@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import TrackedLink from "@/components/public/TrackedLink";
+import { ArrowRightIcon } from "@/components/ui/icons";
 import TextReveal from "@/components/motion/TextReveal.jsx";
 import RoleRotator from "@/components/motion/RoleRotator.jsx";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
@@ -11,7 +12,7 @@ import { useHeroPlayed } from "@/hooks/useHeroPlayed.js";
 // without reaching for an <a> rendered through a <button>-only component —
 // step 1's primitives are out of scope for this step (docs/DECISIONS.md).
 const dashedLinkClass =
-  "press inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase transition-colors hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "press arrow-nudge inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase transition-colors hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 function initials(name) {
   return name
@@ -107,6 +108,7 @@ export default function ProfileIdentity({ profile }) {
             className={dashedLinkClass}
           >
             Resume
+            <ArrowRightIcon size={14} className="arrow text-accent" />
           </TrackedLink>
         </motion.div>
       ) : null}
