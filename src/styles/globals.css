@@ -129,6 +129,18 @@
   --r-xl: 10px;
   --r-2xl: 12px;
   --r-pill: 100px;
+
+  /* motion (docs/motion.md §2) */
+  --motion-instant: 100ms;
+  --motion-fast: 150ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-move: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --motion-distance-sm: 4px;
+  --motion-distance-md: 8px;
 }
 
 @theme inline {
@@ -225,6 +237,109 @@
 
   .animate-toast-in {
     animation: toast-in 180ms ease-out;
+  }
+
+  /* Dialog enter (docs/motion.md §3 "must") — plays on every mount since
+     Dialog.jsx unmounts on close (`if (!open) return null`), so a
+     keyframe that auto-plays on mount is simpler and more robust than a
+     transition + class-toggle that would need a two-render trick. */
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-overlay-in {
+    animation: overlay-in var(--motion-base) var(--ease-enter);
+  }
+
+  .animate-panel-in {
+    animation: panel-in var(--motion-base) var(--ease-enter);
+  }
+
+  /* Admin sidebar mobile drawer enter (docs/motion.md §3). */
+  @keyframes drawer-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-drawer-in {
+    animation: drawer-in var(--motion-base) var(--ease-enter);
+  }
+
+  /* Orbit dot (docs/motion.md §4, signature moment #1) — continuous
+     ambient drift, removed entirely (not slowed) under reduced motion by
+     the global override above, which also forces iteration-count to 1 so
+     it settles on the loop's start/end state instead of mid-drift. */
+  @keyframes orbit-drift {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0.7;
+    }
+    25% {
+      transform: translate(5px, -3px);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(0, -5px);
+      opacity: 0.85;
+    }
+    75% {
+      transform: translate(-5px, -3px);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(0, 0);
+      opacity: 0.7;
+    }
+  }
+
+  .orbit-dot {
+    animation: orbit-drift 7s linear infinite;
+  }
+
+  /* Section/heatmap scroll reveal (docs/motion.md §3/§4) — shared by the
+     Reveal component and the heatmap's left-to-right wipe. Transitions
+     (not keyframes) since both are toggled by a class once an
+     IntersectionObserver fires, rather than auto-playing on mount. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(var(--motion-distance-md));
+    transition:
+      opacity var(--motion-base) var(--ease-enter),
+      transform var(--motion-base) var(--ease-enter);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .heatmap-wipe {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 700ms var(--ease-enter);
+  }
+
+  .heatmap-wipe.is-visible {
+    clip-path: inset(0 0 0 0);
   }
 
   /*

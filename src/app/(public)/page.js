@@ -9,7 +9,7 @@ import ProjectsSection from "@/components/public/ProjectsSection";
 import StackSection from "@/components/public/StackSection";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import SideIndex from "@/components/public/SideIndex";
-import ScrollReveal from "@/components/ui/ScrollReveal.jsx";
+import Reveal from "@/components/ui/Reveal.jsx";
 import { getContributionCalendar } from "@/lib/github/contributions";
 import { SECTION_INDEX_META } from "@/lib/sections.js";
 import {
@@ -65,55 +65,55 @@ export default async function Home() {
         switch (section.key) {
           case "banner":
             return (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <BannerSection bannerUrl={profile?.bannerUrl} />
-              </ScrollReveal>
+              </Reveal>
             );
           case "profile":
             return (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <ProfileIdentity profile={profile} />
-              </ScrollReveal>
+              </Reveal>
             );
           case "about":
             return sectionRendered.about ? (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <AboutSection profile={profile} />
-              </ScrollReveal>
+              </Reveal>
             ) : null;
           case "contact-links":
             return sectionRendered["contact-links"] ? (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <ContactLinksRow socialLinks={profile?.socialLinks} />
-              </ScrollReveal>
+              </Reveal>
             ) : null;
           case "github-heatmap":
             return sectionRendered["github-heatmap"] ? (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <GithubHeatmap calendar={calendar} />
-              </ScrollReveal>
+              </Reveal>
             ) : null;
           case "projects":
             return sectionRendered.projects ? (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <ProjectsSection projects={featuredProjects} skills={skills} />
-              </ScrollReveal>
+              </Reveal>
             ) : null;
           case "tech-stack":
             return sectionRendered["tech-stack"] ? (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <StackSection skills={skills} />
-              </ScrollReveal>
+              </Reveal>
             ) : null;
           case "lets-talk":
             return (
-              <ScrollReveal key={section.key}>
+              <Reveal key={section.key}>
                 <LetsTalkSection
                   heading={profile?.letsTalkHeading}
                   subtext={profile?.letsTalkSubtext}
                   footerText={siteSettings?.footerText}
                 />
-              </ScrollReveal>
+              </Reveal>
             );
           default:
             return null;
