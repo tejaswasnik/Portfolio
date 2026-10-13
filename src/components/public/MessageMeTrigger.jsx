@@ -18,7 +18,7 @@ export default function MessageMeTrigger({ icon, label }) {
         trackEvent("click", { target: "Contact button" });
         openContactModal(event);
       }}
-      className="flex flex-1 items-center justify-center gap-2.5 bg-bg px-5 py-5"
+      className="lift press flex flex-1 items-center justify-center gap-2.5 bg-bg px-5 py-5"
     >
       <span className="flex size-8 items-center justify-center rounded-lg border border-border-default bg-surface-3 text-accent">
         {icon}

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./motion.css";
 
 /* Lenis (SmoothScroll.jsx) recommended base CSS: `lenis-smooth` forces
  * `scroll-behavior: auto` so a browser-native smooth-scroll never stacks

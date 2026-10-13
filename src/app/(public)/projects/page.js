@@ -1,6 +1,5 @@
 import PageFrame from "@/components/ui/PageFrame";
 import SectionDivider from "@/components/ui/SectionDivider";
-import Nav from "@/components/public/Nav";
 import ProjectCard from "@/components/public/ProjectCard";
 import ProjectFilters from "@/components/public/ProjectFilters";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
@@ -70,8 +69,6 @@ export default async function ProjectsPage({ searchParams }) {
 
   return (
     <PageFrame>
-      <Nav active="projects" />
-
       <section aria-labelledby="projects-page-heading">
         <SectionDivider />
         <div className="flex flex-col gap-5 px-6 pb-6 pt-10">

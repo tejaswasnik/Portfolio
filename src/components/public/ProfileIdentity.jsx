@@ -6,7 +6,7 @@ import { withImageKitTransform } from "@/lib/imagekit/url.js";
 // without reaching for an <a> rendered through a <button>-only component —
 // step 1's primitives are out of scope for this step (docs/DECISIONS.md).
 const dashedLinkClass =
-  "inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase transition-colors hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "press inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 text-text-primary text-[11px] font-bold font-mono uppercase transition-colors hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 function initials(name) {
   return name

@@ -1,5 +1,4 @@
 import PageFrame from "@/components/ui/PageFrame";
-import Nav from "@/components/public/Nav";
 import BannerSection from "@/components/public/BannerSection";
 import ProfileIdentity from "@/components/public/ProfileIdentity";
 import AboutSection from "@/components/public/AboutSection";
@@ -61,8 +60,6 @@ export default async function Home() {
 
   return (
     <PageFrame interestImages={visibleKeys.has("interest-images") ? interestImages : []}>
-      <Nav active="home" />
-
       {visibleSections.map((section) => {
         switch (section.key) {
           case "banner":

@@ -1,6 +1,8 @@
 import MaintenanceView from "@/components/public/MaintenanceView";
+import Nav from "@/components/public/Nav";
 import SmoothScroll from "@/components/ui/SmoothScroll.jsx";
 import TransitionProvider from "@/components/public/transitions/TransitionProvider.jsx";
+import MotionProvider from "@/components/providers/MotionProvider.jsx";
 import { getPublicSiteSettings } from "@/lib/db/cache";
 import { getSiteUrl } from "@/lib/site-url.js";
 import { isMaintenanceModeOn, resolveSiteMeta } from "@/lib/site-meta.js";
@@ -43,9 +45,12 @@ export default async function PublicLayout({ children }) {
   }
 
   return (
-    <TransitionProvider>
-      <SmoothScroll />
-      {children}
-    </TransitionProvider>
+    <MotionProvider>
+      <Nav />
+      <TransitionProvider>
+        <SmoothScroll />
+        {children}
+      </TransitionProvider>
+    </MotionProvider>
   );
 }

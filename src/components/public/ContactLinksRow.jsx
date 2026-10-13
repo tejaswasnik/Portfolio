@@ -64,7 +64,7 @@ export default function ContactLinksRow({ socialLinks }) {
             href={cell.href}
             target={cell.external ? "_blank" : undefined}
             rel={cell.external ? "noopener noreferrer" : undefined}
-            className="flex flex-1 items-center justify-center gap-2.5 bg-bg px-5 py-5"
+            className="lift press flex flex-1 items-center justify-center gap-2.5 bg-bg px-5 py-5"
           >
             <span
               className={`flex size-8 items-center justify-center rounded-lg border ${
