@@ -1,3 +1,4 @@
+import Reveal from "@/components/ui/Reveal.jsx";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { heatLevel } from "@/lib/github/contributions";
 
@@ -62,19 +63,21 @@ export default function GithubHeatmap({ calendar }) {
               <span key={`${label}-${index}`}>{label.toUpperCase()}</span>
             ))}
           </div>
-          <div className="flex w-max gap-1">
-            {calendar.weeks.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-1">
-                {week.days.map((day) => (
-                  <div
-                    key={day.date}
-                    title={`${day.count} contributions on ${day.date}`}
-                    className={`size-[10px] rounded-[1px] ${HEAT_CLASS[heatLevel(day.count, max)]}`}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
+          <Reveal baseClass="heatmap-wipe">
+            <div className="flex w-max gap-1">
+              {calendar.weeks.map((week, weekIndex) => (
+                <div key={weekIndex} className="flex flex-col gap-1">
+                  {week.days.map((day) => (
+                    <div
+                      key={day.date}
+                      title={`${day.count} contributions on ${day.date}`}
+                      className={`size-[10px] rounded-[1px] ${HEAT_CLASS[heatLevel(day.count, max)]}`}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </Reveal>
           <div className="flex items-center justify-between font-mono text-[10px] text-text-muted">
             <p>GitHub contributions, past year</p>
             <div className="flex items-center gap-1 text-[9px]">
