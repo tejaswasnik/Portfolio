@@ -10,7 +10,17 @@ const HEAT_CLASS = [
   "bg-heat-4",
 ];
 
-const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short" });
+// Both formatters read in UTC — the API returns plain "YYYY-MM-DD" day
+// strings with no time component, and `new Date(dateString)` parses
+// those as UTC midnight; formatting with the viewer's local timezone
+// instead could shift a day near midnight to the wrong month/label.
+const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
+const DAY_FORMAT = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
 
 /**
  * GitHub activity heatmap (Figma 10:4 "Activity and field notes" →
@@ -27,6 +37,9 @@ const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short" });
 export default function GithubHeatmap({ calendar }) {
   const allDays = calendar.weeks.flatMap((week) => week.days);
   const max = Math.max(1, ...allDays.map((day) => day.count));
+  const total = allDays.reduce((sum, day) => sum + day.count, 0);
+  const lastDay = allDays[allDays.length - 1];
+  const year = lastDay ? new Date(lastDay.date).getUTCFullYear() : new Date().getUTCFullYear();
 
   // One label per month boundary crossed, in column order.
   const monthLabels = [];
@@ -52,34 +65,44 @@ export default function GithubHeatmap({ calendar }) {
           Activity
         </h2>
         {/*
-          The full year is ~52 columns wide (~730px at 10px cells + gap),
-          which overflows any mobile viewport — design.md §22: "heatmap
-          ... scrolls horizontally with the months row". Both rows share
-          one scroll container so they stay aligned while scrolling.
+          Columns are fluid (1fr each) so the whole grid always fills the
+          column width exactly, whatever the API's week count — never a
+          horizontal scrollbar, on any viewport. Rows stay a fixed 10px
+          tall; cells get narrower (not literally square) on very narrow
+          viewports rather than overflowing. grid-auto-flow: column lets
+          the flattened week-major day list below fall into place without
+          explicit row/column indices.
         */}
-        <div className="flex flex-col gap-2.5 overflow-x-auto">
-          <div className="flex w-max min-w-full justify-between gap-1 font-mono text-[9px] text-text-muted">
+        <div className="flex flex-col gap-2.5">
+          <div className="flex w-full justify-between gap-1 font-mono text-[9px] text-text-muted">
             {monthLabels.map((label, index) => (
               <span key={`${label}-${index}`}>{label.toUpperCase()}</span>
             ))}
           </div>
           <Reveal baseClass="heatmap-wipe">
-            <div className="flex w-max gap-1">
-              {calendar.weeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-1">
-                  {week.days.map((day) => (
-                    <div
-                      key={day.date}
-                      title={`${day.count} contributions on ${day.date}`}
-                      className={`size-[10px] rounded-[1px] ${HEAT_CLASS[heatLevel(day.count, max)]}`}
-                    />
-                  ))}
-                </div>
-              ))}
+            <div
+              className="grid gap-[2px]"
+              style={{
+                gridTemplateColumns: `repeat(${calendar.weeks.length}, minmax(0, 1fr))`,
+                gridTemplateRows: "repeat(7, 10px)",
+                gridAutoFlow: "column",
+              }}
+            >
+              {calendar.weeks.flatMap((week) =>
+                week.days.map((day) => (
+                  <div
+                    key={day.date}
+                    title={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${DAY_FORMAT.format(new Date(day.date))}`}
+                    className={`rounded-[1px] ${HEAT_CLASS[heatLevel(day.count, max)]}`}
+                  />
+                )),
+              )}
             </div>
           </Reveal>
           <div className="flex items-center justify-between font-mono text-[10px] text-text-muted">
-            <p>GitHub contributions, past year</p>
+            <p>
+              {total} contribution{total === 1 ? "" : "s"} in {year}
+            </p>
             <div className="flex items-center gap-1 text-[9px]">
               <span>Less</span>
               {HEAT_CLASS.map((cls) => (
