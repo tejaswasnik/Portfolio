@@ -317,8 +317,9 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
                   onDragStart={() => handleDragStart(skill.id)}
                   onDragOver={(event) => handleDragOver(event, skill.id)}
                   onDrop={(event) => handleDrop(event, skill.id)}
-                  className={`hidden w-full items-center gap-4 border-b border-border-subtle py-2.5 last:border-b-0 md:flex ${
-                    skill.visible ? "" : "opacity-60"
+                  onDragEnd={() => setDragId(null)}
+                  className={`hidden w-full items-center gap-4 border-b border-border-subtle py-2.5 transition-opacity last:border-b-0 md:flex ${
+                    dragId === skill.id ? "opacity-60" : skill.visible ? "" : "opacity-60"
                   }`}
                 >
                   <div className="flex w-4 items-center">
