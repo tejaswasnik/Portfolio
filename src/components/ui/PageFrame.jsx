@@ -19,7 +19,23 @@ export default function PageFrame({ children, className = "" }) {
       <Rails />
       <AnalyticsBeacon />
       <ContactModalProvider>{children}</ContactModalProvider>
+      <BottomBlur />
     </main>
+  );
+}
+
+/**
+ * Progressive frosted-glass blur pinned to the viewport's bottom edge —
+ * full strength at the very bottom, fading to none ~120px up via a mask
+ * (not a flat fade-to-color, so it blurs whatever scrolls underneath
+ * rather than hiding behind a background tint). Decorative only.
+ */
+export function BottomBlur() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-32 backdrop-blur-md [mask-image:linear-gradient(to_top,black,transparent)]"
+    />
   );
 }
 
