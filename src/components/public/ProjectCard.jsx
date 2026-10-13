@@ -3,7 +3,7 @@ import TrackedLink from "@/components/public/TrackedLink";
 import SkillIcon from "@/components/ui/SkillIcon";
 import { GithubIcon, ArrowUpRightIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
-import { BRAND_COLOR_SLUGS, resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 // Matches Button's "icon" variant classes (src/components/ui/Button.jsx)
 // as a link rather than a <button onClick> — avoids needing "use client"
@@ -92,12 +92,7 @@ export default function ProjectCard({ project, skillsById }) {
               <Chip
                 key={id}
                 variant="tech"
-                icon={
-                  <SkillIcon
-                    {...resolveSkillIcon(skill)}
-                    brandColor={BRAND_COLOR_SLUGS.has(skill.iconSlug)}
-                  />
-                }
+                icon={<SkillIcon {...resolveSkillIcon(skill)} />}
               >
                 {skill.name}
               </Chip>
