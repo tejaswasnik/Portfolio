@@ -9,6 +9,7 @@ import ProjectsSection from "@/components/public/ProjectsSection";
 import StackSection from "@/components/public/StackSection";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import SideIndex from "@/components/public/SideIndex";
+import ScrollReveal from "@/components/ui/ScrollReveal.jsx";
 import { getContributionCalendar } from "@/lib/github/contributions";
 import { SECTION_INDEX_META } from "@/lib/sections.js";
 import {
@@ -63,41 +64,56 @@ export default async function Home() {
       {visibleSections.map((section) => {
         switch (section.key) {
           case "banner":
-            return <BannerSection key={section.key} bannerUrl={profile?.bannerUrl} />;
+            return (
+              <ScrollReveal key={section.key}>
+                <BannerSection bannerUrl={profile?.bannerUrl} />
+              </ScrollReveal>
+            );
           case "profile":
-            return <ProfileIdentity key={section.key} profile={profile} />;
+            return (
+              <ScrollReveal key={section.key}>
+                <ProfileIdentity profile={profile} />
+              </ScrollReveal>
+            );
           case "about":
             return sectionRendered.about ? (
-              <AboutSection key={section.key} profile={profile} />
+              <ScrollReveal key={section.key}>
+                <AboutSection profile={profile} />
+              </ScrollReveal>
             ) : null;
           case "contact-links":
             return sectionRendered["contact-links"] ? (
-              <ContactLinksRow key={section.key} socialLinks={profile?.socialLinks} />
+              <ScrollReveal key={section.key}>
+                <ContactLinksRow socialLinks={profile?.socialLinks} />
+              </ScrollReveal>
             ) : null;
           case "github-heatmap":
             return sectionRendered["github-heatmap"] ? (
-              <GithubHeatmap key={section.key} calendar={calendar} />
+              <ScrollReveal key={section.key}>
+                <GithubHeatmap calendar={calendar} />
+              </ScrollReveal>
             ) : null;
           case "projects":
             return sectionRendered.projects ? (
-              <ProjectsSection
-                key={section.key}
-                projects={featuredProjects}
-                skills={skills}
-              />
+              <ScrollReveal key={section.key}>
+                <ProjectsSection projects={featuredProjects} skills={skills} />
+              </ScrollReveal>
             ) : null;
           case "tech-stack":
             return sectionRendered["tech-stack"] ? (
-              <StackSection key={section.key} skills={skills} />
+              <ScrollReveal key={section.key}>
+                <StackSection skills={skills} />
+              </ScrollReveal>
             ) : null;
           case "lets-talk":
             return (
-              <LetsTalkSection
-                key={section.key}
-                heading={profile?.letsTalkHeading}
-                subtext={profile?.letsTalkSubtext}
-                footerText={siteSettings?.footerText}
-              />
+              <ScrollReveal key={section.key}>
+                <LetsTalkSection
+                  heading={profile?.letsTalkHeading}
+                  subtext={profile?.letsTalkSubtext}
+                  footerText={siteSettings?.footerText}
+                />
+              </ScrollReveal>
             );
           default:
             return null;
