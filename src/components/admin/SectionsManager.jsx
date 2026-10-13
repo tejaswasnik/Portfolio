@@ -130,8 +130,9 @@ export default function SectionsManager({ sections }) {
               onDragStart={() => handleDragStart(section.id)}
               onDragOver={(event) => handleDragOver(event, section.id)}
               onDrop={(event) => handleDrop(event, section.id)}
-              className={`flex w-full flex-wrap items-center gap-x-4 gap-y-2 border-b border-border-subtle py-3 ${
-                section.visible ? "" : "opacity-65"
+              onDragEnd={() => setDragId(null)}
+              className={`flex w-full flex-wrap items-center gap-x-4 gap-y-2 border-b border-border-subtle py-3 transition-opacity ${
+                dragId === section.id ? "opacity-60" : section.visible ? "" : "opacity-65"
               }`}
             >
               <div className="hidden w-4 items-center sm:flex">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "@/lib/hooks/useReducedMotion.js";
 
 /**
  * Sun/moon icon toggle. Flips data-theme on <html> and persists to
@@ -8,9 +9,12 @@ import { useEffect, useRef, useState } from "react";
  * clicked point (ported from magicui's animated-theme-toggler, adapted
  * to this project's data-theme attribute instead of a "dark" class —
  * falls back to an instant flip where the View Transitions API is
- * unavailable, e.g. Safari/Firefox without the flag).
+ * unavailable, e.g. Safari/Firefox without the flag, or where
+ * prefers-reduced-motion is on — the wipe is WAAPI-driven so it bypasses
+ * the global CSS reduced-motion override (docs/motion.md §7).
  */
 export default function ThemeToggle() {
+  const reducedMotion = useReducedMotion();
   // Starts null (renders nothing) so server and first client render match;
   // the effect then reads the real theme the no-flash script already set.
   // Reading DOM state after mount is the correct pattern here, not state
@@ -36,7 +40,7 @@ export default function ThemeToggle() {
   function toggle() {
     const next = theme === "light" ? "dark" : "light";
 
-    if (typeof document.startViewTransition !== "function" || !buttonRef.current) {
+    if (reducedMotion || typeof document.startViewTransition !== "function" || !buttonRef.current) {
       applyTheme(next);
       return;
     }

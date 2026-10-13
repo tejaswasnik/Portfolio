@@ -250,8 +250,9 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
                 onDragStart={() => handleDragStart(project.id)}
                 onDragOver={(event) => handleDragOver(event, project.id)}
                 onDrop={(event) => handleDrop(event, project.id)}
-                className={`hidden w-full items-center gap-4 border-b border-border-subtle py-3 last:border-b-0 md:flex ${
-                  project.published ? "" : "opacity-65"
+                onDragEnd={() => setDragId(null)}
+                className={`hidden w-full items-center gap-4 border-b border-border-subtle py-3 transition-opacity last:border-b-0 md:flex ${
+                  dragId === project.id ? "opacity-60" : project.published ? "" : "opacity-65"
                 }`}
               >
               <div className="flex w-4 items-center">
