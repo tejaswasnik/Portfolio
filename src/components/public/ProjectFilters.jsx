@@ -27,7 +27,7 @@ export default function ProjectFilters({ label, options, activeValue, buildHref 
             key={option.value}
             href={buildHref(option.value)}
             aria-current={active ? "true" : undefined}
-            className={`rounded-pill border px-3 py-[5px] font-mono text-[10px] ${
+            className={`rounded-pill border px-3 py-[5px] font-mono text-[10px] transition-colors ${
               active
                 ? "border-accent bg-surface-3 text-text-primary"
                 : "border-border-default text-text-muted hover:text-text-primary"

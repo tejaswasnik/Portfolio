@@ -6,7 +6,7 @@ export default function Input({ label, id, className = "", ...props }) {
   const input = (
     <input
       id={id}
-      className={`w-full rounded-lg border border-border-default bg-bg px-3.5 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent ${className}`.trim()}
+      className={`w-full rounded-lg border border-border-default bg-bg px-3.5 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent ${className}`.trim()}
       {...props}
     />
   );

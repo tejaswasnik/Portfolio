@@ -14,7 +14,7 @@ export default function MoveButtons({ disabled, atStart, atEnd, name, onMove, cl
         disabled={disabled || atStart}
         aria-label={`Move ${name} up`}
         onClick={() => onMove(-1)}
-        className="flex size-6 items-center justify-center rounded border border-border-default bg-surface-3 text-text-muted hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex size-6 items-center justify-center rounded border border-border-default bg-surface-3 text-text-muted transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         <ChevronUpIcon size={12} />
       </button>
@@ -23,7 +23,7 @@ export default function MoveButtons({ disabled, atStart, atEnd, name, onMove, cl
         disabled={disabled || atEnd}
         aria-label={`Move ${name} down`}
         onClick={() => onMove(1)}
-        className="flex size-6 items-center justify-center rounded border border-border-default bg-surface-3 text-text-muted hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex size-6 items-center justify-center rounded border border-border-default bg-surface-3 text-text-muted transition-colors hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         <ChevronDownIcon size={12} />
       </button>

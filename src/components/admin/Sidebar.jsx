@@ -62,7 +62,7 @@ export default function Sidebar({ unreadMessages }) {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-[44px] items-center justify-between rounded-md pl-3 pr-2.5 font-mono text-[11px] lg:h-[34px] ${
+                className={`flex h-[44px] items-center justify-between rounded-md pl-3 pr-2.5 font-mono text-[11px] transition-colors lg:h-[34px] ${
                   active
                     ? "border border-border-default bg-surface-3 text-text-primary"
                     : "text-text-muted hover:text-text-primary"
@@ -97,7 +97,7 @@ export default function Sidebar({ unreadMessages }) {
           type="button"
           onClick={handleSignOut}
           aria-label="Sign out"
-          className="text-text-muted hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="text-text-muted transition-colors hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <LogOutIcon size={14} />
         </button>
@@ -112,7 +112,7 @@ export default function Sidebar({ unreadMessages }) {
       </div>
 
       {drawerOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="animate-overlay-in fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
             aria-label="Close menu"
@@ -125,7 +125,7 @@ export default function Sidebar({ unreadMessages }) {
             role="dialog"
             aria-modal="true"
             aria-label="Admin navigation"
-            className="relative z-10 flex h-screen w-[280px] flex-col gap-6 overflow-y-auto border-r border-border-subtle bg-bg px-4 py-5"
+            className="animate-drawer-in relative z-10 flex h-screen w-[280px] flex-col gap-6 overflow-y-auto border-r border-border-subtle bg-bg px-4 py-5"
           >
             {content}
           </div>

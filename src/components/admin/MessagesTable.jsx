@@ -149,7 +149,7 @@ export default function MessagesTable({ messages }) {
               <Link
                 key={message.id}
                 href={`/admin/messages/${message.id}`}
-                className={`block w-full border-b border-border-subtle py-3.5 last:border-b-0 hover:bg-surface-2 ${
+                className={`block w-full border-b border-border-subtle py-3.5 last:border-b-0 transition-colors hover:bg-surface-2 ${
                   message.archived ? "opacity-60" : ""
                 }`}
               >

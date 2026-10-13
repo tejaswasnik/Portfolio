@@ -315,7 +315,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
                 <Link
                   href={`/admin/projects/${project.id}`}
                   aria-label={`Edit ${project.name}`}
-                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
                 >
                   <PencilIcon size={14} />
                 </Link>
@@ -323,7 +323,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
                   type="button"
                   aria-label={`Delete ${project.name}`}
                   onClick={() => setDeleteTarget(project)}
-                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                  className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
                 >
                   <TrashIcon size={14} />
                 </button>

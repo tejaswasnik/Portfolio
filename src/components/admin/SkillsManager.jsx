@@ -20,7 +20,7 @@ import {
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
-  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent";
+  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent";
 
 const emptyForm = {
   name: "",
@@ -364,7 +364,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
                       type="button"
                       aria-label={`Edit ${skill.name}`}
                       onClick={() => startEdit(skill)}
-                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
                     >
                       <PencilIcon size={14} />
                     </button>
@@ -372,7 +372,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
                       type="button"
                       aria-label={`Delete ${skill.name}`}
                       onClick={() => setDeleteTarget(skill)}
-                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
                     >
                       <TrashIcon size={14} />
                     </button>
@@ -429,7 +429,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
             <button
               type="button"
               onClick={() => setIconPickerOpen(true)}
-              className="flex-1 rounded-lg border border-dashed border-border-default px-3 py-2.5 text-left font-mono text-[11px] text-text-muted hover:border-accent/50 hover:text-text-primary"
+              className="flex-1 rounded-lg border border-dashed border-border-default px-3 py-2.5 text-left font-mono text-[11px] text-text-muted transition-colors hover:border-accent/50 hover:text-text-primary"
             >
               {form.iconUrl
                 ? "Custom upload — change…"

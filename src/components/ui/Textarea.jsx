@@ -7,7 +7,7 @@ export default function Textarea({ label, id, className = "", ...props }) {
     <textarea
       id={id}
       rows={5}
-      className={`w-full rounded-lg border border-border-default bg-bg px-3.5 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent ${className}`.trim()}
+      className={`w-full rounded-lg border border-border-default bg-bg px-3.5 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent ${className}`.trim()}
       {...props}
     />
   );
