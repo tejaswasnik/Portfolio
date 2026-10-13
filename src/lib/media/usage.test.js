@@ -63,6 +63,22 @@ describe("computeFileUsage", () => {
     ]);
   });
 
+  it("matches a single interest image", () => {
+    const withInterest = { interestImages: [{ imageUrl: "https://ik/poster.jpg" }] };
+    expect(computeFileUsage("https://ik/poster.jpg", withInterest)).toEqual([
+      { category: "interest-images", label: "Interest image" },
+    ]);
+  });
+
+  it("counts multiple interest images sharing the same file (e.g. duplicated)", () => {
+    const withInterest = {
+      interestImages: [{ imageUrl: "https://ik/poster.jpg" }, { imageUrl: "https://ik/poster.jpg" }],
+    };
+    expect(computeFileUsage("https://ik/poster.jpg", withInterest)).toEqual([
+      { category: "interest-images", label: "Interest images (2)" },
+    ]);
+  });
+
   it("tolerates missing profile/siteSettings/projects", () => {
     expect(computeFileUsage("https://ik/anything.png", {})).toEqual([]);
     expect(computeFileUsage("https://ik/anything.png")).toEqual([]);

@@ -30,4 +30,5 @@ export const SECTION_DESCRIPTIONS = {
   projects: "Featured projects only",
   "tech-stack": "Skill chips from the skills list",
   "lets-talk": "Heading, subtext and button",
+  "interest-images": "Scattered margin decoration · desktop only, overlay (not drag-reorderable)",
 };

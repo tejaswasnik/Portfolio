@@ -18,6 +18,7 @@ import {
   getPublicVisibleSections,
   getPublicVisibleSkills,
   getPublicFeaturedProjects,
+  getPublicVisibleInterestImages,
 } from "@/lib/db/cache";
 
 export const metadata = {
@@ -27,13 +28,14 @@ export const metadata = {
 
 
 export default async function Home() {
-  const [profile, siteSettings, visibleSections, skills, featuredProjects] =
+  const [profile, siteSettings, visibleSections, skills, featuredProjects, interestImages] =
     await Promise.all([
       getPublicProfile(),
       getPublicSiteSettings(),
       getPublicVisibleSections(),
       getPublicVisibleSkills(),
       getPublicFeaturedProjects(),
+      getPublicVisibleInterestImages(),
     ]);
 
   const visibleKeys = new Set(visibleSections.map((section) => section.key));
@@ -58,7 +60,7 @@ export default async function Home() {
     .map((section) => SECTION_INDEX_META[section.key]);
 
   return (
-    <PageFrame>
+    <PageFrame interestImages={visibleKeys.has("interest-images") ? interestImages : []}>
       <Nav active="home" />
 
       {visibleSections.map((section) => {

@@ -5,6 +5,7 @@ import { getSiteSettings } from "./collections/site-settings.js";
 import { findVisibleSections } from "./collections/sections.js";
 import { findVisibleSkills } from "./collections/skills.js";
 import { findPublicProjects, findPublicProjectBySlug } from "./collections/projects.js";
+import { findVisibleInterestImages } from "./collections/interestImages.js";
 import { serializeDoc, serializeDocs } from "./serialize.js";
 
 /**
@@ -18,6 +19,7 @@ export const CACHE_TAGS = {
   sections: "sections",
   skills: "skills",
   projects: "projects",
+  interestImages: "interest-images",
 };
 
 const cachedProfile = unstable_cache(
@@ -61,6 +63,26 @@ const cachedProjectBySlug = unstable_cache(
   async (slug) => serializeDoc(await findPublicProjectBySlug(await getDb(), slug)),
   ["public-project-by-slug"],
   { tags: [CACHE_TAGS.projects] },
+);
+
+// Public shape drops `fileId`/`createdAt`/`updatedAt` — server-only
+// bookkeeping the decorative layer has no use for.
+const cachedVisibleInterestImages = unstable_cache(
+  async () => {
+    const items = await findVisibleInterestImages(await getDb());
+    return items.map((item) => ({
+      id: String(item._id),
+      imageUrl: item.imageUrl,
+      alt: item.alt,
+      width: item.width,
+      height: item.height,
+      offsetX: item.offsetX,
+      topPct: item.topPct,
+      rotation: item.rotation,
+    }));
+  },
+  ["public-visible-interest-images"],
+  { tags: [CACHE_TAGS.interestImages] },
 );
 
 /**
@@ -126,5 +148,13 @@ export async function getPublicProjectBySlug(slug) {
     return await cachedProjectBySlug(slug);
   } catch {
     return null;
+  }
+}
+
+export async function getPublicVisibleInterestImages() {
+  try {
+    return await cachedVisibleInterestImages();
+  } catch {
+    return [];
   }
 }

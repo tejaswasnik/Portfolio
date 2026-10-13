@@ -12,6 +12,7 @@ import {
 import { getProfile } from "@/lib/db/collections/profile.js";
 import { getSiteSettings } from "@/lib/db/collections/site-settings.js";
 import { findAllProjects } from "@/lib/db/collections/projects.js";
+import { findAllInterestImages } from "@/lib/db/collections/interestImages.js";
 import { serializeDocs } from "@/lib/db/serialize.js";
 import { mediaIdSchema, mediaUploadSchema } from "@/lib/schemas/media.js";
 import { computeFileUsage } from "@/lib/media/usage.js";
@@ -62,12 +63,13 @@ export async function deleteMedia(input) {
   const file = await findMediaById(session.db, parsed.data.id);
   if (!file) return { ok: false, error: "This file no longer exists." };
 
-  const [profile, siteSettings, projects] = await Promise.all([
+  const [profile, siteSettings, projects, interestImages] = await Promise.all([
     getProfile(session.db),
     getSiteSettings(session.db),
     findAllProjects(session.db),
+    findAllInterestImages(session.db),
   ]);
-  const usage = computeFileUsage(file.url, { profile, siteSettings, projects });
+  const usage = computeFileUsage(file.url, { profile, siteSettings, projects, interestImages });
   if (usage.length > 0) {
     return {
       ok: false,

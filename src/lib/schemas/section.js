@@ -11,6 +11,7 @@ export const sectionKeyValues = [
   "projects",
   "tech-stack",
   "lets-talk",
+  "interest-images",
 ];
 
 export const sectionSchema = z.object({
