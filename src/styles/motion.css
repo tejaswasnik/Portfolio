@@ -155,3 +155,36 @@
     display: none;
   }
 }
+
+/* A10 — the activity graph's left-to-right wave. Column-staggered via a
+   single CSS custom property (`--col`, set inline per cell) and one
+   @keyframes, not a Motion component per cell (up to 371 of them). The
+   `opacity: 0` base state only applies once [data-heatmap-ready] is
+   present, which HeatmapGrid.jsx only adds after confirming client JS
+   actually ran — with JS disabled, or before that confirmation, every
+   cell just renders at its normal opacity, matching every other
+   reveal in this app's "readable with JS disabled" rule. */
+[data-heatmap-ready] .heatmap-cell {
+  opacity: 0;
+}
+
+[data-heatmap-ready][data-inview] .heatmap-cell {
+  animation: heatmap-wave 0.3s var(--ease-out) forwards;
+  animation-delay: calc(var(--col) * 8ms);
+}
+
+@keyframes heatmap-wave {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-heatmap-ready] .heatmap-cell {
+    opacity: 1;
+    animation: none;
+  }
+}

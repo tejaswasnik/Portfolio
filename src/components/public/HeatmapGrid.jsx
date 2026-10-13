@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "motion/react";
 import { heatLevel } from "@/lib/github/contributions";
 
 const HEAT_CLASS = ["bg-heat-0", "bg-heat-1", "bg-heat-2", "bg-heat-3", "bg-heat-4"];
@@ -40,6 +41,20 @@ export default function HeatmapGrid({ weeks, max }) {
   const containerRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
 
+  // A10's wave: `data-heatmap-ready` only gets added once this effect
+  // actually runs, i.e. once client JS is confirmed working — the CSS
+  // rule that hides cells before the wave plays is scoped under that
+  // attribute (see motion.css), so with JS disabled the grid just
+  // renders every cell visible, no flash, no "readable with JS
+  // disabled" violation. `once: true` matches every other in-view
+  // reveal in this app: it plays on first view only.
+  const [ready, setReady] = useState(false);
+  // No external state to synchronize; this only flips once to record that
+  // client JS actually mounted (see the comment above).
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setReady(true), []);
+  const inView = useInView(containerRef, { once: true });
+
   function showTooltip(event, day) {
     const containerRect = containerRef.current.getBoundingClientRect();
     const cellRect = event.currentTarget.getBoundingClientRect();
@@ -63,6 +78,8 @@ export default function HeatmapGrid({ weeks, max }) {
   return (
     <div ref={containerRef} className="relative">
       <div
+        data-heatmap-ready={ready ? "true" : undefined}
+        data-inview={inView ? "true" : undefined}
         className="grid gap-[2px]"
         style={{
           gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
@@ -70,7 +87,7 @@ export default function HeatmapGrid({ weeks, max }) {
           gridAutoFlow: "column",
         }}
       >
-        {weeks.flatMap((week) =>
+        {weeks.flatMap((week, weekIndex) =>
           week.days.map((day) => (
             <button
               key={day.date}
@@ -80,7 +97,8 @@ export default function HeatmapGrid({ weeks, max }) {
               onMouseLeave={hideTooltip}
               onFocus={(event) => showTooltip(event, day)}
               onBlur={hideTooltip}
-              className={`m-0 scale-100 rounded-[1px] border-0 p-0 outline-none transition-transform duration-150 ease-out hover:z-10 hover:scale-125 focus-visible:z-10 focus-visible:scale-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${HEAT_CLASS[heatLevel(day.count, max)]}`}
+              style={{ "--col": weekIndex }}
+              className={`heatmap-cell m-0 scale-100 rounded-[1px] border-0 p-0 outline-none transition-transform duration-150 ease-out hover:z-10 hover:scale-125 focus-visible:z-10 focus-visible:scale-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${HEAT_CLASS[heatLevel(day.count, max)]}`}
             />
           )),
         )}
