@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dropzone from "@/components/admin/Dropzone";
 import Toggle from "@/components/ui/Toggle";
-import { ArrowUpRightIcon, MailIcon } from "@/components/ui/icons.jsx";
+import { ArrowUpRightIcon, MailIcon, PlusIcon, TrashIcon } from "@/components/ui/icons.jsx";
 import { toggleSectionVisible } from "@/app/admin/(dashboard)/sections/actions.js";
 import { saveProfileAndAbout } from "@/app/admin/(dashboard)/profile/actions.js";
 import { useActionToast } from "@/lib/hooks/useActionToast.js";
@@ -21,7 +21,9 @@ function buildInitialState(profile, siteSettings) {
     photoUrl: profile?.photoUrl ?? "",
     name: profile?.name ?? "",
     location: profile?.location ?? "",
-    tagline: profile?.tagline ?? "",
+    // Falls back to the legacy single `tagline` string so a document saved
+    // before this field became an array still loads correctly once.
+    taglines: profile?.taglines?.length ? profile.taglines : [profile?.tagline ?? ""],
     about: profile?.about ?? "",
     footnote: profile?.footnote ?? "",
     email: profile?.socialLinks?.email ?? "",
@@ -79,6 +81,26 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
     };
   }
 
+  function setTagline(index) {
+    return (event) => {
+      setForm((f) => ({
+        ...f,
+        taglines: f.taglines.map((t, i) => (i === index ? event.target.value : t)),
+      }));
+      setSaved(false);
+    };
+  }
+
+  function addTagline() {
+    setForm((f) => ({ ...f, taglines: [...f.taglines, ""] }));
+    setSaved(false);
+  }
+
+  function removeTagline(index) {
+    setForm((f) => ({ ...f, taglines: f.taglines.filter((_, i) => i !== index) }));
+    setSaved(false);
+  }
+
   function discard() {
     setForm(initial);
     setFieldErrors({});
@@ -110,7 +132,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
       photoUrl: form.photoUrl,
       name: form.name,
       location: form.location,
-      tagline: form.tagline,
+      taglines: form.taglines.map((t) => t.trim()).filter(Boolean),
       about: form.about,
       footnote: form.footnote,
       socialLinks: {
@@ -239,18 +261,42 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
               </label>
             </div>
 
-            <label className="flex w-full flex-col gap-1.5">
-              <span className={fieldLabel}>Tagline</span>
-              <input
-                value={form.tagline}
-                onChange={set("tagline")}
-                required
-                className={fieldInput}
-              />
-              {fieldErrors.tagline ? (
-                <span className="text-[11px] text-text-secondary">{fieldErrors.tagline[0]}</span>
+            <div className="flex w-full flex-col gap-1.5">
+              <span className={fieldLabel}>Taglines</span>
+              <p className="font-mono text-[10px] text-text-muted">
+                Cycles through each line on the public header
+              </p>
+              {form.taglines.map((tagline, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    value={tagline}
+                    onChange={setTagline(index)}
+                    required
+                    className={fieldInput}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeTagline(index)}
+                    disabled={form.taglines.length <= 1}
+                    className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border-default bg-surface-2 text-text-muted disabled:opacity-40"
+                    aria-label="Remove tagline"
+                  >
+                    <TrashIcon size={14} />
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addTagline}
+                className="flex items-center gap-1.5 self-start rounded-md border border-dashed border-border-default px-3 py-[7px] font-mono text-[10px] font-bold uppercase text-text-primary"
+              >
+                <PlusIcon size={12} />
+                Add tagline
+              </button>
+              {fieldErrors.taglines ? (
+                <span className="text-[11px] text-text-secondary">{fieldErrors.taglines[0]}</span>
               ) : null}
-            </label>
+            </div>
           </div>
 
           <div className={cardClass}>

@@ -11,7 +11,7 @@ export const socialLinksSchema = z.object({
 
 export const profileSchema = z.object({
   name: z.string().trim().min(1),
-  tagline: z.string().trim().min(1),
+  taglines: z.array(z.string().trim().min(1)).min(1),
   location: z.string().trim().default(""),
   photoUrl: optionalUrlSchema.default(""),
   about: z.string().trim().min(1),
