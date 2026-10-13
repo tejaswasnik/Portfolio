@@ -1,6 +1,7 @@
 import HeatmapGrid from "@/components/public/HeatmapGrid.jsx";
 import Reveal from "@/components/ui/Reveal.jsx";
 import SectionDivider from "@/components/ui/SectionDivider";
+import CountUp from "@/components/motion/CountUp.jsx";
 
 const HEAT_CLASS = [
   "bg-heat-0",
@@ -74,7 +75,7 @@ export default function GithubHeatmap({ calendar }) {
           </Reveal>
           <div className="flex items-center justify-between font-mono text-[10px] text-text-muted">
             <p>
-              {total} contribution{total === 1 ? "" : "s"} in {year}
+              <CountUp to={total} /> contribution{total === 1 ? "" : "s"} in {year}
             </p>
             <div className="flex items-center gap-1 text-[9px]">
               <span>Less</span>
