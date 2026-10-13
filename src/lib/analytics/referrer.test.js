@@ -19,7 +19,7 @@ describe("normalizeReferrer", () => {
     expect(normalizeReferrer("https://www.linkedin.com/feed", "https://tejaswasnik.me")).toBe(
       "LinkedIn",
     );
-    expect(normalizeReferrer("https://t.co/abc123", "https://tejaswasnik.me")).toBe("Twitter / X");
+    expect(normalizeReferrer("https://t.co/abc123", "https://tejaswasnik.me")).toBe("X");
   });
 
   it("falls back to the bare hostname for an unrecognized referrer", () => {

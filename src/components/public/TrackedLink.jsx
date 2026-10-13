@@ -4,7 +4,7 @@ import { trackEvent } from "@/lib/analytics/trackEvent.js";
 
 /**
  * A plain `<a>` that beacons a `click` event first (PRD §3.2's tracked
- * links: GitHub, LinkedIn, Twitter, live links, project GitHub links,
+ * links: GitHub, LinkedIn, X, live links, project GitHub links,
  * resume). A tiny client component so the server components that render
  * these links (ContactLinksRow, ProfileIdentity, ProjectCard, the
  * project details page) don't need to become client components

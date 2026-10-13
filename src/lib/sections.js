@@ -25,7 +25,7 @@ export const SECTION_DESCRIPTIONS = {
   banner: "Looping GIF · 760 × 100",
   profile: "Photo, name, tagline, resume button",
   about: "Rich text and footnote line",
-  "contact-links": "Message me, GitHub, LinkedIn, Twitter",
+  "contact-links": "Message me, GitHub, LinkedIn, X",
   "github-heatmap": "Contributions for the saved username · cached 6–12 h",
   projects: "Featured projects only",
   "tech-stack": "Skill chips from the skills list",

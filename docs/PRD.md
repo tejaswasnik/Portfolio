@@ -32,7 +32,7 @@ Next.js portfolio with a private admin panel. Public site follows the Field Note
 1. **Banner:** looping GIF, 760 × 100 via ImageKit; placeholder fallback.
 2. **Profile header:** photo, name, tagline, location, Resume button when a resume is uploaded.
 3. **About:** heading, rich-text paragraphs, footnote line.
-4. **Contact links:** Message me (opens contact form), GitHub, LinkedIn, Twitter. Empty links aren't rendered.
+4. **Contact links:** Message me (opens contact form), GitHub, LinkedIn, X. Empty links aren't rendered.
 5. **GitHub heatmap:** real data by username, cached 6–12 h, admin toggle and username; hidden if the fetch fails.
 6. **Projects (featured):** only featured projects; cover, status badge, name, description, tech tags, GitHub and live buttons, View details.
 7. **Tech Stack:** chips from the admin skills list.
@@ -53,7 +53,7 @@ Fields: name, email, subject (optional), message. Client and server validation; 
 Email + password login · single account, bcrypt · signed JWT in a secure HTTP-only cookie · auto-logout on inactivity · login rate limiting and lockout · change password and admin email in settings.
 
 ### 3.2 Dashboard and analytics
-Date range (7 / 30 / 90 days, custom). Widgets: page views and unique visitors vs previous period · views over time · top pages · top referrers · countries · devices, browsers, OS · click tracking (GitHub, LinkedIn, Twitter, live links, project GitHub links, contact button, resume downloads) · per-project views and clicks · contact conversions · recent activity and unread count.
+Date range (7 / 30 / 90 days, custom). Widgets: page views and unique visitors vs previous period · views over time · top pages · top referrers · countries · devices, browsers, OS · click tracking (GitHub, LinkedIn, X, live links, project GitHub links, contact button, resume downloads) · per-project views and clicks · contact conversions · recent activity and unread count.
 
 **How it works:** a tiny client component beacons `/api/track` on route change and tracked clicks. An event stores type, path, referrer, country, device, browser, OS, timestamp and a daily-rotating hashed visitor ID (IP + user agent + salt). No cookies, no raw IPs. Bots filtered; admin visits excluded. Dashboard uses aggregation pipelines; TTL index removes raw events after 12–24 months.
 
@@ -87,7 +87,7 @@ Rules: Featured = home and `/projects` · Not featured = `/projects` only · Unp
 Client-side upload to ImageKit via a server-signed endpoint · preview before saving · 760 × 100 guidance warning · size limit (e.g. 5 MB) · replace, remove or revert to placeholder.
 
 ### 3.7 Profile and content editor
-Name, tagline, location, photo, about, footnote, footer text, resume (PDF) · social links (email, GitHub, LinkedIn, Twitter) · GitHub username and heatmap toggle · "Let's talk" heading and subtext.
+Name, tagline, location, photo, about, footnote, footer text, resume (PDF) · social links (email, GitHub, LinkedIn, X) · GitHub username and heatmap toggle · "Let's talk" heading and subtext.
 
 ### 3.8 Messages
 List (name, email, subject, preview, date, read/unread) · full view with mark read/unread, archive, delete, reply (mailto) · search and filters (unread, archived) · unread badge in the sidebar · configurable notification email.

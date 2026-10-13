@@ -5,7 +5,7 @@ import {
   MailIcon,
   GithubIcon,
   LinkedinIcon,
-  TwitterIcon,
+  XIcon,
   ArrowUpRightIcon,
 } from "@/components/ui/icons";
 
@@ -44,10 +44,10 @@ export default function ContactLinksRow({ socialLinks }) {
       ? {
           key: "twitter",
           href: links.twitter,
-          icon: <TwitterIcon size={14} />,
-          label: "Twitter",
+          icon: <XIcon size={14} />,
+          label: "X",
           external: true,
-          target: "Twitter / X",
+          target: "X",
         }
       : null,
   ].filter(Boolean);

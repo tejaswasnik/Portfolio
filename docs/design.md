@@ -225,10 +225,10 @@ Where a rail meets a divider, draw a **`+` mark**:
 - Four **equal-width cells** (`flex: 1`, ~189px, height 66), each `padding: 0 20px; gap: 10; justify-content: center`, background `--bg`, separated by 1px × 66 partitions `#1E2226`.
 - **Icon container:** 32×32, radius 8, 1px border.
   - Primary (Message me): bg `#1A1D20`, border `#2E3337`, icon `#B5D4BF`.
-  - Secondary (GitHub, LinkedIn, Twitter): bg `#16191B`, border `#232729`, icon `#ACB2B0`.
+  - Secondary (GitHub, LinkedIn, X): bg `#16191B`, border `#232729`, icon `#ACB2B0`.
 - **Label:** Inter 13/600. Primary = accent; others = secondary.
 - External links append a 14px **arrow-up-right** (1px stroke, muted).
-- Icons are 16px (Twitter 14px).
+- Icons are 16px (X 14px).
 
 ### 6.6 Contribution calendar
 - Months row: 6 labels (APR → SEP), mono 9, muted, `space-between`.
@@ -277,8 +277,8 @@ Where a rail meets a divider, draw a **`+` mark**:
 ## 7. Iconography
 
 - Style: **outline icons** (Lucide-style), 16px default, 14px in compact contexts.
-- Stroke: 1px for UI icons; 2px for upload, arrow-right, twitter (emphasis).
-- Icons used: `sun`, `upload`, `coffee`, `mail`, `github`, `linkedin`, `twitter`, `arrow-up-right`, `arrow-right`.
+- Stroke: 1px for UI icons; 2px for upload, arrow-right, x (emphasis).
+- Icons used: `sun`, `upload`, `coffee`, `mail`, `github`, `linkedin`, `x`, `arrow-up-right`, `arrow-right`.
 - Colour follows the text token of its context (secondary by default, muted for trailing arrows, accent for primary affordances).
 
 ---

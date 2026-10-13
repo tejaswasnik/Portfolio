@@ -381,14 +381,14 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
             </div>
 
             <label className="flex w-full flex-col gap-1.5">
-              <span className={fieldLabel}>Twitter</span>
+              <span className={fieldLabel}>X</span>
               <div className="flex items-center gap-2 rounded-lg border border-border-default bg-surface-2 px-3 py-2.5">
                 <ArrowUpRightIcon size={14} className="shrink-0 text-text-muted" />
                 <input
                   type="url"
                   value={form.twitter}
                   onChange={set("twitter")}
-                  placeholder="https://twitter.com/username"
+                  placeholder="https://x.com/username"
                   className="w-full bg-transparent text-[13px] text-text-primary placeholder:text-text-muted outline-none"
                 />
               </div>
