@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Lets ThemeToggle's circular clip-path reveal animate on its own terms
+ * instead of the browser's default cross-fade/mix-blend-mode. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /*
  * Field Notes design tokens (docs/design.md §2, §4, §11).
  * Dark is the primary theme (data-theme="dark" or unset); light values

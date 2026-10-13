@@ -1,22 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/** Sun/moon icon toggle. Flips data-theme on <html> and persists to localStorage. */
+/**
+ * Sun/moon icon toggle. Flips data-theme on <html> and persists to
+ * localStorage, wrapped in a circular View Transition wipe from the
+ * clicked point (ported from magicui's animated-theme-toggler, adapted
+ * to this project's data-theme attribute instead of a "dark" class —
+ * falls back to an instant flip where the View Transitions API is
+ * unavailable, e.g. Safari/Firefox without the flag).
+ */
 export default function ThemeToggle() {
   // Starts null (renders nothing) so server and first client render match;
   // the effect then reads the real theme the no-flash script already set.
   // Reading DOM state after mount is the correct pattern here, not state
   // that should be derived during render, so the lint rule is suppressed.
   const [theme, setTheme] = useState(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(document.documentElement.getAttribute("data-theme") || "dark");
   }, []);
 
-  function toggle() {
-    const next = theme === "light" ? "dark" : "light";
+  function applyTheme(next) {
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
     try {
@@ -26,9 +33,37 @@ export default function ThemeToggle() {
     }
   }
 
+  function toggle() {
+    const next = theme === "light" ? "dark" : "light";
+
+    if (typeof document.startViewTransition !== "function" || !buttonRef.current) {
+      applyTheme(next);
+      return;
+    }
+
+    const { top, left, width, height } = buttonRef.current.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${maxRadius}px at ${x}px ${y}px)`] },
+          { duration: 400, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" },
+        );
+      })
+      .catch(() => {});
+  }
+
   return (
     <button
       type="button"
+      ref={buttonRef}
       onClick={toggle}
       aria-label={
         theme === "light" ? "Switch to dark theme" : "Switch to light theme"
