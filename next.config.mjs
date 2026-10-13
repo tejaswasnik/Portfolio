@@ -4,9 +4,13 @@
 // talks to directly — images read from ik.imagekit.io, and uploads
 // (src/lib/imagekit/upload.js) XHR straight to upload.imagekit.io with
 // a signed token, never the private key.
+// Dev-only: Turbopack/React dev tooling needs eval() to rebuild
+// callstacks (never used by React in production builds).
+const isDev = process.env.NODE_ENV !== "production";
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://ik.imagekit.io",
   "font-src 'self' data:",
