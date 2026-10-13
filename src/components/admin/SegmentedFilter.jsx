@@ -12,7 +12,7 @@ import Link from "next/link";
  */
 export default function SegmentedFilter({ options, activeValue, buildHref }) {
   return (
-    <div className="flex items-center gap-0.5 rounded-lg border border-border-subtle bg-surface-2 p-[3px]">
+    <div className="flex items-center gap-0.5 overflow-x-auto rounded-lg border border-border-subtle bg-surface-2 p-[3px]">
       {options.map((option) => {
         const active = option.value === activeValue;
         return (
