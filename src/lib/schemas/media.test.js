@@ -36,6 +36,28 @@ describe("mediaSchema", () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it("rejects a size over the 10 MB ceiling (SEC-04)", () => {
+    const result = mediaSchema.safeParse({
+      fileId: "fk_123",
+      url: "https://ik.imagekit.io/demo/huge.png",
+      name: "huge.png",
+      type: "image/png",
+      size: 10 * 1024 * 1024 + 1,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a MIME type outside the app's allowlist (SEC-04)", () => {
+    const result = mediaSchema.safeParse({
+      fileId: "fk_123",
+      url: "https://ik.imagekit.io/demo/script.sh",
+      name: "script.sh",
+      type: "application/x-sh",
+      size: 1024,
+    });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("mediaUploadSchema", () => {
