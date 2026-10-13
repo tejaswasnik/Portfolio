@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import PageFrame from "@/components/ui/PageFrame";
 import SectionDivider from "@/components/ui/SectionDivider";
-import Nav from "@/components/public/Nav";
 import TransitionLink from "@/components/public/transitions/TransitionLink.jsx";
 import MarkdownContent from "@/components/public/MarkdownContent";
 import Lightbox from "@/components/public/Lightbox";
@@ -82,8 +81,6 @@ export default async function ProjectDetailPage({ params }) {
 
   return (
     <PageFrame>
-      <Nav active="projects" />
-
       <section aria-label="Breadcrumb">
         <SectionDivider />
         <div className="flex items-center justify-between p-6">

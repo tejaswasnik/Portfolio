@@ -10,7 +10,7 @@ import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 // as a link rather than a <button onClick> — avoids needing "use client"
 // just to open a URL. Step 1's primitives are out of scope for this step.
 const iconLinkClass =
-  "flex items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary size-7 transition-colors hover:bg-border-icon hover:border-border-hover";
+  "press flex items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary size-7 transition-colors hover:bg-border-icon hover:border-border-hover";
 
 /**
  * Featured/listed project card (Figma 5:5651 "Project card"). The two
@@ -30,7 +30,7 @@ export default function ProjectCard({ project, skillsById }) {
 
   return (
     <article className="flex flex-1 flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-1 p-4 transition-colors hover:border-border-default">
-      <div className="relative h-[200px] w-full overflow-hidden rounded-[10px] bg-gradient-to-br from-surface-3 to-surface-2">
+      <div className="card-media relative h-[200px] w-full rounded-[10px] bg-gradient-to-br from-surface-3 to-surface-2">
         {project.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
           <img
@@ -41,10 +41,14 @@ export default function ProjectCard({ project, skillsById }) {
           />
         ) : null}
         <span
-          className={`absolute left-3 top-3 rounded-sm border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase ${
+          className={`absolute left-3 top-3 flex items-center gap-1.5 rounded-sm border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase ${
             isOngoing ? "text-accent" : "text-text-primary"
           }`}
         >
+          <span
+            aria-hidden="true"
+            className={`size-1.5 rounded-full bg-current ${isOngoing ? "status-dot--live" : ""}`}
+          />
           {isOngoing ? "Ongoing" : "Completed"}
         </span>
       </div>
@@ -105,10 +109,10 @@ export default function ProjectCard({ project, skillsById }) {
         <TransitionLink
           href={`/projects/${project.slug}`}
           flipKey={`project-cover-${project.slug}`}
-          className="group flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 font-mono text-[11px] font-bold uppercase text-text-primary transition-colors hover:border-accent/50"
+          className="press arrow-nudge flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 font-mono text-[11px] font-bold uppercase text-text-primary transition-colors hover:border-accent/50"
         >
           View details
-          <ArrowRightIcon size={14} className="text-accent transition-transform group-hover:translate-x-0.5" />
+          <ArrowRightIcon size={14} className="arrow text-accent" />
         </TransitionLink>
       </div>
     </article>

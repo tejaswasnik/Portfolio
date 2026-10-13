@@ -1,0 +1,157 @@
+/**
+ * CSS-side motion tokens, hand-kept in sync with src/lib/motion/tokens.js
+ * (docs/superpowers/plans/2026-10-13-portfolio-micro-animations.md).
+ * Used by the four pure-CSS micro-interactions (A1-A4 — press, arrow
+ * nudge, nav underline, social-link lift) and the project card hover
+ * (A9), none of which need Motion's JS runtime for a 120-400ms
+ * transition on an already-painted element.
+ */
+
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 120ms;
+  --dur-hover: 180ms;
+  --dur-ui: 240ms;
+  --dur-reveal: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-press: 0.01ms;
+    --dur-hover: 0.01ms;
+    --dur-ui: 0.01ms;
+    --dur-reveal: 0.01ms;
+  }
+
+  /* Opt-in escape hatch (spec: "opacity fades of <=150ms allowed" under
+     reduced motion) for the handful of elements that should still fade,
+     just never move/scale/blur. Nothing uses --dur-reveal/--dur-ui/etc
+     above for them, since those are forced to ~0 globally. */
+  .motion-safe-fade {
+    transition: opacity 150ms linear !important;
+  }
+}
+
+/* A1 — :active press feedback on every button/button-styled link. */
+.press {
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.press:active {
+  transform: scale(0.97);
+}
+
+/* A2 — arrow nudges toward travel direction on hover ("Let's Talk ->",
+   "View details", "Resume", "Message me"). The nudge itself only under
+   real hover capability (spec: "Hover effects inside
+   @media (hover: hover) and (pointer: fine)"); the .press active-scale
+   above still applies everywhere, touch included. */
+.arrow-nudge .arrow {
+  display: inline-block;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .arrow-nudge:hover .arrow {
+    transform: translateX(3px);
+  }
+}
+
+/* A3 — nav/footer text links: underline draws in from the left on
+   hover, and un-draws back out the same side it came from (not a
+   straight reverse) — the rauno.me detail the spec calls out. */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .link-underline:not(:hover)::after {
+    transform-origin: right;
+  }
+}
+
+/* A4 — social links lift 1px and brighten to the foreground color on hover. */
+@media (hover: hover) and (pointer: fine) {
+  .lift {
+    transition:
+      transform var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out);
+  }
+
+  .lift:hover {
+    transform: translateY(-1px);
+    color: var(--text-primary);
+  }
+}
+
+/* A9 — project card cover image zooms inside its own clipped box; the
+   card's own box never changes size, so this can't shift layout. */
+.card-media {
+  overflow: hidden;
+}
+
+.card-media img {
+  transition: transform 400ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-media:hover img {
+    transform: scale(1.03);
+  }
+}
+
+/* A9 — the "Ongoing" status dot: a soft pulsing ring (the one looping
+   decoration besides the role rotator). Its own duration, not a --dur-*
+   token (those are UI-feedback/reveal timings, not loop timings), but
+   still neutralized by the reduced-motion block above (animation-duration
+   isn't overridden there since it's a keyframe animation, not a
+   transition — explicitly disabled below instead). */
+.status-dot--live {
+  position: relative;
+}
+
+.status-dot--live::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  animation: status-dot-pulse 2s var(--ease-out) infinite;
+}
+
+@keyframes status-dot-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot--live::after {
+    animation: none;
+    display: none;
+  }
+}
