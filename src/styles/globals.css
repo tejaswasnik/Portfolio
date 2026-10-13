@@ -364,6 +364,25 @@ html.lenis body {
     clip-path: inset(0 0 0 0);
   }
 
+  /* Heatmap cell tooltip enter (docs/motion.md's "every transition gets a
+     deliberate entrance" rule) — translateX(-50%) is baked into both
+     keyframe states (not a separate `-translate-x-1/2` utility) since an
+     `animation`'s `transform` would otherwise clobber a class-applied one. */
+  @keyframes heatmap-tooltip-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 4px) scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+  }
+
+  .animate-heatmap-tooltip-in {
+    animation: heatmap-tooltip-in 140ms var(--ease-enter);
+  }
+
   /*
    * Typography for markdown-rendered project descriptions (step 4),
    * matching the About section's real type scale (Figma 72:505):
