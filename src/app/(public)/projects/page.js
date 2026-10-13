@@ -75,7 +75,10 @@ export default async function ProjectsPage({ searchParams }) {
       <section aria-labelledby="projects-page-heading">
         <SectionDivider />
         <div className="flex flex-col gap-5 px-6 pb-6 pt-10">
-          <h1 className="font-serif text-[30px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
+          <h1
+            data-flip-key="projects-heading"
+            className="font-serif text-[30px] tracking-[-0.95px] text-text-primary sm:text-[38px]"
+          >
             Projects
           </h1>
           <p className="font-mono text-[11px] text-text-muted">
