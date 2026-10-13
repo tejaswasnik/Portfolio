@@ -25,6 +25,8 @@ src/
     github/    contributions fetch + cache
     mail/      Nodemailer transport (Gmail OAuth2) + sendMail()
     rate-limit/ Mongo-backed limiter (rateLimits collection, TTL index)
+    icons/     multi-library icon lookup (Simple Icons, Lucide, Remix Icon)
+    hooks/     shared client-side React hooks
   styles/      globals.css (tokens from design.md §11), tailwind.config.js
 middleware.js  protects /admin/*, serves maintenance mode
 ```
@@ -37,7 +39,7 @@ middleware.js  protects /admin/*, serves maintenance mode
 | `siteSettings` (1 doc) | title, description, ogImage, favicon, notificationEmail, maintenanceMode, footerText, githubUsername |
 | `profile` (1 doc) | name, tagline, location, photoUrl, about (markdown), footnote, socialLinks, bannerUrl, bannerFileId, resumeUrl, resumeFileId, letsTalkHeading, letsTalkSubtext |
 | `sections` | key, label, visible, order |
-| `skills` | name, icon, category, visible, order |
+| `skills` | name, iconLibrary, iconSlug, iconUrl, category, visible, order |
 | `projects` | name, slug, shortDescription, longDescription, coverImage, screenshots[], liveUrl, githubUrl, techIds[], status (ongoing/completed), featured, published, order, seo, createdAt, updatedAt |
 | `messages` | name, email, subject, message, read, archived, emailFailed, ipHash, createdAt |
 | `events` | type (view/click), path, target, referrer, country, device, browser, os, visitorHash, createdAt |

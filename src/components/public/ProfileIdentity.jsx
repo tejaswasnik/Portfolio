@@ -39,9 +39,9 @@ export default function ProfileIdentity({ profile }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2">
-        <p className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary">
+        <h1 className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary">
           {profile?.name ?? "Your Name"}
-        </p>
+        </h1>
         <p className="font-mono text-[13px] text-text-secondary">
           {profile?.tagline ?? "Your tagline"}
         </p>

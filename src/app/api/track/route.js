@@ -10,11 +10,7 @@ import { isBot } from "@/lib/analytics/bot.js";
 import { parseUserAgent } from "@/lib/analytics/userAgent.js";
 import { verifySessionToken } from "@/lib/auth/jwt.js";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session.js";
-
-function getClientIp(request) {
-  const forwarded = request.headers.get("x-forwarded-for");
-  return forwarded?.split(",")[0]?.trim() || "unknown";
-}
+import { getClientIp } from "@/lib/http/clientIp.js";
 
 /**
  * Reads one cookie from the raw `Cookie` header via the standard
