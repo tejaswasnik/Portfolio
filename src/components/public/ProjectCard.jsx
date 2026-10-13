@@ -1,5 +1,6 @@
 import Chip from "@/components/ui/Chip";
 import TrackedLink from "@/components/public/TrackedLink";
+import TransitionLink from "@/components/public/transitions/TransitionLink.jsx";
 import SkillIcon from "@/components/ui/SkillIcon";
 import { GithubIcon, ArrowUpRightIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
@@ -33,6 +34,7 @@ export default function ProjectCard({ project, skillsById }) {
         {project.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
           <img
+            data-flip-key={`project-cover-${project.slug}`}
             src={withImageKitTransform(project.coverImage, "w-440,q-75,c-at_max")}
             alt=""
             className="size-full object-cover"
@@ -47,7 +49,7 @@ export default function ProjectCard({ project, skillsById }) {
         </span>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div data-flip-card-text={project.slug} className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h3 className="font-serif text-[22px] text-text-primary">
             {project.name}
@@ -100,13 +102,14 @@ export default function ProjectCard({ project, skillsById }) {
           })}
         </div>
 
-        <a
+        <TransitionLink
           href={`/projects/${project.slug}`}
+          flipKey={`project-cover-${project.slug}`}
           className="group flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 font-mono text-[11px] font-bold uppercase text-text-primary transition-colors hover:border-accent/50"
         >
           View details
           <ArrowRightIcon size={14} className="text-accent transition-transform group-hover:translate-x-0.5" />
-        </a>
+        </TransitionLink>
       </div>
     </article>
   );

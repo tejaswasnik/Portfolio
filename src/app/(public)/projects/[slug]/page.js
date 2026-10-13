@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageFrame from "@/components/ui/PageFrame";
 import SectionDivider from "@/components/ui/SectionDivider";
 import Nav from "@/components/public/Nav";
+import TransitionLink from "@/components/public/transitions/TransitionLink.jsx";
 import MarkdownContent from "@/components/public/MarkdownContent";
 import Lightbox from "@/components/public/Lightbox";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
@@ -87,13 +87,13 @@ export default async function ProjectDetailPage({ params }) {
       <section aria-label="Breadcrumb">
         <SectionDivider />
         <div className="flex items-center justify-between p-6">
-          <Link
+          <TransitionLink
             href="/projects"
             className="flex items-center gap-2 font-mono text-[11px] text-text-muted hover:text-text-primary"
           >
             <BackIcon size={12} />
             All projects
-          </Link>
+          </TransitionLink>
           <span className="font-mono text-[10px] text-text-muted">
             /projects/{project.slug}
           </span>
@@ -153,6 +153,7 @@ export default async function ProjectDetailPage({ params }) {
           <div className="p-6">
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
+              data-flip-key={`project-cover-${project.slug}`}
               src={withImageKitTransform(project.coverImage, "w-700,q-75,c-at_max")}
               alt={`${project.name} cover`}
               className="w-full rounded-2xl border border-border-subtle object-cover"
@@ -226,7 +227,7 @@ export default async function ProjectDetailPage({ params }) {
           {previous || next ? (
             <div className="flex flex-col gap-4 sm:flex-row">
               {previous ? (
-                <Link
+                <TransitionLink
                   href={`/projects/${previous.slug}`}
                   className="flex flex-1 flex-col gap-1.5 rounded-2xl border border-border-subtle bg-surface-1 p-4"
                 >
@@ -236,10 +237,10 @@ export default async function ProjectDetailPage({ params }) {
                   <span className="font-serif text-[22px] text-text-primary">
                     {previous.name}
                   </span>
-                </Link>
+                </TransitionLink>
               ) : null}
               {next ? (
-                <Link
+                <TransitionLink
                   href={`/projects/${next.slug}`}
                   className="flex flex-1 flex-col items-end gap-1.5 rounded-2xl border border-border-subtle bg-surface-1 p-4 text-right"
                 >
@@ -247,17 +248,17 @@ export default async function ProjectDetailPage({ params }) {
                     Next →
                   </span>
                   <span className="font-serif text-[22px] text-text-primary">{next.name}</span>
-                </Link>
+                </TransitionLink>
               ) : null}
             </div>
           ) : null}
-          <Link
+          <TransitionLink
             href="/projects"
             className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-border-default px-3.5 py-2.5 font-mono text-[11px] font-bold uppercase text-text-primary hover:border-accent/50"
           >
             <BackIcon size={14} />
             Back to projects
-          </Link>
+          </TransitionLink>
         </div>
       </section>
 

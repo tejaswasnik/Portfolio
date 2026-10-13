@@ -26,10 +26,21 @@ export default function PageFrame({ children, className = "", interestImages = [
   return (
     <div className="relative overflow-x-clip">
       <InterestImages items={interestImages} />
-      <main className={`relative z-10 mx-auto max-w-column ${className}`.trim()}>
+      {/* `id`/`tabIndex` so TransitionProvider can move focus to the
+          incoming page's landmark after a navigation; `data-transition-stagger`'s
+          direct children are what Beats 1/3 lift-fade-stagger. */}
+      <main
+        id="page-main"
+        tabIndex={-1}
+        className={`relative z-10 mx-auto max-w-column outline-none ${className}`.trim()}
+      >
         <Rails />
         <AnalyticsBeacon />
-        <ContactModalProvider>{children}</ContactModalProvider>
+        <ContactModalProvider>
+          <div data-transition-stagger className="contents">
+            {children}
+          </div>
+        </ContactModalProvider>
       </main>
       <BottomBlur />
     </div>
@@ -58,8 +69,14 @@ export function Rails() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden xl:block"
     >
-      <div className="absolute inset-y-0 left-0 w-px border-l border-dashed border-rail" />
-      <div className="absolute inset-y-0 right-0 w-px border-l border-dashed border-rail" />
+      <div
+        data-transition-rail
+        className="absolute inset-y-0 left-0 w-px origin-top border-l border-dashed border-rail"
+      />
+      <div
+        data-transition-rail
+        className="absolute inset-y-0 right-0 w-px origin-top border-l border-dashed border-rail"
+      />
     </div>
   );
 }

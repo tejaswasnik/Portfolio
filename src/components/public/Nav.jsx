@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TransitionLink from "@/components/public/transitions/TransitionLink.jsx";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 /**
@@ -11,25 +11,25 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 export default function Nav({ active }) {
   return (
     <div className="flex h-16 w-full items-center justify-between px-6">
-      <Link
+      <TransitionLink
         href="/"
         className="font-serif text-xl tracking-[0.5px] text-text-primary"
       >
         TW.
-      </Link>
+      </TransitionLink>
       <div className="flex items-center gap-6">
-        <Link
+        <TransitionLink
           href="/"
           className={`font-mono text-[11px] ${active === "home" ? "text-text-primary" : "text-text-muted transition-colors hover:text-text-primary"}`}
         >
           Home
-        </Link>
-        <Link
+        </TransitionLink>
+        <TransitionLink
           href="/projects"
           className={`font-mono text-[11px] ${active === "projects" ? "text-text-primary" : "text-text-muted transition-colors hover:text-text-primary"}`}
         >
           Projects
-        </Link>
+        </TransitionLink>
         <span aria-hidden="true" className="h-4 w-px bg-border-subtle" />
         <ThemeToggle />
       </div>

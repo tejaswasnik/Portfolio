@@ -17,6 +17,7 @@ export default function ProjectsSection({ projects, skills }) {
       <div className="flex flex-col gap-8 p-6">
         <h2
           id="projects-heading"
+          data-flip-key="projects-heading"
           className="font-serif text-2xl tracking-[0.6px] text-text-primary"
         >
           Projects
