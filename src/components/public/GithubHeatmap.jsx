@@ -1,6 +1,6 @@
+import HeatmapGrid from "@/components/public/HeatmapGrid.jsx";
 import Reveal from "@/components/ui/Reveal.jsx";
 import SectionDivider from "@/components/ui/SectionDivider";
-import { heatLevel } from "@/lib/github/contributions";
 
 const HEAT_CLASS = [
   "bg-heat-0",
@@ -10,17 +10,11 @@ const HEAT_CLASS = [
   "bg-heat-4",
 ];
 
-// Both formatters read in UTC — the API returns plain "YYYY-MM-DD" day
-// strings with no time component, and `new Date(dateString)` parses
-// those as UTC midnight; formatting with the viewer's local timezone
-// instead could shift a day near midnight to the wrong month/label.
+// Reads in UTC — the API returns plain "YYYY-MM-DD" day strings with no
+// time component, and `new Date(dateString)` parses those as UTC
+// midnight; formatting with the viewer's local timezone instead could
+// shift a day near midnight to the wrong month label.
 const MONTH_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" });
-const DAY_FORMAT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
 
 /**
  * GitHub activity heatmap (Figma 10:4 "Activity and field notes" →
@@ -65,13 +59,9 @@ export default function GithubHeatmap({ calendar }) {
           Activity
         </h2>
         {/*
-          Columns are fluid (1fr each) so the whole grid always fills the
-          column width exactly, whatever the API's week count — never a
-          horizontal scrollbar, on any viewport. Rows stay a fixed 10px
-          tall; cells get narrower (not literally square) on very narrow
-          viewports rather than overflowing. grid-auto-flow: column lets
-          the flattened week-major day list below fall into place without
-          explicit row/column indices.
+          HeatmapGrid's columns are fluid (1fr each) so the grid always
+          fills the column width exactly, whatever the API's week count —
+          never a horizontal scrollbar, on any viewport.
         */}
         <div className="flex flex-col gap-2.5">
           <div className="flex w-full justify-between gap-1 font-mono text-[9px] text-text-muted">
@@ -80,24 +70,7 @@ export default function GithubHeatmap({ calendar }) {
             ))}
           </div>
           <Reveal baseClass="heatmap-wipe">
-            <div
-              className="grid gap-[2px]"
-              style={{
-                gridTemplateColumns: `repeat(${calendar.weeks.length}, minmax(0, 1fr))`,
-                gridTemplateRows: "repeat(7, 10px)",
-                gridAutoFlow: "column",
-              }}
-            >
-              {calendar.weeks.flatMap((week) =>
-                week.days.map((day) => (
-                  <div
-                    key={day.date}
-                    title={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${DAY_FORMAT.format(new Date(day.date))}`}
-                    className={`rounded-[1px] ${HEAT_CLASS[heatLevel(day.count, max)]}`}
-                  />
-                )),
-              )}
-            </div>
+            <HeatmapGrid weeks={calendar.weeks} max={max} />
           </Reveal>
           <div className="flex items-center justify-between font-mono text-[10px] text-text-muted">
             <p>
