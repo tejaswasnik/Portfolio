@@ -153,8 +153,8 @@ export default function BannerManager({ profile }) {
   }
 
   return (
-    <div className="flex w-full items-start gap-6">
-      <div className="flex flex-1 flex-col gap-4">
+    <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
+      <div className="flex w-full flex-1 flex-col gap-4">
         {error ? (
           <p
             role="alert"
@@ -315,7 +315,7 @@ export default function BannerManager({ profile }) {
         </div>
       </div>
 
-      <div className="flex w-[344px] flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5">
+      <div className="flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5 lg:w-[344px]">
         <p className="font-serif text-[22px] text-text-primary">Guidelines</p>
         {guidelines.map((rule) => (
           <div key={rule.title} className="flex w-full items-start gap-2.5">
