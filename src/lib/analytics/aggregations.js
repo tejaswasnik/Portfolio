@@ -55,17 +55,30 @@ export function computeOverviewStats({
   };
 }
 
-/** One row per UTC day in `[startDate, endDate]`, views + unique visitors. */
+/**
+ * One row per UTC day in `[startDate, endDate]`, views + unique visitors.
+ *
+ * Groups `events` into per-day buckets in a single pass (PERF-04): the
+ * previous version re-filtered the *entire* events array once per day
+ * in range, an O(days × events) cost that measured 7-8s at 50k events
+ * over a 90-day range. Grouping once is O(events + days).
+ */
 export function computeViewsOverTime(events, startDate, endDate) {
+  const byDay = new Map();
+  for (const event of events) {
+    if (event.type !== "view") continue;
+    const dateKey = new Date(event.createdAt).toISOString().slice(0, 10);
+    if (!byDay.has(dateKey)) byDay.set(dateKey, []);
+    byDay.get(dateKey).push(event);
+  }
+
   const days = [];
   const cursor = new Date(`${startDate}T00:00:00.000Z`);
   const end = new Date(`${endDate}T00:00:00.000Z`);
 
   while (cursor <= end) {
     const dateKey = cursor.toISOString().slice(0, 10);
-    const dayEvents = events.filter(
-      (e) => e.type === "view" && new Date(e.createdAt).toISOString().slice(0, 10) === dateKey,
-    );
+    const dayEvents = byDay.get(dateKey) || [];
     days.push({
       date: dateKey,
       views: dayEvents.length,
