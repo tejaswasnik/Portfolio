@@ -38,6 +38,7 @@ export default function Dialog({ open, onClose, title, children }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        data-lenis-prevent
         className="animate-panel-in relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-border-subtle bg-surface-1 p-6 sm:max-w-[520px] sm:rounded-2xl sm:p-8"
       >
         <div className="mb-4 flex items-center justify-between">

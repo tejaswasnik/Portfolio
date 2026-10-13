@@ -1,4 +1,5 @@
 import MaintenanceView from "@/components/public/MaintenanceView";
+import SmoothScroll from "@/components/ui/SmoothScroll.jsx";
 import { getPublicSiteSettings } from "@/lib/db/cache";
 import { getSiteUrl } from "@/lib/site-url.js";
 import { isMaintenanceModeOn, resolveSiteMeta } from "@/lib/site-meta.js";
@@ -40,5 +41,10 @@ export default async function PublicLayout({ children }) {
     return <MaintenanceView />;
   }
 
-  return children;
+  return (
+    <>
+      <SmoothScroll />
+      {children}
+    </>
+  );
 }

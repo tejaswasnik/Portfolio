@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+/* Lenis (SmoothScroll.jsx) recommended base CSS: `lenis-smooth` forces
+ * `scroll-behavior: auto` so a browser-native smooth-scroll never stacks
+ * with Lenis's own easing, `[data-lenis-prevent]` opts an element (e.g. a
+ * modal's internal scroll area) out of Lenis entirely, and
+ * `lenis-stopped` backs `lenis.stop()` if that's ever called. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 /* Lets ThemeToggle's circular clip-path reveal animate on its own terms
  * instead of the browser's default cross-fade/mix-blend-mode. */
 ::view-transition-old(root),
