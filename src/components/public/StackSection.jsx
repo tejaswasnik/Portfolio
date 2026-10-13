@@ -1,12 +1,18 @@
 import SectionDivider from "@/components/ui/SectionDivider";
 import Chip from "@/components/ui/Chip";
+import SkillIcon from "@/components/ui/SkillIcon";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 /**
  * Tech stack chips (Figma 5:5766 → 5:5769). Figma's own heading is 30px
  * serif, but CLAUDE.md explicitly says "'Stack' matches the others" —
  * 24px, like About/Projects/Activity — so that convention wins here
  * (docs/DECISIONS.md).
- * @param {{ skills: Array<{ id: string, name: string, icon?: string }> }} props
+ *
+ * Icons render in their real brand colour (`SkillIcon`'s default —
+ * overriding design.md §20's original "monochrome" call per user
+ * feedback, see docs/DECISIONS.md "fixes round 2").
+ * @param {{ skills: Array<{ id: string, name: string, iconSlug?: string, iconUrl?: string }> }} props
  */
 export default function StackSection({ skills }) {
   if (skills.length === 0) return null;
@@ -23,19 +29,7 @@ export default function StackSection({ skills }) {
         </h2>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (
-            <Chip
-              key={skill.id}
-              variant="skill"
-              icon={
-                // skill.icon may be an ImageKit URL (step 9) or a yet-undefined
-                // icon-library key (step 4); only render it as an <img> once
-                // it's actually a URL.
-                /^(https?:)?\//.test(skill.icon ?? "") ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- remote URL, not a static import.
-                  <img src={skill.icon} alt="" className="size-3.5 rounded" />
-                ) : undefined
-              }
-            >
+            <Chip key={skill.id} variant="skill" icon={<SkillIcon {...resolveSkillIcon(skill)} />}>
               {skill.name}
             </Chip>
           ))}

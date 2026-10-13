@@ -4,6 +4,8 @@ import { serializeDocs } from "@/lib/db/serialize.js";
 import AdminSearchInput from "@/components/admin/AdminSearchInput";
 import SegmentedFilter from "@/components/admin/SegmentedFilter";
 import SkillsManager from "@/components/admin/SkillsManager";
+import SkillIcon from "@/components/ui/SkillIcon";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 export const metadata = { title: "Admin — Skills" };
 
@@ -39,16 +41,19 @@ export default async function AdminSkillsPage({ searchParams }) {
   const categories = [...new Set(allSkills.map((s) => s.category).filter(Boolean))].sort();
   const category = categories.includes(resolved.category) ? resolved.category : "all";
 
-  const filtered = filterAdminSkills(allSkills, { search, category });
+  const filtered = filterAdminSkills(allSkills, { search, category }).map((skill) => ({
+    ...skill,
+    iconNode: <SkillIcon {...resolveSkillIcon(skill)} size={16} />,
+  }));
   const filtersActive = Boolean(search) || category !== "all";
 
   const categoryOptions = [{ value: "all", label: "All" }, ...categories.map((c) => ({ value: c, label: c }))];
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">Skills</h1>
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">Skills</h1>
           <p className="font-mono text-[11px] text-text-muted">
             {allSkills.length} {allSkills.length === 1 ? "skill" : "skills"} ·{" "}
             {allSkills.filter((s) => s.visible).length} visible · reused as tags in the project

@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
 import { CopyIcon, LockIcon, TrashIcon } from "@/components/ui/icons.jsx";
 import { deleteMedia } from "@/app/admin/(dashboard)/media/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 /**
  * One card's copy/delete controls (Figma 71:646's "icon button — copy"
@@ -20,14 +21,17 @@ export default function MediaCardActions({ id, url, usage }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const notify = useActionToast();
 
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      notify({ ok: true }, "URL copied");
     } catch {
       setError("Couldn't copy — select and copy the URL manually.");
+      notify({ ok: false, error: "Couldn't copy — select and copy the URL manually." });
     }
   }
 
@@ -38,9 +42,11 @@ export default function MediaCardActions({ id, url, usage }) {
     if (!result.ok) {
       setError(result.error || "Couldn't delete this file.");
       setConfirmOpen(false);
+      notify(result);
       return;
     }
     setConfirmOpen(false);
+    notify(result, "File deleted");
     router.refresh();
   }
 

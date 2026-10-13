@@ -10,9 +10,11 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "db:ensure-indexes": "node --env-file=.env.local scripts/ensure-indexes.js",
     "db:seed": "node --env-file=.env.local scripts/seed.js",
-    "seed:admin": "node --env-file=.env.local scripts/seed-admin.js"
+    "seed:admin": "node --env-file=.env.local scripts/seed-admin.js",
+    "migrate:skill-icons": "node --env-file=.env.local scripts/migrate-skill-icons.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -24,9 +26,11 @@
     "nodemailer": "^10.1.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "simple-icons": "^16.35.0",
     "zod": "^4.6.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",

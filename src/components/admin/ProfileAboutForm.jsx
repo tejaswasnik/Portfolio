@@ -7,6 +7,7 @@ import Toggle from "@/components/ui/Toggle";
 import { ArrowUpRightIcon, MailIcon } from "@/components/ui/icons.jsx";
 import { toggleSectionVisible } from "@/app/admin/(dashboard)/sections/actions.js";
 import { saveProfileAndAbout } from "@/app/admin/(dashboard)/profile/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
@@ -67,6 +68,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
   const [heatmapVisible, setHeatmapVisible] = useState(heatmapSection?.visible ?? false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
+  const notify = useActionToast();
   const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -91,7 +93,9 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
     if (!result.ok) {
       setHeatmapVisible(!nextValue);
       setError(result.error || "Could not update the heatmap toggle.");
+      notify(result);
     } else {
+      notify(result, nextValue ? "Section shown" : "Section hidden");
       router.refresh();
     }
   }
@@ -129,18 +133,20 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
     if (!result.ok) {
       setError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
     setSaved(true);
+    notify(result, "Changes saved");
     router.refresh();
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
             Profile &amp; About
           </h1>
           <p className="font-mono text-[11px] text-text-muted">
@@ -174,7 +180,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
         </p>
       ) : null}
 
-      <div className="flex w-full items-start gap-6">
+      <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
@@ -385,7 +391,7 @@ export default function ProfileAboutForm({ profile, siteSettings, heatmapSection
           </div>
         </div>
 
-        <div className="flex w-[344px] flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 lg:w-[344px]">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
               <p className="font-serif text-[22px] text-text-primary">Resume</p>

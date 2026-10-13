@@ -4,7 +4,16 @@ File: **Portfolio V2** · key `KxTn1qYG7kzoGVYjbQM5Vh`
 Link pattern: `https://www.figma.com/design/KxTn1qYG7kzoGVYjbQM5Vh/Portfolio-V2?node-id=<id with : replaced by ->`
 Variables collection: **Field Notes — Tokens** (mirrors `design.md` §2).
 
-The canvas is organised into four sections: *0 Inspiration*, *1 Public site*, *2 Home responsive & themes*, *3 Admin panel*.
+The canvas is organised into four sections:
+
+| Section | Node | Contents |
+|---|---|---|
+| 0 · Inspiration | `76:2` | Reference sites (chanhdai.com, jdhruv.dev) |
+| 1 · Public site — desktop 1440 | `76:3` | Home, Projects, Project details, Maintenance, 404, Contact form, Contact sent |
+| 2 · Home — responsive & themes | `76:4` | Dark and light home at 1280 / 768 / 375, interaction-state sheet |
+| 3 · Admin panel | `76:5` | All 14 admin frames |
+
+Frame node IDs below are stable; fetch a frame directly with its ID (`get_design_context`, `get_screenshot`).
 
 ## Public site (1440 desktop)
 
@@ -52,8 +61,8 @@ Admin shell: 240px sidebar (Overview, Content, Site groups; unread badge on Mess
 ## Known gaps (not designed yet)
 
 - Project-details screenshot **lightbox** state.
-- Admin: delete-confirmation dialogs, empty states, loading and error states, mobile layout (admin is desktop-only in v1).
-- Responsive variants of Projects, Project details, Contact, 404 and Maintenance (follow the 768/375 rules in `design.md` §10 and the home variants).
+- Admin: delete-confirmation dialogs, empty states, loading and error states, and all responsive/mobile layouts. Follow `design.md` §23 (admin responsive) and §21 (toasts).
+- Responsive variants of Projects, Project details, Contact, 404 and Maintenance: follow `design.md` §22 and the home 768/375 frames.
 - Light theme for the new public pages (use the home light variants as the token reference).
 - The 1440 home lacks the email-copy row and "Open to" line that the 1280 home has; follow the 1280 version.
 

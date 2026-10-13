@@ -2,6 +2,7 @@ import { requireAdmin } from "@/lib/auth/requireAdmin.js";
 import { countUnreadMessages } from "@/lib/db/collections/messages.js";
 import Sidebar from "@/components/admin/Sidebar";
 import Topbar from "@/components/admin/Topbar";
+import AdminShellProvider from "@/components/admin/AdminShellProvider";
 
 export const metadata = { title: "Admin — Dashboard" };
 
@@ -17,12 +18,14 @@ export default async function AdminShellLayout({ children }) {
   const unreadMessages = await countUnreadMessages(session.db).catch(() => 0);
 
   return (
-    <div className="flex min-h-screen bg-bg">
-      <Sidebar unreadMessages={unreadMessages} />
-      <div className="flex-1">
-        <Topbar />
-        <main className="p-8">{children}</main>
+    <AdminShellProvider>
+      <div className="flex min-h-screen bg-bg">
+        <Sidebar unreadMessages={unreadMessages} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Topbar />
+          <main className="p-4 sm:p-8">{children}</main>
+        </div>
       </div>
-    </div>
+    </AdminShellProvider>
   );
 }
