@@ -4,7 +4,7 @@ import { profileSchema, profileFormSchema, bannerFormSchema } from "./profile.js
 describe("profileSchema", () => {
   const valid = {
     name: "Tejas Wasnik",
-    tagline: "Building thoughtful software.",
+    taglines: ["Building thoughtful software."],
     about: "I build things.",
     letsTalkHeading: "Let's talk",
     letsTalkSubtext: "Reach out any time.",
@@ -31,9 +31,14 @@ describe("profileSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects a missing tagline", () => {
-    const { tagline, ...withoutTagline } = valid;
-    const result = profileSchema.safeParse(withoutTagline);
+  it("rejects a missing taglines list", () => {
+    const { taglines, ...withoutTaglines } = valid;
+    const result = profileSchema.safeParse(withoutTaglines);
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an empty taglines list", () => {
+    const result = profileSchema.safeParse({ ...valid, taglines: [] });
     expect(result.success).toBe(false);
   });
 });
@@ -41,7 +46,7 @@ describe("profileSchema", () => {
 describe("profileFormSchema (admin Profile & About form)", () => {
   const valid = {
     name: "Tejas Wasnik",
-    tagline: "Building thoughtful software.",
+    taglines: ["Building thoughtful software."],
     about: "I build things.",
     letsTalkHeading: "Let's talk",
     letsTalkSubtext: "Reach out any time.",
