@@ -118,6 +118,19 @@ describe("computeViewsOverTime", () => {
       { date: "2026-10-12", views: 0, uniqueVisitors: 0 },
     ]);
   });
+
+  it("ignores click events and events outside the requested range", () => {
+    const events = [
+      view({ createdAt: "2026-10-09T23:59:59.000Z", visitorHash: "outside-before" }),
+      view({ createdAt: "2026-10-10T08:00:00.000Z", visitorHash: "a" }),
+      { ...view({ createdAt: "2026-10-10T09:00:00.000Z", visitorHash: "a" }), type: "click" },
+      view({ createdAt: "2026-10-13T00:00:00.000Z", visitorHash: "outside-after" }),
+    ];
+
+    const result = computeViewsOverTime(events, "2026-10-10", "2026-10-10");
+
+    expect(result).toEqual([{ date: "2026-10-10", views: 1, uniqueVisitors: 1 }]);
+  });
 });
 
 describe("computeTopPages", () => {

@@ -10,7 +10,7 @@ Deviations from the docs and ambiguous calls made while executing `docs/PROMPTS.
 
 **`next.config.mjs` experimental flags removed.** The default Next 16 template enables `cacheComponents`/`partialPrefetching`, which use `"use cache"` directives instead of the classic `fetch`-cache + `revalidateTag`/`revalidatePath` model that `docs/ARCHITECTURE.md` and `docs/PRD.md` assume. Removed both flags to keep the documented revalidation model simple and predictable.
 
-**No CSP header yet.** Added `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` and `Strict-Transport-Security` in `next.config.mjs`. Held off on `Content-Security-Policy` until the external origins (ImageKit CDN, Google Fonts, GitHub API) are finalized in later steps, to avoid a header that blocks features before they exist.
+**CSP added once the external origins were finalized (audit SEC-02).** Added `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` and `Strict-Transport-Security` in `next.config.mjs` early, holding off on `Content-Security-Policy` until the external origins (ImageKit CDN, GitHub API) were finalized. They now are — the browser only ever talks to `ik.imagekit.io`/`upload.imagekit.io` directly (GitHub's contributions fetch is server-side; `next/font` self-hosts, so Google Fonts needs no runtime origin) — so a CSP scoped to exactly those is now in place.
 
 **Env loader is a lazy `getEnv()` function, not a top-level throw on import.** Importing `src/lib/env.js` anywhere would otherwise fail `npm run build`/`npm test` before `.env.local` exists. `getEnv()` validates and caches on first call, so it's safe to import now and wire into `src/lib/db`, `src/lib/mail`, etc. in later steps.
 

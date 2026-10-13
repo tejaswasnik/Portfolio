@@ -10,12 +10,7 @@ import { getSiteSettings } from "@/lib/db/collections/site-settings.js";
 import { checkAndIncrementRateLimit } from "@/lib/rate-limit/index.js";
 import { hashIp } from "@/lib/rate-limit/hash.js";
 import { sendContactNotification } from "@/lib/mail/sendMail.js";
-
-/** First entry of X-Forwarded-For, or "unknown" when absent (local dev). */
-function getClientIp(request) {
-  const forwarded = request.headers.get("x-forwarded-for");
-  return forwarded?.split(",")[0]?.trim() || "unknown";
-}
+import { getClientIp } from "@/lib/http/clientIp.js";
 
 export async function POST(request) {
   let body;

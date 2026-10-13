@@ -514,9 +514,8 @@ Lightbox, admin empty/loading/error/confirm states, Figma frames for the respons
 
 ## 20. Skill icons
 
-- Icons come from the `simple-icons` npm package, stored on the skill as `iconSlug` (e.g. `javascript`, `react`, `nextdotjs`, `nodedotjs`, `mongodb`, `tailwindcss`, `html5`, `css`). Render as inline SVG using the icon's `path` (24×24 viewBox), size 14, `fill="currentColor"`.
-- **Stack section chips:** monochrome, `--text-chip` (hover: `--text-secondary`).
-- **Project-card pills and admin rows:** monochrome by default; brand colours only where §2 "Brand logo colours" allows (Next.js, TypeScript, PostgreSQL, React).
+- Icons can come from one of three libraries — Simple Icons, Lucide, or Remix Icon (fixes round 2) — stored on the skill as `iconLibrary` + `iconSlug`, or a custom-uploaded `iconUrl`. Simple Icons/Remix Icon render as inline SVG via the icon's `path` (24×24 viewBox), size 14; Lucide renders as a stroke-based outline (always monochrome, carries no brand colour).
+- **Coloured by default** (each brand's real hex, per direct user feedback — this overrides this section's original "monochrome by default" call). Pass `monochrome` to `SkillIcon` to force `currentColor` instead, for contexts where a wash of brand colours would be too noisy or risks blending into the surface (a near-black/near-white hex against this app's own near-black/white surfaces). See `src/components/ui/SkillIcon.jsx`'s JSDoc and `docs/DECISIONS.md` "fixes round 2" for the full reasoning.
 - Fallback when a slug is missing or unknown: a 14px rounded tile with the first letter of the skill name in mono 9 (never a blank gap).
 - Admin icon picker: search field + 6-column grid of matching icons (max 48 results) with the slug shown on hover; selecting fills the slug field. A custom upload (ImageKit, SVG/PNG) is an alternative and stores `iconUrl`.
 - Icon slug field accepts lowercase letters, digits and hyphens, up to 40 characters. It is never limited to 3 characters.

@@ -139,12 +139,15 @@ describe("POST /api/admin/login", () => {
     expect(verifyPasswordMock).not.toHaveBeenCalled();
   });
 
-  it("returns 503 when the database is unreachable", async () => {
-    getDbMock.mockRejectedValue(new Error("connection refused"));
+  it("returns 503 when the database is unreachable, without leaking internal error details", async () => {
+    getDbMock.mockRejectedValue(new Error("querySrv ECONNREFUSED _mongodb._tcp.cluster0.example.net"));
 
     const { POST } = await import("./route.js");
     const response = await POST(postRequest(credentials));
+    const json = await response.json();
 
     expect(response.status).toBe(503);
+    expect(json).not.toHaveProperty("details");
+    expect(JSON.stringify(json)).not.toMatch(/ECONNREFUSED|mongodb/i);
   });
 });

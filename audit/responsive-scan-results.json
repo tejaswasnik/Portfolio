@@ -1,0 +1,1081 @@
+{
+  "responsive": [
+    {
+      "url": "/",
+      "label": "public@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@320",
+      "status": 404,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "public"
+    },
+    {
+      "url": "/",
+      "label": "public@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@375",
+      "status": 404,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "public"
+    },
+    {
+      "url": "/",
+      "label": "public@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@768",
+      "status": 404,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "public"
+    },
+    {
+      "url": "/",
+      "label": "public@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@1024",
+      "status": 404,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "public"
+    },
+    {
+      "url": "/",
+      "label": "public@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@1280",
+      "status": 404,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "public"
+    },
+    {
+      "url": "/",
+      "label": "public@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "public"
+    },
+    {
+      "url": "/projects",
+      "label": "public@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "public"
+    },
+    {
+      "url": "/projects/workspace",
+      "label": "public@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "public"
+    },
+    {
+      "url": "/projects/fieldnote",
+      "label": "public@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "public"
+    },
+    {
+      "url": "/404-test-xyz",
+      "label": "public@1440",
+      "status": 404,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "public"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 418,
+      "innerWidth": 320,
+      "bodyScrollWidth": 418,
+      "hScroll": true,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 370,
+      "innerWidth": 320,
+      "bodyScrollWidth": 370,
+      "hScroll": true,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 382,
+      "innerWidth": 320,
+      "bodyScrollWidth": 382,
+      "hScroll": true,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "bodyScrollWidth": 320,
+      "hScroll": false,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@320",
+      "status": 200,
+      "scrollWidth": 382,
+      "innerWidth": 320,
+      "bodyScrollWidth": 382,
+      "hScroll": true,
+      "width": 320,
+      "area": "admin"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 418,
+      "innerWidth": 375,
+      "bodyScrollWidth": 418,
+      "hScroll": true,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 382,
+      "innerWidth": 375,
+      "bodyScrollWidth": 382,
+      "hScroll": true,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 375,
+      "innerWidth": 375,
+      "bodyScrollWidth": 375,
+      "hScroll": false,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@375",
+      "status": 200,
+      "scrollWidth": 382,
+      "innerWidth": 375,
+      "bodyScrollWidth": 382,
+      "hScroll": true,
+      "width": 375,
+      "area": "admin"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@768",
+      "status": 200,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "bodyScrollWidth": 768,
+      "hScroll": false,
+      "width": 768,
+      "area": "admin"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@1024",
+      "status": 200,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "hScroll": false,
+      "width": 1024,
+      "area": "admin"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@1280",
+      "status": 200,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "hScroll": false,
+      "width": 1280,
+      "area": "admin"
+    },
+    {
+      "url": "/admin",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/projects/new",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/skills",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/sections",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/banner",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/profile",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/messages",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/settings",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    },
+    {
+      "url": "/admin/media",
+      "label": "admin@1440",
+      "status": 200,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "hScroll": false,
+      "width": 1440,
+      "area": "admin"
+    }
+  ],
+  "fonts": {
+    "home": {
+      "h1": null,
+      "h2": "\"Instrument Serif\", serif",
+      "body": "\"JetBrains Mono\", ui-monospace, monospace",
+      "mono": "\"JetBrains Mono\", ui-monospace, monospace"
+    }
+  },
+  "touchTargets": [],
+  "reducedMotion": {
+    "banner": {
+      "gifFound": null,
+      "animatedElements": [
+        {
+          "tag": "HTML",
+          "cls": "ntkZhG_variable tFTtWW_variable XeZSCW_variable",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "HEAD",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "META",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "META",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "LINK",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "LINK",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "LINK",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "LINK",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "LINK",
+          "cls": "",
+          "dur": "1e-05s"
+        },
+        {
+          "tag": "SCRIPT",
+          "cls": "",
+          "dur": "1e-05s"
+        }
+      ]
+    }
+  },
+  "altText": {
+    "/": {
+      "imgCount": 0,
+      "imgsMissingAltAttr": [],
+      "iconButtonCount": 1,
+      "unlabeledIconButtons": []
+    },
+    "/projects": {
+      "imgCount": 0,
+      "imgsMissingAltAttr": [],
+      "iconButtonCount": 1,
+      "unlabeledIconButtons": []
+    },
+    "/projects/workspace": {
+      "imgCount": 0,
+      "imgsMissingAltAttr": [],
+      "iconButtonCount": 1,
+      "unlabeledIconButtons": []
+    }
+  },
+  "focusVisible": {}
+}

@@ -11,6 +11,7 @@ import { ArrowUpRightIcon, ImageIcon, PlusIcon } from "@/components/ui/icons.jsx
 import { slugify } from "@/lib/schemas/common.js";
 import { projectStatusValues } from "@/lib/schemas/project.js";
 import { useActionToast } from "@/lib/hooks/useActionToast.js";
+import { useUnsavedChangesWarning } from "@/lib/hooks/useUnsavedChangesWarning.js";
 import {
   createProject,
   deleteProject,
@@ -78,6 +79,33 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  // Unsaved-changes warning (UX-02): snapshot every field the form can
+  // edit and compare against what was last saved (or the initial
+  // values, for a new project). `lastSavedSnapshot` is updated after a
+  // successful edit-mode save so a subsequent `router.refresh()`
+  // doesn't leave the warning stuck on for a form the user just saved.
+  const currentSnapshot = JSON.stringify({
+    name,
+    slug,
+    shortDescription,
+    longDescription,
+    liveUrl,
+    githubUrl,
+    status,
+    techIds,
+    seoTitle,
+    seoDescription,
+    seoOgImage,
+    featured,
+    published,
+    orderChoice,
+    coverImage,
+    screenshots,
+  });
+  const [lastSavedSnapshot, setLastSavedSnapshot] = useState(currentSnapshot);
+  const isDirty = currentSnapshot !== lastSavedSnapshot;
+  useUnsavedChangesWarning(isDirty);
+
   // `totalCount` is every *other* project (edit mode excludes self), so
   // this project can occupy any position from 1 up to totalCount + 1.
   const orderOptions = Array.from({ length: totalCount + 1 }, (_, i) => i + 1);
@@ -138,6 +166,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     }
 
     notify(result, mode === "create" ? "Project created" : "Changes saved");
+    setLastSavedSnapshot(currentSnapshot);
     if (mode === "create") {
       router.push(`/admin/projects/${result.id}`);
     } else {

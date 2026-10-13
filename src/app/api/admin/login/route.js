@@ -46,7 +46,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("Login route getDb error:", error);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again later.", details: error?.message || String(error) },
+      { error: "Something went wrong. Please try again later." },
       { status: 503 },
     );
   }
