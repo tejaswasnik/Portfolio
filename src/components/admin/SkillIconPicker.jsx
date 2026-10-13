@@ -111,7 +111,7 @@ export default function SkillIconPicker({ open, onClose, initialQuery = "", onCh
               type="button"
               onClick={() => handleLibraryChange(lib.value)}
               title={lib.hint}
-              className={`rounded-md border px-2.5 py-1.5 font-mono text-[10px] uppercase ${
+              className={`rounded-md border px-2.5 py-1.5 font-mono text-[10px] uppercase transition-colors ${
                 library === lib.value
                   ? "border-accent bg-surface-3 text-text-primary"
                   : "border-border-default text-text-muted hover:text-text-primary"
@@ -128,7 +128,7 @@ export default function SkillIconPicker({ open, onClose, initialQuery = "", onCh
           onChange={handleQueryChange}
           placeholder="Search icons…"
           autoFocus
-          className="w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent"
+          className="w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent"
         />
 
         <div className="max-h-[320px] overflow-y-auto">
@@ -150,7 +150,7 @@ export default function SkillIconPicker({ open, onClose, initialQuery = "", onCh
                   type="button"
                   title={icon.slug}
                   onClick={() => pick(icon)}
-                  className="flex aspect-square items-center justify-center rounded-md border border-border-default bg-surface-2 text-text-primary hover:border-accent/50"
+                  className="flex aspect-square items-center justify-center rounded-md border border-border-default bg-surface-2 text-text-primary transition-colors hover:border-accent/50"
                 >
                   <SkillIcon {...icon} size={20} />
                 </button>

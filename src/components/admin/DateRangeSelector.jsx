@@ -36,7 +36,7 @@ export default function DateRangeSelector({ range, from, to }) {
           <Link
             key={option.value}
             href={`/admin?range=${option.value}`}
-            className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase ${
+            className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase transition-colors ${
               range === option.value
                 ? "border border-border-default bg-surface-3 text-text-primary"
                 : "border border-transparent text-text-muted hover:text-text-primary"
@@ -48,7 +48,7 @@ export default function DateRangeSelector({ range, from, to }) {
         <button
           type="button"
           onClick={() => setShowCustom((v) => !v)}
-          className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase ${
+          className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase transition-colors ${
             range === "custom"
               ? "border border-border-default bg-surface-3 text-text-primary"
               : "border border-transparent text-text-muted hover:text-text-primary"

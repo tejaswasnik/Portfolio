@@ -10,7 +10,7 @@ import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
-  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent";
+  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent";
 const cardClass =
   "flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5";
 

@@ -60,7 +60,7 @@ export default function MediaCardActions({ id, url, usage }) {
           onClick={handleCopy}
           aria-label="Copy file URL"
           title={copied ? "Copied!" : "Copy file URL"}
-          className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+          className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
         >
           <CopyIcon size={14} />
         </button>
@@ -80,7 +80,7 @@ export default function MediaCardActions({ id, url, usage }) {
             type="button"
             onClick={() => setConfirmOpen(true)}
             aria-label="Delete file"
-            className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+            className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary transition-colors hover:border-border-hover"
           >
             <TrashIcon size={14} />
           </button>

@@ -52,7 +52,7 @@ export default function Lightbox({ images, projectName }) {
             key={src}
             type="button"
             onClick={() => setOpenIndex(index)}
-            className="flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-1 p-0 text-left"
+            className="group flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-1 p-0 text-left transition-colors hover:border-border-default"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
@@ -62,14 +62,17 @@ export default function Lightbox({ images, projectName }) {
             />
             <span className="flex items-center justify-between px-3 pb-3 font-mono text-[10px] text-text-muted">
               {String(index + 1).padStart(2, "0")} · {images.length} total
-              <ExpandIcon size={12} />
+              <ExpandIcon
+                size={12}
+                className="opacity-60 transition-[opacity,transform] group-hover:scale-110 group-hover:opacity-100"
+              />
             </span>
           </button>
         ))}
       </div>
 
       {isOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg/90 p-6">
+        <div className="animate-overlay-in fixed inset-0 z-50 flex items-center justify-center bg-bg/90 p-6">
           <button
             type="button"
             aria-label="Close lightbox"
@@ -83,7 +86,7 @@ export default function Lightbox({ images, projectName }) {
             aria-modal="true"
             aria-labelledby={titleId}
             tabIndex={-1}
-            className="relative z-10 flex max-h-full max-w-4xl flex-col gap-3 outline-none"
+            className="animate-panel-in relative z-10 flex max-h-full max-w-4xl flex-col gap-3 outline-none"
           >
             <div className="flex items-center justify-between">
               <h2 id={titleId} className="font-mono text-[11px] text-text-muted">
@@ -93,7 +96,7 @@ export default function Lightbox({ images, projectName }) {
               <button
                 type="button"
                 onClick={() => setOpenIndex(-1)}
-                className="font-mono text-[11px] uppercase tracking-[1px] text-text-muted hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="font-mono text-[11px] uppercase tracking-[1px] text-text-muted transition-colors hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 ESC ✕
               </button>
@@ -111,14 +114,14 @@ export default function Lightbox({ images, projectName }) {
                   onClick={() =>
                     setOpenIndex((index) => (index - 1 + images.length) % images.length)
                   }
-                  className="hover:text-text-primary"
+                  className="transition-colors hover:text-text-primary"
                 >
                   ← Previous
                 </button>
                 <button
                   type="button"
                   onClick={() => setOpenIndex((index) => (index + 1) % images.length)}
-                  className="hover:text-text-primary"
+                  className="transition-colors hover:text-text-primary"
                 >
                   Next →
                 </button>

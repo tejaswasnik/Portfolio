@@ -20,7 +20,7 @@ export default function SegmentedFilter({ options, activeValue, buildHref }) {
             key={option.value}
             href={buildHref(option.value)}
             aria-current={active ? "true" : undefined}
-            className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase ${
+            className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase transition-colors ${
               active
                 ? "border border-border-default bg-surface-3 text-text-primary"
                 : "border border-transparent text-text-muted hover:text-text-primary"

@@ -53,7 +53,7 @@ export default function MediaPickerDialog({ open, onClose, onPick }) {
                 onPick({ url: file.url, fileId: file.fileId });
                 onClose();
               }}
-              className="aspect-square overflow-hidden rounded-md border border-border-default bg-surface-3 hover:border-accent/50"
+              className="aspect-square overflow-hidden rounded-md border border-border-default bg-surface-3 transition-colors hover:border-accent/50"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL */}
               <img src={file.url} alt={file.name} className="size-full object-cover" />

@@ -20,7 +20,7 @@ import {
 
 const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-muted";
 const fieldInput =
-  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent";
+  "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none transition-colors focus-visible:border-accent";
 const cardClass =
   "flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5";
 
@@ -399,7 +399,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
                     type="button"
                     onClick={() => setStatus(value)}
                     aria-pressed={status === value}
-                    className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase ${
+                    className={`rounded-[5px] px-2.5 py-[5px] font-mono text-[10px] uppercase transition-colors ${
                       status === value
                         ? "border border-border-default bg-surface-3 text-text-primary"
                         : "border border-transparent text-text-muted hover:text-text-primary"
@@ -427,7 +427,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
                         type="button"
                         onClick={() => setTechIds((current) => current.filter((t) => t !== id))}
                         aria-label={`Remove ${skill?.name ?? id}`}
-                        className="text-text-muted hover:text-text-primary"
+                        className="text-text-muted transition-colors hover:text-text-primary"
                       >
                         ×
                       </button>
@@ -625,7 +625,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
                       type="button"
                       onClick={() => removeScreenshot(index)}
                       aria-label={`Remove screenshot ${index + 1} slot`}
-                      className="mt-2.5 shrink-0 text-text-muted hover:text-text-primary"
+                      className="mt-2.5 shrink-0 text-text-muted transition-colors hover:text-text-primary"
                     >
                       ×
                     </button>
@@ -637,7 +637,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
             <button
               type="button"
               onClick={addScreenshotSlot}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border-default bg-surface-2 py-2.5 font-mono text-[10px] uppercase text-text-secondary hover:border-accent/50"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-border-default bg-surface-2 py-2.5 font-mono text-[10px] uppercase text-text-secondary transition-colors hover:border-accent/50"
             >
               <PlusIcon size={10} />
               Add screenshot
@@ -667,7 +667,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
       ) : null}
 
       <p className="font-mono text-[10px] text-text-muted">
-        <Link href="/admin/projects" className="underline hover:text-text-primary">
+        <Link href="/admin/projects" className="underline transition-colors hover:text-text-primary">
           ← Back to projects
         </Link>
       </p>

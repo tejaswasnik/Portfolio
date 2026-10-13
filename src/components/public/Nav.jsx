@@ -20,13 +20,13 @@ export default function Nav({ active }) {
       <div className="flex items-center gap-6">
         <Link
           href="/"
-          className={`font-mono text-[11px] ${active === "home" ? "text-text-primary" : "text-text-muted hover:text-text-primary"}`}
+          className={`font-mono text-[11px] ${active === "home" ? "text-text-primary" : "text-text-muted transition-colors hover:text-text-primary"}`}
         >
           Home
         </Link>
         <Link
           href="/projects"
-          className={`font-mono text-[11px] ${active === "projects" ? "text-text-primary" : "text-text-muted hover:text-text-primary"}`}
+          className={`font-mono text-[11px] ${active === "projects" ? "text-text-primary" : "text-text-muted transition-colors hover:text-text-primary"}`}
         >
           Projects
         </Link>
