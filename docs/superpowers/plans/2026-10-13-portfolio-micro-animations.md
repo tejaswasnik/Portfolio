@@ -60,9 +60,20 @@ Looping animation #2 is the role rotator (A6); it pauses when the tab is hidden.
 
 **Explicitly out of scope:** custom cursor, smooth-scroll hijacking (Lenis), page-load preloader, parallax, marquee, WebGL, sound.
 
+## Decisions (D1–D6)
+
+Resolved before Task 1, in response to the plan's own "map paths before editing" instruction hitting real conflicts with this repo. These override the task text wherever they differ from it.
+
+- **D1 — Provider placement.** `MotionProvider` wraps in `src/app/(public)/layout.js` (not `src/app/layout.tsx`, which doesn't exist here — this is a plain-JS repo), as the **outermost** of the three public providers: `MotionProvider > Nav > TransitionProvider > SmoothScroll > {children}`. Admin doesn't get it.
+- **D2 — Testing stack.** `vitest.config.js`/`playwright.config.js` already exist — reused, not recreated. `jsdom`, `@testing-library/react`, `@testing-library/jest-dom` added as devDependencies; each new component test opts into jsdom via a `// @vitest-environment jsdom` comment (`environmentMatchGlobs` is deprecated in Vitest 3), leaving the 56 pre-existing node-environment tests untouched.
+- **D3 — `AnimatedTextSlider` vs `RoleRotator`.** `RoleRotator` is the new implementation, wired into `ProfileIdentity.jsx` in place of `AnimatedTextSlider`. **`AnimatedTextSlider.jsx` itself is NOT deleted** (explicit instruction) — it's left in the repo unused rather than removed, even though it has no remaining importers.
+- **D4 — Task 8, lightened.** No client-side `ProjectGrid`/`AnimatePresence`/grid-reflow. `ProjectFilters.jsx` stays server-rendered with plain `<Link>`s (works with JS off, URL stays the source of truth). Instead: extract the chip row into a small client `FilterChips` wrapping the same links; the active pill slides via `layoutId` + `useOptimistic` (moves on click, not on server round-trip); cards get a CSS fade-in keyed on the current filter, no layout animation. `TransitionProvider` must skip its page transition when only the query string changes on `/projects` (filter clicks), or every click triggers a full page transition.
+- **D5 — Nav hoisted into the layout.** `<Nav/>` moves to `(public)/layout.js`, no longer takes an `active` prop — derives it from `usePathname()` (`/` → home, anything starting with `/projects` → projects, including detail pages). Required for A7's `layoutId` pill to animate across a route change at all (it needs the component to survive the navigation). Side effect: Nav sits outside `TransitionProvider`'s animated content, so it stays visually still during page transitions — confirmed `TransitionProvider` never selects Nav's DOM.
+- **D6 — Task 10 skipped entirely**, not treated as a stretch goal. The GSAP hand-rolled FLIP cover-image transition already built in `TransitionProvider.jsx` does this job; running a second View Transition system alongside it would fight.
+
 ## Global Constraints
 
-- Package: `motion` (import from `"motion/react"`), not `framer-motion`. No GSAP for this work.
+- Package: `motion` (import from `"motion/react"`) for all new animation work. The existing GSAP `TransitionProvider` and Lenis `SmoothScroll` stay exactly as they are (D6) — no more GSAP/Lenis added anywhere in this plan.
 - Every value in "Motion tokens" is defined once in `src/lib/motion/tokens.ts` and `src/styles/motion.css`; no inline magic numbers in components.
 - Animate only `transform`, `opacity`, `filter`, `clip-path`. Never `width/height/top/left` — except A6's container width, which uses Motion `layout` (transform-based).
 - Never `transition: all`. List properties.
