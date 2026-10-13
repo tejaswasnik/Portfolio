@@ -30,15 +30,15 @@ export default function BannerMedia({ bannerUrl }) {
     return (
       // eslint-disable-next-line @next/next/no-img-element -- animated GIF; next/image can't preserve looping.
       <img
-        src={withImageKitTransform(bannerUrl, "w-480,q-70,c-at_max")}
+        src={withImageKitTransform(bannerUrl, "w-960,q-70,c-at_max")}
         alt=""
-        className="h-[138px] w-full rounded-lg object-cover"
+        className="h-[220px] w-full rounded-lg object-cover"
       />
     );
   }
 
   return (
-    <div className="flex h-[138px] w-full flex-col items-center justify-center gap-3 rounded-lg bg-surface-2">
+    <div className="flex h-[220px] w-full flex-col items-center justify-center gap-3 rounded-lg bg-surface-2">
       <span className="flex size-8 items-center justify-center rounded-full bg-bg">
         <UploadIcon className="text-text-primary" />
       </span>
@@ -48,7 +48,7 @@ export default function BannerMedia({ bannerUrl }) {
             ? "Banner hidden — reduced motion is on"
             : "Banner coming soon"}
         </p>
-        <p className="text-[10px] text-text-muted">760 × 100</p>
+        <p className="text-[10px] text-text-muted">1200 × 220</p>
       </div>
     </div>
   );

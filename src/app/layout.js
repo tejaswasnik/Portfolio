@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
