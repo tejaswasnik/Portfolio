@@ -1,4 +1,5 @@
 import TrackedLink from "@/components/public/TrackedLink";
+import { AnimatedTextSlider } from "@/components/ui/AnimatedTextSlider.jsx";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
 
 // Matches Button's "dashed" variant classes (src/components/ui/Button.jsx)
@@ -42,9 +43,10 @@ export default function ProfileIdentity({ profile }) {
         <h1 className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary">
           {profile?.name ?? "Your Name"}
         </h1>
-        <p className="font-mono text-[13px] text-text-secondary">
-          {profile?.tagline ?? "Your tagline"}
-        </p>
+        <AnimatedTextSlider
+          texts={profile?.taglines?.length ? profile.taglines : ["Your tagline"]}
+          className="font-mono text-[13px] text-text-secondary"
+        />
         {profile?.location ? (
           <p className="font-mono text-[11px] text-text-muted">
             {profile.location}

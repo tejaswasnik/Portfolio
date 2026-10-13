@@ -15,7 +15,7 @@ const sections = [
 
 const profile = {
   name: "Tejas Wasnik",
-  tagline: "Building thoughtful, fast software.",
+  taglines: ["Building thoughtful, fast software."],
   location: "India",
   photoUrl: "",
   about:

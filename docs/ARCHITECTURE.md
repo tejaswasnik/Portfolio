@@ -37,7 +37,7 @@ middleware.js  protects /admin/*, serves maintenance mode
 | `users` | email, passwordHash, failedAttempts, lockedUntil, tokenVersion, createdAt |
 | `rateLimits` | key (hashed), count, expiresAt (TTL) |
 | `siteSettings` (1 doc) | title, description, ogImage, favicon, notificationEmail, maintenanceMode, footerText, githubUsername |
-| `profile` (1 doc) | name, tagline, location, photoUrl, about (markdown), footnote, socialLinks, bannerUrl, bannerFileId, resumeUrl, resumeFileId, letsTalkHeading, letsTalkSubtext |
+| `profile` (1 doc) | name, taglines (array, cycled on the public header via `AnimatedTextSlider`), location, photoUrl, about (markdown), footnote, socialLinks, bannerUrl, bannerFileId, resumeUrl, resumeFileId, letsTalkHeading, letsTalkSubtext |
 | `sections` | key, label, visible, order |
 | `skills` | name, iconLibrary, iconSlug, iconUrl, category, visible, order |
 | `projects` | name, slug, shortDescription, longDescription, coverImage, screenshots[], liveUrl, githubUrl, techIds[], status (ongoing/completed), featured, published, order, seo, createdAt, updatedAt |
