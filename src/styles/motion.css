@@ -188,3 +188,27 @@
     animation: none;
   }
 }
+
+/* Task 8 — /projects card grid fades in on filter change. Keyed by a
+   `key={tag-status}` on the grid div in page.js, so React remounts this
+   element (and only this element) on every filter click, which replays
+   the animation — no client JS needed, so it plays identically with JS
+   disabled (same remount happens on the plain server navigation). */
+.project-grid-fade {
+  animation: project-grid-fade-in var(--dur-reveal) var(--ease-out) both;
+}
+
+@keyframes project-grid-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-grid-fade {
+    animation: none;
+  }
+}

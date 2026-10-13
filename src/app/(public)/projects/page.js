@@ -1,7 +1,7 @@
 import PageFrame from "@/components/ui/PageFrame";
 import SectionDivider from "@/components/ui/SectionDivider";
 import ProjectCard from "@/components/public/ProjectCard";
-import ProjectFilters from "@/components/public/ProjectFilters";
+import FilterChips from "@/components/public/FilterChips.jsx";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import { filterProjectsByTagAndStatus } from "@/lib/db/collections/projects.js";
 import { projectStatusValues } from "@/lib/schemas/project.js";
@@ -84,14 +84,16 @@ export default async function ProjectsPage({ searchParams }) {
           </p>
 
           {tagOptions.length > 1 ? (
-            <ProjectFilters
+            <FilterChips
+              groupId="tag"
               options={tagOptions}
               activeValue={tag ?? ""}
               buildHref={buildFilterHref({ tag, status }, "tag")}
             />
           ) : null}
 
-          <ProjectFilters
+          <FilterChips
+            groupId="status"
             label="Status"
             options={statusOptions}
             activeValue={status ?? ""}
@@ -107,7 +109,10 @@ export default async function ProjectsPage({ searchParams }) {
             Project list
           </h2>
           {projects.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div
+              key={`${tag ?? "all"}-${status ?? "all"}`}
+              className="project-grid-fade grid grid-cols-1 gap-4 sm:grid-cols-2"
+            >
               {projects.map((project) => (
                 <ProjectCard key={project.id} project={project} skillsById={skillsById} />
               ))}
