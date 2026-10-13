@@ -86,7 +86,7 @@ async function migrate() {
 
     await collection.updateOne(
       { _id: skill._id },
-      { $set: { iconSlug }, $unset: { icon: "" } },
+      { $set: { iconLibrary: "simple-icons", iconSlug }, $unset: { icon: "" } },
     );
     migrated++;
     console.log(

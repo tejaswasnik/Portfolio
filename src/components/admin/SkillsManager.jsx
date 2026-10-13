@@ -7,6 +7,8 @@ import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
 import MoveButtons from "@/components/admin/MoveButtons";
+import SkillIcon from "@/components/ui/SkillIcon";
+import SkillIconPicker from "@/components/admin/SkillIconPicker";
 import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   createSkill,
@@ -22,8 +24,10 @@ const fieldInput =
 
 const emptyForm = {
   name: "",
+  iconLibrary: "",
   iconSlug: "",
   iconUrl: "",
+  iconPreviewNode: null,
   category: "",
   visible: true,
   orderChoice: "last",
@@ -36,12 +40,16 @@ const emptyForm = {
  * pencil loads that skill into the same panel, matching the single
  * frame Figma gives for "Add skill" (no separate Edit frame exists).
  *
- * Icon is a simple-icons slug (`iconSlug`) rendered via `SkillIcon`
- * (fixes round 2, Fix 1) — the full search-and-pick UI from design.md
- * §20 is Fix 2's commit; this field is still a plain text input here.
+ * Icon is picked via `SkillIconPicker` (design.md §20, fixes round 2
+ * Fix 2) — a search-and-pick dialog across simple-icons/Lucide/Remix
+ * Icon, or a custom SVG/PNG upload. `form.iconPreviewNode` is a plain
+ * React node (either the skill's existing `iconNode`, already rendered
+ * server-side, or a fresh `<SkillIcon>` built from the picker's search
+ * result) — never re-resolved client-side, since the lookup packages
+ * themselves are server-only (see `src/lib/icons/resolveSkillIcon.js`).
  *
  * @param {{
- *   skills: Array<{id: string, name: string, iconSlug?: string, iconUrl?: string, iconNode: React.ReactNode, category: string, visible: boolean, order: number}>,
+ *   skills: Array<{id: string, name: string, iconLibrary?: string, iconSlug?: string, iconUrl?: string, iconNode: React.ReactNode, category: string, visible: boolean, order: number}>,
  *   totalCount: number,
  *   categories: string[],
  *   reorderDisabled: boolean,
@@ -60,6 +68,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
   const [form, setForm] = useState(emptyForm);
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
   const orderOptions = Array.from(
     { length: (editingId ? totalCount - 1 : totalCount) + 1 },
@@ -70,8 +79,10 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     setEditingId(skill.id);
     setForm({
       name: skill.name,
+      iconLibrary: skill.iconLibrary || "",
       iconSlug: skill.iconSlug || "",
       iconUrl: skill.iconUrl || "",
+      iconPreviewNode: skill.iconNode,
       category: skill.category || "",
       visible: skill.visible,
       orderChoice: skill.order + 1,
@@ -190,6 +201,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     const payload = {
       name: form.name,
+      iconLibrary: form.iconLibrary || "simple-icons",
       iconSlug: form.iconSlug,
       iconUrl: form.iconUrl,
       category: form.category,
@@ -408,18 +420,45 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
           ) : null}
         </label>
 
-        <label className="flex w-full flex-col gap-1.5">
-          <span className={fieldLabel}>Icon slug (simple-icons, e.g. &quot;html5&quot;, &quot;nextdotjs&quot;)</span>
-          <input
-            value={form.iconSlug}
-            onChange={(event) => setForm((f) => ({ ...f, iconSlug: event.target.value }))}
-            placeholder="e.g. graphql"
-            className={`${fieldInput} font-mono`}
-          />
+        <div className="flex w-full flex-col gap-1.5">
+          <span className={fieldLabel}>Icon</span>
+          <div className="flex items-center gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+              {form.iconPreviewNode ?? <SkillIcon name={form.name} size={16} />}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIconPickerOpen(true)}
+              className="flex-1 rounded-lg border border-dashed border-border-default px-3 py-2.5 text-left font-mono text-[11px] text-text-muted hover:border-accent/50 hover:text-text-primary"
+            >
+              {form.iconUrl
+                ? "Custom upload — change…"
+                : form.iconSlug
+                  ? `${form.iconSlug} — change…`
+                  : "Choose an icon…"}
+            </button>
+          </div>
           {fieldErrors.iconSlug ? (
             <span className="text-[11px] text-text-secondary">{fieldErrors.iconSlug[0]}</span>
           ) : null}
-        </label>
+        </div>
+
+        {iconPickerOpen ? (
+          <SkillIconPicker
+            open={iconPickerOpen}
+            onClose={() => setIconPickerOpen(false)}
+            initialQuery={form.name}
+            onChange={({ iconLibrary, iconSlug, iconUrl, preview }) =>
+              setForm((f) => ({
+                ...f,
+                iconLibrary,
+                iconSlug,
+                iconUrl,
+                iconPreviewNode: <SkillIcon {...preview} size={16} />,
+              }))
+            }
+          />
+        ) : null}
 
         <label className="flex w-full flex-col gap-1.5">
           <span className={fieldLabel}>Category (optional)</span>

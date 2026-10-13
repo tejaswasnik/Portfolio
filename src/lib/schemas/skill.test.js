@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  iconLibraryValues,
   skillSchema,
   skillVisibleToggleSchema,
   skillIdSchema,
@@ -53,6 +54,24 @@ describe("skillSchema", () => {
       iconUrl: "https://ik.imagekit.io/demo/icon.svg",
     });
     expect(result.success).toBe(true);
+  });
+
+  it("defaults iconLibrary to simple-icons when omitted (pre-fix-2 data)", () => {
+    const result = skillSchema.safeParse({ name: "React", iconSlug: "react" });
+    expect(result.success).toBe(true);
+    expect(result.data.iconLibrary).toBe("simple-icons");
+  });
+
+  it("accepts every supported icon library", () => {
+    for (const library of iconLibraryValues) {
+      const result = skillSchema.safeParse({ name: "X", iconLibrary: library, iconSlug: "x" });
+      expect(result.success, `expected ${library} to be accepted`).toBe(true);
+    }
+  });
+
+  it("rejects an unsupported icon library", () => {
+    const result = skillSchema.safeParse({ name: "X", iconLibrary: "font-awesome" });
+    expect(result.success).toBe(false);
   });
 });
 
