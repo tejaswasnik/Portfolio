@@ -1,8 +1,15 @@
 /**
- * Renders one skill's icon (design.md §20): the simple-icons path data
- * when a slug resolved, a custom-uploaded image when the skill has an
- * `iconUrl`, or a rounded first-letter tile when neither is available
- * — never a blank gap or raw slug text.
+ * Renders one skill's icon: the simple-icons path data when a slug
+ * resolved, a custom-uploaded image when the skill has an `iconUrl`, or
+ * a rounded first-letter tile when neither is available — never a blank
+ * gap or raw slug text.
+ *
+ * Colored by default (each brand's real hex, per user feedback —
+ * overriding design.md §20's original "monochrome by default" call).
+ * Pass `monochrome` to force `currentColor` instead, for a context where
+ * a wash of brand colors would be too noisy or risks blending into the
+ * background (a near-black or near-white hex against this app's own
+ * near-black/white surfaces).
  *
  * Deliberately a dumb, universal renderer that never imports
  * `simple-icons` itself (that package is ~5 MB of path data for every
@@ -19,7 +26,7 @@
  *   name?: string,
  *   size?: number,
  *   className?: string,
- *   brandColor?: boolean,
+ *   monochrome?: boolean,
  * }} props
  */
 export default function SkillIcon({
@@ -29,7 +36,7 @@ export default function SkillIcon({
   name,
   size = 14,
   className = "",
-  brandColor = false,
+  monochrome = false,
 }) {
   if (url) {
     return (
@@ -51,7 +58,7 @@ export default function SkillIcon({
         height={size}
         viewBox="0 0 24 24"
         aria-hidden="true"
-        fill={brandColor && hex ? `#${hex}` : "currentColor"}
+        fill={!monochrome && hex ? `#${hex}` : "currentColor"}
         className={`inline-block shrink-0 ${className}`}
       >
         <path d={path} />

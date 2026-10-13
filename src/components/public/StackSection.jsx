@@ -9,10 +9,9 @@ import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
  * 24px, like About/Projects/Activity — so that convention wins here
  * (docs/DECISIONS.md).
  *
- * Icons are monochrome here (design.md §20: "Stack section chips:
- * monochrome, --text-chip") — `SkillIcon` is never given `brandColor`,
- * so it always renders with `fill="currentColor"` and inherits Chip's
- * `--text-chip` colour.
+ * Icons render in their real brand colour (`SkillIcon`'s default —
+ * overriding design.md §20's original "monochrome" call per user
+ * feedback, see docs/DECISIONS.md "fixes round 2").
  * @param {{ skills: Array<{ id: string, name: string, iconSlug?: string, iconUrl?: string }> }} props
  */
 export default function StackSection({ skills }) {

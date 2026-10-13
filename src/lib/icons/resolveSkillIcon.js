@@ -1,13 +1,6 @@
 import { getIconBySlug } from "./simpleIcons.js";
 
 /**
- * Slugs allowed to render in their real brand colour (design.md §2
- * "Brand logo colours"/§20) — everywhere else icons stay monochrome
- * (`SkillIcon`'s default `fill="currentColor"`).
- */
-export const BRAND_COLOR_SLUGS = new Set(["nextdotjs", "typescript", "postgresql", "react"]);
-
-/**
  * Resolves one skill's stored `iconSlug`/`iconUrl` into the plain,
  * serializable props `SkillIcon` needs to render — a custom-uploaded
  * icon wins over a simple-icons slug, an unknown/missing slug falls
