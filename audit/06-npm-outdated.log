@@ -1,0 +1,4 @@
+Package  Current  Wanted   Latest  Location             Depended by
+eslint    9.39.5  9.39.5  10.12.0  node_modules/eslint  portfolio
+vitest     5.0.3   5.0.4    5.0.4  node_modules/vitest  portfolio
+zod        4.6.6   4.6.7    4.6.7  node_modules/zod     portfolio
