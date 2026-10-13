@@ -1,0 +1,21 @@
+src/app/(public)/projects/[slug]/page.js:154:            {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
+src/components/admin/BannerManager.jsx:177:              {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF */}
+src/components/admin/BannerManager.jsx:225:                {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF */}
+src/components/admin/Dropzone.jsx:102:              {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL */}
+src/components/admin/MediaCard.jsx:33:          // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
+src/components/admin/MediaPickerDialog.jsx:58:              {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL */}
+src/components/admin/ProfileAboutForm.jsx:194:                  // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
+src/components/admin/ProjectsTable.jsx:180:                      // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
+src/components/admin/ProjectsTable.jsx:270:                    // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
+src/components/admin/Sidebar.jsx:34:    // eslint-disable-next-line react-hooks/exhaustive-deps -- only pathname should re-trigger this
+src/components/admin/SkillIconPicker.jsx:75:    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only: subsequent searches are triggered by the input/tab handlers below, not by re-running this effect
+src/components/public/BannerMedia.jsx:22:    // eslint-disable-next-line react-hooks/set-state-in-effect
+src/components/public/BannerMedia.jsx:31:      // eslint-disable-next-line @next/next/no-img-element -- animated GIF; next/image can't preserve looping.
+src/components/public/Lightbox.jsx:57:            {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
+src/components/public/Lightbox.jsx:101:            {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
+src/components/public/ProfileIdentity.jsx:29:          // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
+src/components/public/ProjectCard.jsx:34:          // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
+src/components/ui/SkillIcon.jsx:48:      // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
+src/components/ui/ThemeToggle.jsx:14:    // eslint-disable-next-line react-hooks/set-state-in-effect
+src/components/ui/Toaster.jsx:98:    // eslint-disable-next-line react-hooks/exhaustive-deps -- re-runs only when `paused` flips; onDismiss/toast.duration are stable for this toast's lifetime
+src/lib/hooks/useFocusTrap.js:50:    // eslint-disable-next-line react-hooks/exhaustive-deps -- containerRef is a stable ref object; onEscape identity churn shouldn't re-run the trap
