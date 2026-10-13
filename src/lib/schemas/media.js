@@ -32,6 +32,7 @@ const MEDIA_ALLOWED_TYPES = [
   "image/png",
   "image/gif",
   "image/webp",
+  "image/avif",
   "image/svg+xml",
   "image/x-icon",
   "application/pdf",

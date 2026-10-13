@@ -14,6 +14,7 @@
     "db:ensure-indexes": "node --env-file=.env.local scripts/ensure-indexes.js",
     "db:seed": "node --env-file=.env.local scripts/seed.js",
     "seed:admin": "node --env-file=.env.local scripts/seed-admin.js",
+    "seed:interests": "node --env-file=.env.local scripts/seed-interest-images.js",
     "migrate:skill-icons": "node --env-file=.env.local scripts/migrate-skill-icons.js",
     "generate:remixicon-index": "node scripts/generate-remixicon-index.js"
   },

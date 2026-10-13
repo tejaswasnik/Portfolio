@@ -10,4 +10,5 @@ export const COLLECTIONS = {
   messages: "messages",
   events: "events",
   media: "media",
+  interestImages: "interestImages",
 };

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { AlertIcon, CheckIcon, TrashIcon, UploadIcon } from "@/components/ui/icons.jsx";
 import { useImageKitUpload } from "@/lib/imagekit/useImageKitUpload.js";
+import { readImageDimensions } from "@/lib/imagekit/readImageDimensions.js";
 import { deleteImageKitFileAction } from "@/lib/imagekit/actions.js";
 import { saveBanner } from "@/app/admin/(dashboard)/banner/actions.js";
 import { useActionToast } from "@/lib/hooks/useActionToast.js";
@@ -19,23 +20,6 @@ const guidelines = [
   { title: "GIF only", hint: "Looping animation, first frame used for reduced motion" },
   { title: "ImageKit storage", hint: "Signed upload, old file deleted on replace" },
 ];
-
-/** Reads a File's natural pixel dimensions client-side. */
-function readImageDimensions(file) {
-  return new Promise((resolve) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve({ width: img.naturalWidth, height: img.naturalHeight });
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      resolve(null);
-    };
-    img.src = url;
-  });
-}
 
 function formatSize(bytes) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;

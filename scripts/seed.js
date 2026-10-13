@@ -11,6 +11,7 @@ const sections = [
   { key: "projects", label: "Projects", visible: true, order: 5 },
   { key: "tech-stack", label: "Tech Stack", visible: true, order: 6 },
   { key: "lets-talk", label: "Let's talk", visible: true, order: 7 },
+  { key: "interest-images", label: "Interest images", visible: true, order: 8 },
 ];
 
 const profile = {

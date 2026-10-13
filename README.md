@@ -28,6 +28,7 @@ npm run dev                  # http://localhost:3000
 | `npm run lint` | ESLint |
 | `npm test` | Unit tests |
 | `npm run seed:admin` | Create the admin user from `ADMIN_EMAIL` and a prompted password |
+| `npm run seed:interests` | Opt-in, idempotent: add 7 starter "Interest images" placeholders (no-op if any already exist) |
 
 ### Environment variables
 
@@ -36,6 +37,10 @@ npm run dev                  # http://localhost:3000
 **Gmail OAuth2 setup (one time):** create an OAuth client in Google Cloud Console, enable the Gmail API, authorise the `https://mail.google.com/` scope once (for example via the OAuth Playground with your own client credentials) to get a refresh token, and put it in `GOOGLE_REFRESH_TOKEN`. Nodemailer exchanges it for access tokens automatically. Set the OAuth consent screen to *In production*, otherwise refresh tokens expire after 7 days.
 
 Secrets live only in env files and the host's environment settings, never in the repo.
+
+### Interest images (admin → "Interest images")
+
+Scattered decorative photos in the margins either side of the 760px column, desktop only (hidden below 1200px). Recommended source size: **at least 240px on the longest side** — smaller uploads still work but the admin UI warns that they may look soft once placed, since the layer renders them up to 400px CSS-wide. JPG, PNG, WebP or AVIF, 5 MB max per file. Up to 24 images; new ones are auto-placed in the margins (never over the 760px column or the side index) and can be repositioned, resized or rotated from the gallery's per-item edit panel.
 
 ## Deployment (Vercel)
 

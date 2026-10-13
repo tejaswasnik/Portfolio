@@ -1,5 +1,6 @@
 import ContactModalProvider from "@/components/public/ContactModalProvider";
 import AnalyticsBeacon from "@/components/public/AnalyticsBeacon";
+import InterestImages from "@/components/public/InterestImages";
 
 /**
  * The "drafting table" page chrome (docs/design.md §5): two full-height
@@ -12,15 +13,26 @@ import AnalyticsBeacon from "@/components/public/AnalyticsBeacon";
  * Talk" wiring for free without each page managing its own modal state,
  * and the page-view analytics beacon (step 11) for the same reason —
  * only public pages use `PageFrame`, so admin pages never beacon.
+ *
+ * `interestImages` (default `[]`, so every call site that doesn't pass
+ * it renders exactly as before) is the scattered margin decoration: an
+ * `absolute inset-0 z-0` layer sized to a full-viewport-width wrapper —
+ * not to `<main>` itself, which is only the 760px column and would clip
+ * anything positioned in its margins. `<main>` sits inside that wrapper
+ * at `relative z-10` so it (and everything in it) always paints above.
+ * @param {{ children: React.ReactNode, className?: string, interestImages?: Array }} props
  */
-export default function PageFrame({ children, className = "" }) {
+export default function PageFrame({ children, className = "", interestImages = [] }) {
   return (
-    <main className={`relative mx-auto max-w-column ${className}`.trim()}>
-      <Rails />
-      <AnalyticsBeacon />
-      <ContactModalProvider>{children}</ContactModalProvider>
+    <div className="relative overflow-x-clip">
+      <InterestImages items={interestImages} />
+      <main className={`relative z-10 mx-auto max-w-column ${className}`.trim()}>
+        <Rails />
+        <AnalyticsBeacon />
+        <ContactModalProvider>{children}</ContactModalProvider>
+      </main>
       <BottomBlur />
-    </main>
+    </div>
   );
 }
 

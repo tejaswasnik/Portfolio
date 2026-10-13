@@ -38,3 +38,23 @@ export function reorderSections(db, orderedIds) {
     })),
   );
 }
+
+/**
+ * Idempotent self-heal for a DB seeded before the Interest images
+ * section existed (`scripts/seed.js` only covers a fresh install) — a
+ * missing row would otherwise be indistinguishable from "deliberately
+ * hidden" to the public page's plain `visibleKeys.has(...)` check, since
+ * `findVisibleSections` only ever returns `visible: true` docs either
+ * way. Called once from the admin Interest images page load; a no-op if
+ * the row already exists.
+ * @param {import('mongodb').Db} db
+ */
+export async function ensureInterestImagesSection(db) {
+  const maxOrder = await sectionsCollection(db).find({}).sort({ order: -1 }).limit(1).toArray();
+  const nextOrder = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
+  await sectionsCollection(db).updateOne(
+    { key: "interest-images" },
+    { $setOnInsert: { key: "interest-images", label: "Interest images", visible: true, order: nextOrder } },
+    { upsert: true },
+  );
+}

@@ -14,6 +14,7 @@ export const MEDIA_CATEGORY_OPTIONS = [
   { value: "profile", label: "Profile" },
   { value: "projects", label: "Projects" },
   { value: "resume", label: "Resume" },
+  { value: "interest-images", label: "Interest images" },
   { value: "unused", label: "Unused" },
 ];
 
@@ -23,10 +24,11 @@ export const MEDIA_CATEGORY_OPTIONS = [
  *   profile?: { bannerUrl?: string, photoUrl?: string, resumeUrl?: string } | null,
  *   siteSettings?: { ogImage?: string, favicon?: string } | null,
  *   projects?: Array<{ name: string, coverImage?: string, screenshots?: string[] }>,
+ *   interestImages?: Array<{ imageUrl?: string }>,
  * }} context
  * @returns {Array<{ category: string, label: string }>}
  */
-export function computeFileUsage(url, { profile, siteSettings, projects = [] } = {}) {
+export function computeFileUsage(url, { profile, siteSettings, projects = [], interestImages = [] } = {}) {
   const usage = [];
   if (!url) return usage;
 
@@ -45,6 +47,14 @@ export function computeFileUsage(url, { profile, siteSettings, projects = [] } =
         usage.push({ category: "projects", label: `${project.name} · Screenshot` });
       }
     }
+  }
+
+  const interestImageUses = interestImages.filter((item) => item.imageUrl === url).length;
+  if (interestImageUses > 0) {
+    usage.push({
+      category: "interest-images",
+      label: interestImageUses === 1 ? "Interest image" : `Interest images (${interestImageUses})`,
+    });
   }
 
   return usage;
