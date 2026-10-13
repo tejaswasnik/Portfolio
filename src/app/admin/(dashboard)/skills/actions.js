@@ -13,12 +13,14 @@ import {
   updateSkillById,
 } from "@/lib/db/collections/skills.js";
 import {
+  iconLibraryValues,
   skillFormSchema,
   skillIdSchema,
   skillReorderSchema,
   skillUpdateFormSchema,
   skillVisibleToggleSchema,
 } from "@/lib/schemas/skill.js";
+import { searchIconLibrary } from "@/lib/icons/resolveSkillIcon.js";
 
 /** Revalidates every page a skills mutation can affect. */
 function revalidateSkills() {
@@ -65,6 +67,21 @@ export async function reorderSkills(input) {
   await reorderSkillsInDb(session.db, parsed.data.orderedIds);
   revalidateSkills();
   return { ok: true };
+}
+
+/**
+ * Searches one icon library for the admin icon picker (Fix 2) — never
+ * returns more than 48 results, same bound every library's own
+ * `search*Icons()` helper enforces.
+ * @param {unknown} input `{ library, query }`
+ */
+export async function searchSkillIcons(input) {
+  const session = await requireAdmin({ redirectOnFail: false });
+  if (!session) return { ok: false, results: [] };
+
+  const library = iconLibraryValues.includes(input?.library) ? input.library : "simple-icons";
+  const query = typeof input?.query === "string" ? input.query : "";
+  return { ok: true, results: searchIconLibrary(library, query) };
 }
 
 /** @param {unknown} input `skillFormSchema` shape */

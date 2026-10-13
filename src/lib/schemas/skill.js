@@ -1,7 +1,10 @@
 import { z } from "zod";
 import { objectIdStringSchema, optionalUrlSchema } from "./common.js";
 
-/** A simple-icons slug: lowercase letters, digits and hyphens, 1-40 chars. Never a fixed-length abbreviation (docs/DECISIONS.md, fixes round 2). */
+/** Every icon source `iconSlug` can come from (fixes round 2, Fix 2). Kept in sync with `ICON_LIBRARIES` in src/lib/icons/resolveSkillIcon.js. */
+export const iconLibraryValues = ["simple-icons", "lucide", "remixicon"];
+
+/** A library slug: lowercase letters, digits and hyphens, 1-40 chars. Never a fixed-length abbreviation (docs/DECISIONS.md, fixes round 2). */
 const iconSlugSchema = z
   .string()
   .trim()
@@ -10,6 +13,7 @@ const iconSlugSchema = z
 
 export const skillSchema = z.object({
   name: z.string().trim().min(1),
+  iconLibrary: z.enum(iconLibraryValues).default("simple-icons"),
   iconSlug: iconSlugSchema.default(""),
   iconUrl: optionalUrlSchema.default(""),
   category: z.string().trim().default(""),
