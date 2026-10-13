@@ -86,18 +86,22 @@ export default async function ProjectsPage({ searchParams }) {
           {tagOptions.length > 1 ? (
             <FilterChips
               groupId="tag"
-              options={tagOptions}
+              options={tagOptions.map((option) => ({
+                ...option,
+                href: buildFilterHref({ tag, status }, "tag")(option.value),
+              }))}
               activeValue={tag ?? ""}
-              buildHref={buildFilterHref({ tag, status }, "tag")}
             />
           ) : null}
 
           <FilterChips
             groupId="status"
             label="Status"
-            options={statusOptions}
+            options={statusOptions.map((option) => ({
+              ...option,
+              href: buildFilterHref({ tag, status }, "status")(option.value),
+            }))}
             activeValue={status ?? ""}
-            buildHref={buildFilterHref({ tag, status }, "status")}
           />
         </div>
       </section>

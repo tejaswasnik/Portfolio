@@ -20,15 +20,19 @@ import { SPRING } from "@/lib/motion/tokens.js";
  * `TransitionProvider` already skips (`shouldTransition` treats same-path
  * query changes as no transition), so this is the only motion the click
  * produces, and without it the pill would wait on a full navigation.
+ *
+ * `options` carry a pre-built `href` (not a `buildHref` callback) because
+ * this is a Client Component: a Server Component page can't pass a
+ * closure down as a prop (React only serializes data across that
+ * boundary), so the href has to be computed server-side per option.
  * @param {{
  *   groupId: string,
  *   label?: string,
- *   options: Array<{ value: string, label: string }>,
+ *   options: Array<{ value: string, label: string, href: string }>,
  *   activeValue: string,
- *   buildHref: (value: string) => string,
  * }} props
  */
-export default function FilterChips({ groupId, label, options, activeValue, buildHref }) {
+export default function FilterChips({ groupId, label, options, activeValue }) {
   const [optimisticValue, setOptimisticValue] = useOptimistic(activeValue);
 
   return (
@@ -43,7 +47,7 @@ export default function FilterChips({ groupId, label, options, activeValue, buil
         return (
           <Link
             key={option.value}
-            href={buildHref(option.value)}
+            href={option.href}
             aria-current={active ? "true" : undefined}
             onClick={() => startTransition(() => setOptimisticValue(option.value))}
             className={`relative rounded-pill border px-3 py-[5px] font-mono text-[10px] transition-colors ${
