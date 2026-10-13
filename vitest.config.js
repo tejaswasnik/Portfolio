@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "node",
-    include: ["src/**/*.test.js", "*.test.js"],
+    include: ["src/**/*.test.js", "src/**/*.test.jsx", "*.test.js"],
     setupFiles: ["./src/test/setup.js"],
   },
   resolve: {

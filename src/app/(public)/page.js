@@ -8,7 +8,7 @@ import ProjectsSection from "@/components/public/ProjectsSection";
 import StackSection from "@/components/public/StackSection";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
 import SideIndex from "@/components/public/SideIndex";
-import Reveal from "@/components/ui/Reveal.jsx";
+import Reveal from "@/components/motion/Reveal.jsx";
 import { getContributionCalendar } from "@/lib/github/contributions";
 import { SECTION_INDEX_META } from "@/lib/sections.js";
 import {
@@ -63,17 +63,12 @@ export default async function Home() {
       {visibleSections.map((section) => {
         switch (section.key) {
           case "banner":
-            return (
-              <Reveal key={section.key}>
-                <BannerSection bannerUrl={profile?.bannerUrl} />
-              </Reveal>
-            );
+            // Not wrapped in <Reveal> — it's part of the hero sequence
+            // (A5), which self-animates on a session-gated "plays once"
+            // basis, not the viewport-triggered A8 pattern.
+            return <BannerSection key={section.key} bannerUrl={profile?.bannerUrl} />;
           case "profile":
-            return (
-              <Reveal key={section.key}>
-                <ProfileIdentity profile={profile} />
-              </Reveal>
-            );
+            return <ProfileIdentity key={section.key} profile={profile} />;
           case "about":
             return sectionRendered.about ? (
               <Reveal key={section.key}>

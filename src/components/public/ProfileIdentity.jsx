@@ -1,6 +1,11 @@
+"use client";
+
+import { motion } from "motion/react";
 import TrackedLink from "@/components/public/TrackedLink";
-import { AnimatedTextSlider } from "@/components/ui/AnimatedTextSlider.jsx";
+import TextReveal from "@/components/motion/TextReveal.jsx";
+import RoleRotator from "@/components/motion/RoleRotator.jsx";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
+import { useHeroPlayed } from "@/hooks/useHeroPlayed.js";
 
 // Matches Button's "dashed" variant classes (src/components/ui/Button.jsx)
 // without reaching for an <a> rendered through a <button>-only component —
@@ -20,12 +25,30 @@ function initials(name) {
 /**
  * Identity row — avatar, name, tagline, location, resume (Figma
  * 5:5613). A toggleable section ("profile") separate from Banner.
+ * Rest of the hero sequence (A5/A6): avatar scales/blurs in at 0.1s,
+ * the name reveals word-by-word at 0.2s (`TextReveal`), the taglines —
+ * now a single rotating line instead of `AnimatedTextSlider`'s static
+ * list — enter at 0.45s (`RoleRotator`), location and Resume fade up
+ * at 0.55s. Gated by the same `useHeroPlayed` session flag as
+ * `BannerSection`, so the two halves of the hero stay in sync without
+ * needing a shared parent to orchestrate them.
  * @param {{ profile: import('@/lib/schemas/profile').profileSchema._type | null }} props
  */
 export default function ProfileIdentity({ profile }) {
+  const heroPlayed = useHeroPlayed();
+  const initial = heroPlayed ? false : "hidden";
+
   return (
     <div className="flex flex-col items-center gap-6 px-6 py-6 text-center sm:flex-row sm:items-center sm:text-left">
-      <div className="flex size-[104px] shrink-0 items-center justify-center rounded-xl bg-surface-2">
+      <motion.div
+        className="flex size-[104px] shrink-0 items-center justify-center rounded-xl bg-surface-2"
+        initial={initial}
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0, scale: 0.96, filter: "blur(4px)" },
+          visible: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.5, delay: 0.1 } },
+        }}
+      >
         {profile?.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.
           <img
@@ -38,31 +61,54 @@ export default function ProfileIdentity({ profile }) {
             {profile?.name ? initials(profile.name) : "TW"}
           </span>
         )}
-      </div>
+      </motion.div>
       <div className="flex flex-1 flex-col gap-2">
-        <h1 className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary">
-          {profile?.name ?? "Your Name"}
-        </h1>
-        <AnimatedTextSlider
-          texts={profile?.taglines?.length ? profile.taglines : ["Your tagline"]}
-          className="font-mono text-[13px] text-text-secondary"
+        <TextReveal
+          text={profile?.name ?? "Your Name"}
+          as="h1"
+          delay={0.2}
+          className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary"
         />
+        <div className="font-mono text-[13px] text-text-secondary">
+          {profile?.taglines?.length ? (
+            <RoleRotator roles={profile.taglines} />
+          ) : (
+            "Your tagline"
+          )}
+        </div>
         {profile?.location ? (
-          <p className="font-mono text-[11px] text-text-muted">
+          <motion.p
+            className="font-mono text-[11px] text-text-muted"
+            initial={initial}
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: 8 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.55 } },
+            }}
+          >
             {profile.location}
-          </p>
+          </motion.p>
         ) : null}
       </div>
       {profile?.resumeUrl ? (
-        <TrackedLink
-          trackTarget="Resume download"
-          href={profile.resumeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={dashedLinkClass}
+        <motion.div
+          initial={initial}
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0, y: 8 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.55 } },
+          }}
         >
-          Resume
-        </TrackedLink>
+          <TrackedLink
+            trackTarget="Resume download"
+            href={profile.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={dashedLinkClass}
+          >
+            Resume
+          </TrackedLink>
+        </motion.div>
       ) : null}
     </div>
   );
