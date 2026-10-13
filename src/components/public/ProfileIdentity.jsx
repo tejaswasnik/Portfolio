@@ -70,13 +70,21 @@ export default function ProfileIdentity({ profile }) {
           delay={0.2}
           className="font-serif text-[38px] leading-none tracking-[-0.95px] text-text-primary"
         />
-        <div className="font-mono text-[13px] text-text-secondary">
+        <motion.div
+          className="font-mono text-[13px] text-text-secondary"
+          initial={initial}
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0, y: 8 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.45 } },
+          }}
+        >
           {profile?.taglines?.length ? (
             <RoleRotator roles={profile.taglines} />
           ) : (
             "Your tagline"
           )}
-        </div>
+        </motion.div>
         {profile?.location ? (
           <motion.p
             className="font-mono text-[11px] text-text-muted"

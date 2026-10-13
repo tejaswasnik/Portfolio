@@ -34,7 +34,7 @@ export default function RoleRotator({ roles, intervalMs = 2600 }) {
   }
 
   return (
-    <motion.span layout="position" className="inline-block overflow-hidden align-bottom" aria-label={roles.join(", ")}>
+    <motion.span layout className="inline-block overflow-hidden align-bottom" aria-label={roles.join(", ")}>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={role}
