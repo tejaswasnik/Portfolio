@@ -43,6 +43,10 @@
   /* accent */
   --accent: #b5d4bf;
 
+  /* status (design.md §14/§21: errors, delete actions, "EMAIL FAILED", warnings) */
+  --danger: #e5827a;
+  --warning: #d9b26a;
+
   /* heatmap (5 levels) */
   --heat-0: #1a1d20;
   --heat-1: #28342c;
@@ -82,6 +86,10 @@
 
   /* accent — darkened for AA contrast on a light background */
   --accent: #3f6b52;
+
+  /* status */
+  --danger: #b3392f;
+  --warning: #8a6420;
 
   /* heatmap (5 levels) */
   --heat-0: #e8e7e3;
@@ -139,6 +147,9 @@
 
   --color-accent: var(--accent);
 
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+
   --color-heat-0: var(--heat-0);
   --color-heat-1: var(--heat-1);
   --color-heat-2: var(--heat-2);
@@ -188,6 +199,24 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+
+  /* Toast slide-up + fade (design.md §21), 180ms ease-out — neutralised
+     to a near-instant appearance under prefers-reduced-motion by the
+     global override above, same as every other animation in this app. */
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-toast-in {
+    animation: toast-in 180ms ease-out;
   }
 
   /*

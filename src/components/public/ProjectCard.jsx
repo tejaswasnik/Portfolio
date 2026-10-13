@@ -1,7 +1,9 @@
 import Chip from "@/components/ui/Chip";
 import TrackedLink from "@/components/public/TrackedLink";
+import SkillIcon from "@/components/ui/SkillIcon";
 import { GithubIcon, ArrowUpRightIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { withImageKitTransform } from "@/lib/imagekit/url.js";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 // Matches Button's "icon" variant classes (src/components/ui/Button.jsx)
 // as a link rather than a <button onClick> — avoids needing "use client"
@@ -19,7 +21,7 @@ const iconLinkClass =
  * (docs/DECISIONS.md).
  * @param {{
  *   project: { name: string, slug: string, shortDescription: string, coverImage?: string, liveUrl?: string, githubUrl?: string, status: 'ongoing' | 'completed', techIds: string[] },
- *   skillsById: Map<string, { name: string, icon: string }>,
+ *   skillsById: Map<string, { name: string, iconSlug?: string, iconUrl?: string }>,
  * }} props
  */
 export default function ProjectCard({ project, skillsById }) {
@@ -87,7 +89,11 @@ export default function ProjectCard({ project, skillsById }) {
             const skill = skillsById.get(id);
             if (!skill) return null;
             return (
-              <Chip key={id} variant="tech">
+              <Chip
+                key={id}
+                variant="tech"
+                icon={<SkillIcon {...resolveSkillIcon(skill)} />}
+              >
                 {skill.name}
               </Chip>
             );

@@ -10,6 +10,7 @@ import Toggle from "@/components/ui/Toggle";
 import { ArrowUpRightIcon, ImageIcon, PlusIcon } from "@/components/ui/icons.jsx";
 import { slugify } from "@/lib/schemas/common.js";
 import { projectStatusValues } from "@/lib/schemas/project.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   createProject,
   deleteProject,
@@ -35,7 +36,7 @@ const cardClass =
  * @param {{
  *   mode: 'create' | 'edit',
  *   project: null | {id: string, name: string, slug: string, shortDescription: string, longDescription: string, coverImage?: string, screenshots?: string[], liveUrl?: string, githubUrl?: string, techIds?: string[], status: string, featured: boolean, published: boolean, order: number, seo?: {title?: string, description?: string, ogImage?: string}},
- *   skills: Array<{id: string, name: string}>,
+ *   skills: Array<{id: string, name: string, iconNode?: React.ReactNode}>,
  *   totalCount: number,
  * }} props
  */
@@ -72,6 +73,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
 
   const [fieldErrors, setFieldErrors] = useState({});
   const [formError, setFormError] = useState("");
+  const notify = useActionToast();
   const [submitting, setSubmitting] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -131,9 +133,11 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     if (!result.ok) {
       setFormError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
+    notify(result, mode === "create" ? "Project created" : "Changes saved");
     if (mode === "create") {
       router.push(`/admin/projects/${result.id}`);
     } else {
@@ -145,19 +149,21 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
     setDeleting(true);
     const result = await deleteProject({ id: project.id });
     if (result.ok) {
+      notify(result, "Project deleted");
       router.push("/admin/projects");
     } else {
       setDeleting(false);
       setDeleteOpen(false);
       setFormError(result.error || "Could not delete this project.");
+      notify(result);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div className="flex items-end justify-between">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 pb-20 lg:pb-0">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <h1 className="font-serif text-[38px] tracking-[-0.95px] text-text-primary">
+          <h1 className="font-serif text-[28px] tracking-[-0.95px] text-text-primary sm:text-[38px]">
             {mode === "create" ? "New project" : "Edit project"}
           </h1>
           <p className="font-mono text-[11px] text-text-muted">
@@ -166,7 +172,8 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
               : `/projects/${project.slug}`}
           </p>
         </div>
-        <div className="flex items-start gap-2">
+        {/* Desktop-only: the mobile equivalent is the sticky bottom save bar below. */}
+        <div className="hidden items-start gap-2 lg:flex">
           {mode === "edit" ? (
             <a
               href={`/projects/${project.slug}`}
@@ -197,6 +204,38 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
         </div>
       </div>
 
+      {/*
+        Sticky bottom save bar, mobile only (design.md §23). A second
+        type="submit" button inside the same <form> as the desktop one
+        above — only one is ever visible at a given width, so there's no
+        double-submit risk.
+      */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-end gap-2 border-t border-border-subtle bg-surface-1 p-4 lg:hidden">
+        {mode === "edit" ? (
+          <a
+            href={`/projects/${project.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-md border border-border-default bg-surface-3 px-3 font-mono text-[10px] font-bold uppercase text-text-primary"
+          >
+            View page
+          </a>
+        ) : null}
+        <button
+          type="submit"
+          disabled={submitting}
+          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-md border border-cta-bg bg-cta-bg px-3 font-mono text-[10px] font-bold uppercase text-cta-text disabled:opacity-50"
+        >
+          {mode === "create"
+            ? submitting
+              ? "Creating…"
+              : "Create project"
+            : submitting
+              ? "Saving…"
+              : "Save changes"}
+        </button>
+      </div>
+
       {formError ? (
         <p
           role="alert"
@@ -206,8 +245,8 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
         </p>
       ) : null}
 
-      <div className="flex w-full items-start gap-6">
-        <div className="flex flex-1 flex-col gap-4">
+      <div className="flex w-full flex-col-reverse items-start gap-6 lg:flex-row">
+        <div className="flex w-full flex-1 flex-col gap-4">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
               <p className="font-serif text-[22px] text-text-primary">Details</p>
@@ -353,6 +392,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
                       key={id}
                       className="inline-flex items-center gap-1.5 rounded-pill border border-dashed border-border-default py-1 pl-2.5 pr-1.5 font-mono text-[10px] text-text-secondary"
                     >
+                      {skill?.iconNode}
                       {skill?.name ?? id}
                       <button
                         type="button"
@@ -433,7 +473,7 @@ export default function ProjectForm({ mode, project, skills, totalCount }) {
           </div>
         </div>
 
-        <div className="flex w-[344px] flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 lg:w-[344px]">
           <div className={cardClass}>
             <div className="flex w-full items-center justify-between">
               <p className="font-serif text-[22px] text-text-primary">Publish</p>

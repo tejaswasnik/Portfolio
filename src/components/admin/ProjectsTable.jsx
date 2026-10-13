@@ -7,6 +7,8 @@ import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
+import MoveButtons from "@/components/admin/MoveButtons";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   deleteProject,
   reorderProjects,
@@ -31,6 +33,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const notify = useActionToast();
 
   async function handleToggle(action, project, field, nextValue) {
     setItems((current) =>
@@ -42,6 +45,10 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
         current.map((p) => (p.id === project.id ? { ...p, [field]: !nextValue } : p)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
+    } else {
+      const fieldLabel = field === "featured" ? "Featured" : "Published";
+      notify(result, `Project ${nextValue ? fieldLabel.toLowerCase() : "un" + fieldLabel.toLowerCase()}`);
     }
   }
 
@@ -71,13 +78,43 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
 
     startTransition(async () => {
       const result = await reorderProjects({ orderedIds: next.map((p) => p.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
+  }
+
+  /**
+   * Swaps one project with its neighbor and saves the new order — the
+   * keyboard/touch-friendly alternative to dragging (design.md §23:
+   * "also offer up/down buttons on every sortable row").
+   * @param {string} id
+   * @param {-1 | 1} direction
+   */
+  function moveItem(id, direction) {
+    if (reorderDisabled) return;
+    const index = items.findIndex((p) => p.id === id);
+    const targetIndex = index + direction;
+    if (index === -1 || targetIndex < 0 || targetIndex >= items.length) return;
+
+    const next = [...items];
+    [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+    setItems(next);
+
+    startTransition(async () => {
+      const result = await reorderProjects({ orderedIds: next.map((p) => p.id) });
+      applyReorderResult(result, items);
+    });
+  }
+
+  /** Shared by `handleDrop` and `moveItem`: rolls back on failure, toasts either way. */
+  function applyReorderResult(result, previousItems) {
+    if (!result.ok) {
+      setItems(previousItems);
+      setError(result.error || "Could not save the new order.");
+      notify(result);
+    } else {
+      notify(result, "Order saved");
+      router.refresh();
+    }
   }
 
   async function confirmDelete() {
@@ -86,9 +123,11 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
     if (result.ok) {
       setItems((current) => current.filter((p) => p.id !== deleteTarget.id));
       setDeleteTarget(null);
+      notify(result, "Project deleted");
       router.refresh();
     } else {
       setError(result.error || "Could not delete this project.");
+      notify(result);
     }
   }
 
@@ -101,7 +140,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
       ) : null}
 
       <div className="flex w-full flex-col items-start rounded-xl border border-border-subtle bg-surface-1 px-5 pb-2 pt-1">
-        <div className="flex w-full items-center gap-4 border-b border-border-subtle py-3">
+        <div className="hidden w-full items-center gap-4 border-b border-border-subtle py-3 md:flex">
           <div className="w-4" />
           <div className="w-14" />
           <div className="flex-1 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
@@ -116,7 +155,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
           <div className="w-[84px] font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
             Published
           </div>
-          <div className="w-10 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
+          <div className="w-16 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
             Order
           </div>
           <div className="w-16" />
@@ -127,17 +166,94 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
             No projects match these filters.
           </p>
         ) : (
-          items.map((project) => (
-            <div
-              key={project.id}
-              draggable={!reorderDisabled}
-              onDragStart={() => handleDragStart(project.id)}
-              onDragOver={(event) => handleDragOver(event, project.id)}
-              onDrop={(event) => handleDrop(event, project.id)}
-              className={`flex w-full items-center gap-4 border-b border-border-subtle py-3 last:border-b-0 ${
-                project.published ? "" : "opacity-65"
-              }`}
-            >
+          items.map((project, index) => (
+            <div key={project.id} className="w-full">
+              {/* Mobile card (design.md §23: "tables turn into stacked cards") */}
+              <div
+                className={`flex w-full flex-col gap-3 border-b border-border-subtle py-3 last:border-b-0 md:hidden ${
+                  project.published ? "" : "opacity-65"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-14 shrink-0 overflow-hidden rounded-md bg-gradient-to-br from-surface-3 to-surface-2">
+                    {project.coverImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL
+                      <img src={project.coverImage} alt="" className="size-full object-cover" />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-medium text-text-primary">
+                      {project.name}
+                    </p>
+                    <p className="truncate font-mono text-[10px] text-text-muted">
+                      /projects/{project.slug}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/admin/projects/${project.id}`}
+                    aria-label={`Edit ${project.name}`}
+                    className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                  >
+                    <PencilIcon size={14} />
+                  </Link>
+                  <button
+                    type="button"
+                    aria-label={`Delete ${project.name}`}
+                    onClick={() => setDeleteTarget(project)}
+                    className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                  >
+                    <TrashIcon size={14} />
+                  </button>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span
+                    className={`inline-flex items-center rounded-[3px] border border-border-default bg-surface-3 px-2 py-1 font-mono text-[8px] font-bold uppercase ${
+                      project.status === "ongoing" ? "text-accent" : "text-text-primary"
+                    }`}
+                  >
+                    {statusLabel[project.status] ?? project.status}
+                  </span>
+                  <label className="flex items-center gap-1.5 font-mono text-[9px] uppercase text-text-muted">
+                    Featured
+                    <Toggle
+                      checked={project.featured}
+                      label={`Featured — ${project.name}`}
+                      onChange={(next) =>
+                        handleToggle(toggleProjectFeatured, project, "featured", next)
+                      }
+                    />
+                  </label>
+                  <label className="flex items-center gap-1.5 font-mono text-[9px] uppercase text-text-muted">
+                    Published
+                    <Toggle
+                      checked={project.published}
+                      label={`Published — ${project.name}`}
+                      onChange={(next) =>
+                        handleToggle(toggleProjectPublished, project, "published", next)
+                      }
+                    />
+                  </label>
+                  <MoveButtons
+                    disabled={reorderDisabled}
+                    atStart={index === 0}
+                    atEnd={index === items.length - 1}
+                    name={project.name}
+                    onMove={(direction) => moveItem(project.id, direction)}
+                    className="ml-auto"
+                  />
+                </div>
+              </div>
+
+              {/* Desktop row */}
+              <div
+                draggable={!reorderDisabled}
+                onDragStart={() => handleDragStart(project.id)}
+                onDragOver={(event) => handleDragOver(event, project.id)}
+                onDrop={(event) => handleDrop(event, project.id)}
+                className={`hidden w-full items-center gap-4 border-b border-border-subtle py-3 last:border-b-0 md:flex ${
+                  project.published ? "" : "opacity-65"
+                }`}
+              >
               <div className="flex w-4 items-center">
                 <GripIcon
                   size={14}
@@ -185,7 +301,16 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
                   }
                 />
               </div>
-              <div className="w-10 text-[11px] text-text-secondary">{project.order + 1}</div>
+              <div className="flex w-16 items-center gap-1 text-[11px] text-text-secondary">
+                {project.order + 1}
+                <MoveButtons
+                  disabled={reorderDisabled}
+                  atStart={index === 0}
+                  atEnd={index === items.length - 1}
+                  name={project.name}
+                  onMove={(direction) => moveItem(project.id, direction)}
+                />
+              </div>
               <div className="flex w-16 items-start gap-1.5">
                 <Link
                   href={`/admin/projects/${project.id}`}
@@ -202,6 +327,7 @@ export default function ProjectsTable({ projects, reorderDisabled }) {
                 >
                   <TrashIcon size={14} />
                 </button>
+              </div>
               </div>
             </div>
           ))

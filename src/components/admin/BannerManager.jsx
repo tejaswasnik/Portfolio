@@ -7,6 +7,7 @@ import { AlertIcon, CheckIcon, TrashIcon, UploadIcon } from "@/components/ui/ico
 import { useImageKitUpload } from "@/lib/imagekit/useImageKitUpload.js";
 import { deleteImageKitFileAction } from "@/lib/imagekit/actions.js";
 import { saveBanner } from "@/app/admin/(dashboard)/banner/actions.js";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 
 const MAX_SIZE_MB = 5;
 const EXPECTED_WIDTH = 760;
@@ -63,6 +64,7 @@ export default function BannerManager({ profile }) {
   const [dragOver, setDragOver] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const notify = useActionToast();
   const { upload, uploading, progress, error: uploadError, setError: setUploadError } =
     useImageKitUpload({ folder: "/portfolio/banner" });
 
@@ -109,6 +111,7 @@ export default function BannerManager({ profile }) {
 
     if (!result.ok) {
       setError(result.error || "Could not save the banner.");
+      notify(result);
       return;
     }
 
@@ -119,6 +122,7 @@ export default function BannerManager({ profile }) {
     setBannerUrl(pending.url);
     setBannerFileId(pending.fileId);
     setPending(null);
+    notify(result, "Banner updated");
     router.refresh();
   }
 
@@ -131,12 +135,14 @@ export default function BannerManager({ profile }) {
 
     if (!result.ok) {
       setError(result.error || "Could not update the banner.");
+      notify(result);
       return;
     }
 
     if (bannerFileId) deleteImageKitFileAction({ fileId: bannerFileId }).catch(() => {});
     setBannerUrl("");
     setBannerFileId("");
+    notify(result, "Banner updated");
     router.refresh();
   }
 

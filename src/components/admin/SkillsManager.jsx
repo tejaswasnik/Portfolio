@@ -6,6 +6,8 @@ import Button from "@/components/ui/Button";
 import Dialog from "@/components/ui/Dialog";
 import Toggle from "@/components/ui/Toggle";
 import { GripIcon, PencilIcon, TrashIcon } from "@/components/ui/icons.jsx";
+import MoveButtons from "@/components/admin/MoveButtons";
+import { useActionToast } from "@/lib/hooks/useActionToast.js";
 import {
   createSkill,
   deleteSkill,
@@ -18,7 +20,14 @@ const fieldLabel = "font-mono text-[9px] uppercase tracking-[0.72px] text-text-m
 const fieldInput =
   "w-full rounded-lg border border-border-default bg-surface-2 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted outline-none focus-visible:border-accent";
 
-const emptyForm = { name: "", icon: "", category: "", visible: true, orderChoice: "last" };
+const emptyForm = {
+  name: "",
+  iconSlug: "",
+  iconUrl: "",
+  category: "",
+  visible: true,
+  orderChoice: "last",
+};
 
 /**
  * Admin Skills screen (Figma 67:7): list column (search, category
@@ -27,14 +36,12 @@ const emptyForm = { name: "", icon: "", category: "", visible: true, orderChoice
  * pencil loads that skill into the same panel, matching the single
  * frame Figma gives for "Add skill" (no separate Edit frame exists).
  *
- * The real frame's Icon field is a "pick from a library or upload"
- * control, but no icon-library data source or ImageKit upload (step 9)
- * exists yet, so Icon is a short text abbreviation the admin types
- * directly — matching exactly what the list's existing rows already
- * render (see docs/DECISIONS.md step 8).
+ * Icon is a simple-icons slug (`iconSlug`) rendered via `SkillIcon`
+ * (fixes round 2, Fix 1) — the full search-and-pick UI from design.md
+ * §20 is Fix 2's commit; this field is still a plain text input here.
  *
  * @param {{
- *   skills: Array<{id: string, name: string, icon: string, category: string, visible: boolean, order: number}>,
+ *   skills: Array<{id: string, name: string, iconSlug?: string, iconUrl?: string, iconNode: React.ReactNode, category: string, visible: boolean, order: number}>,
  *   totalCount: number,
  *   categories: string[],
  *   reorderDisabled: boolean,
@@ -47,6 +54,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const notify = useActionToast();
 
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
@@ -62,7 +70,8 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     setEditingId(skill.id);
     setForm({
       name: skill.name,
-      icon: skill.icon,
+      iconSlug: skill.iconSlug || "",
+      iconUrl: skill.iconUrl || "",
       category: skill.category || "",
       visible: skill.visible,
       orderChoice: skill.order + 1,
@@ -88,6 +97,9 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
         current.map((s) => (s.id === skill.id ? { ...s, visible: !nextValue } : s)),
       );
       setError(result.error || "Something went wrong.");
+      notify(result);
+    } else {
+      notify(result, nextValue ? "Skill shown" : "Skill hidden");
     }
   }
 
@@ -117,13 +129,42 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     startTransition(async () => {
       const result = await reorderSkills({ orderedIds: next.map((s) => s.id) });
-      if (!result.ok) {
-        setItems(items);
-        setError(result.error || "Could not save the new order.");
-      } else {
-        router.refresh();
-      }
+      applyReorderResult(result, items);
     });
+  }
+
+  /**
+   * Swaps one skill with its neighbor and saves the new order — the
+   * keyboard/touch-friendly alternative to dragging (design.md §23).
+   * @param {string} id
+   * @param {-1 | 1} direction
+   */
+  function moveItem(id, direction) {
+    if (reorderDisabled) return;
+    const index = items.findIndex((s) => s.id === id);
+    const targetIndex = index + direction;
+    if (index === -1 || targetIndex < 0 || targetIndex >= items.length) return;
+
+    const next = [...items];
+    [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+    setItems(next);
+
+    startTransition(async () => {
+      const result = await reorderSkills({ orderedIds: next.map((s) => s.id) });
+      applyReorderResult(result, items);
+    });
+  }
+
+  /** Shared by `handleDrop` and `moveItem`: rolls back on failure, toasts either way. */
+  function applyReorderResult(result, previousItems) {
+    if (!result.ok) {
+      setItems(previousItems);
+      setError(result.error || "Could not save the new order.");
+      notify(result);
+    } else {
+      notify(result, "Order saved");
+      router.refresh();
+    }
   }
 
   async function confirmDelete() {
@@ -133,9 +174,11 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
       setItems((current) => current.filter((s) => s.id !== deleteTarget.id));
       if (editingId === deleteTarget.id) cancelEdit();
       setDeleteTarget(null);
+      notify(result, "Skill deleted");
       router.refresh();
     } else {
       setError(result.error || "Could not delete this skill.");
+      notify(result);
     }
   }
 
@@ -147,7 +190,8 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
     const payload = {
       name: form.name,
-      icon: form.icon,
+      iconSlug: form.iconSlug,
+      iconUrl: form.iconUrl,
       category: form.category,
       visible: form.visible,
       orderChoice: form.orderChoice,
@@ -162,18 +206,20 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
     if (!result.ok) {
       setError(result.error || "Something went wrong. Please try again.");
       setFieldErrors(result.fieldErrors || {});
+      notify(result);
       return;
     }
 
+    notify(result, editingId ? "Changes saved" : "Skill added");
     cancelEdit();
     router.refresh();
   }
 
   return (
-    <div className="flex w-full items-start gap-6">
-      <div className="flex flex-1 flex-col gap-4">
+    <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
+      <div className="flex w-full flex-1 flex-col gap-4">
         <div className="flex w-full flex-col items-start rounded-xl border border-border-subtle bg-surface-1 px-5 pb-2 pt-1">
-          <div className="flex w-full items-center gap-4 border-b border-border-subtle py-3">
+          <div className="hidden w-full items-center gap-4 border-b border-border-subtle py-3 md:flex">
             <div className="w-4" />
             <div className="w-8" />
             <div className="flex-1 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
@@ -185,7 +231,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
             <div className="w-[60px] font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
               Shown
             </div>
-            <div className="w-10 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
+            <div className="w-16 font-mono text-[9px] uppercase tracking-[1.44px] text-text-muted">
               Order
             </div>
             <div className="w-16" />
@@ -196,63 +242,129 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
               No skills match these filters.
             </p>
           ) : (
-            items.map((skill) => (
-              <div
-                key={skill.id}
-                draggable={!reorderDisabled}
-                onDragStart={() => handleDragStart(skill.id)}
-                onDragOver={(event) => handleDragOver(event, skill.id)}
-                onDrop={(event) => handleDrop(event, skill.id)}
-                className={`flex w-full items-center gap-4 border-b border-border-subtle py-2.5 last:border-b-0 ${
-                  skill.visible ? "" : "opacity-60"
-                }`}
-              >
-                <div className="flex w-4 items-center">
-                  <GripIcon
-                    size={14}
-                    className={
-                      reorderDisabled
-                        ? "cursor-not-allowed text-text-muted/50"
-                        : "cursor-grab text-text-muted"
-                    }
-                  />
+            items.map((skill, index) => (
+              <div key={skill.id} className="w-full">
+                {/* Mobile card */}
+                <div
+                  className={`flex w-full flex-col gap-3 border-b border-border-subtle py-3 last:border-b-0 md:hidden ${
+                    skill.visible ? "" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+                      {skill.iconNode}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[13px] font-medium text-text-primary">
+                        {skill.name}
+                      </p>
+                      <p className="truncate font-mono text-[10px] text-text-muted">
+                        {skill.category || "—"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={`Edit ${skill.name}`}
+                      onClick={() => startEdit(skill)}
+                      className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                    >
+                      <PencilIcon size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Delete ${skill.name}`}
+                      onClick={() => setDeleteTarget(skill)}
+                      className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary"
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="flex items-center gap-1.5 font-mono text-[9px] uppercase text-text-muted">
+                      Shown
+                      <Toggle
+                        checked={skill.visible}
+                        label={`Shown — ${skill.name}`}
+                        onChange={(next) => handleToggle(skill, next)}
+                      />
+                    </label>
+                    <MoveButtons
+                      disabled={reorderDisabled}
+                      atStart={index === 0}
+                      atEnd={index === items.length - 1}
+                      name={skill.name}
+                      onMove={(direction) => moveItem(skill.id, direction)}
+                      className="ml-auto"
+                    />
+                  </div>
                 </div>
-                <div className="flex w-8 items-center">
-                  <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt font-mono text-[10px] font-bold text-text-chip">
-                    {skill.icon}
-                  </span>
-                </div>
-                <div className="flex-1 text-[13px] font-medium text-text-primary">
-                  {skill.name}
-                </div>
-                <div className="w-24 font-mono text-[10px] text-text-muted">
-                  {skill.category || "—"}
-                </div>
-                <div className="w-[60px]">
-                  <Toggle
-                    checked={skill.visible}
-                    label={`Shown — ${skill.name}`}
-                    onChange={(next) => handleToggle(skill, next)}
-                  />
-                </div>
-                <div className="w-10 text-[11px] text-text-secondary">{skill.order + 1}</div>
-                <div className="flex w-16 items-start gap-1.5">
-                  <button
-                    type="button"
-                    aria-label={`Edit ${skill.name}`}
-                    onClick={() => startEdit(skill)}
-                    className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
-                  >
-                    <PencilIcon size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={`Delete ${skill.name}`}
-                    onClick={() => setDeleteTarget(skill)}
-                    className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
-                  >
-                    <TrashIcon size={14} />
-                  </button>
+
+                {/* Desktop row */}
+                <div
+                  draggable={!reorderDisabled}
+                  onDragStart={() => handleDragStart(skill.id)}
+                  onDragOver={(event) => handleDragOver(event, skill.id)}
+                  onDrop={(event) => handleDrop(event, skill.id)}
+                  className={`hidden w-full items-center gap-4 border-b border-border-subtle py-2.5 last:border-b-0 md:flex ${
+                    skill.visible ? "" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex w-4 items-center">
+                    <GripIcon
+                      size={14}
+                      className={
+                        reorderDisabled
+                          ? "cursor-not-allowed text-text-muted/50"
+                          : "cursor-grab text-text-muted"
+                      }
+                    />
+                  </div>
+                  <div className="flex w-8 items-center">
+                    <span className="flex size-8 items-center justify-center rounded-lg border border-border-icon bg-surface-icon-alt text-text-chip">
+                      {skill.iconNode}
+                    </span>
+                  </div>
+                  <div className="flex-1 text-[13px] font-medium text-text-primary">
+                    {skill.name}
+                  </div>
+                  <div className="w-24 font-mono text-[10px] text-text-muted">
+                    {skill.category || "—"}
+                  </div>
+                  <div className="w-[60px]">
+                    <Toggle
+                      checked={skill.visible}
+                      label={`Shown — ${skill.name}`}
+                      onChange={(next) => handleToggle(skill, next)}
+                    />
+                  </div>
+                  <div className="flex w-16 items-center gap-1 text-[11px] text-text-secondary">
+                    {skill.order + 1}
+                    <MoveButtons
+                      disabled={reorderDisabled}
+                      atStart={index === 0}
+                      atEnd={index === items.length - 1}
+                      name={skill.name}
+                      onMove={(direction) => moveItem(skill.id, direction)}
+                    />
+                  </div>
+                  <div className="flex w-16 items-start gap-1.5">
+                    <button
+                      type="button"
+                      aria-label={`Edit ${skill.name}`}
+                      onClick={() => startEdit(skill)}
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                    >
+                      <PencilIcon size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Delete ${skill.name}`}
+                      onClick={() => setDeleteTarget(skill)}
+                      className="flex size-7 items-center justify-center rounded-md border border-border-default bg-surface-3 text-text-primary hover:border-border-hover"
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))
@@ -273,7 +385,7 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
 
       <form
         onSubmit={handleSubmit}
-        className="flex w-[344px] flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5"
+        className="flex w-full flex-col gap-4 rounded-xl border border-border-subtle bg-surface-1 p-5 lg:w-[344px]"
       >
         <div className="flex w-full items-center justify-between">
           <p className="font-serif text-[22px] text-text-primary">
@@ -297,17 +409,15 @@ export default function SkillsManager({ skills, totalCount, categories, reorderD
         </label>
 
         <label className="flex w-full flex-col gap-1.5">
-          <span className={fieldLabel}>Icon · short abbreviation (e.g. &quot;TS&quot;, &quot;Nx&quot;)</span>
+          <span className={fieldLabel}>Icon slug (simple-icons, e.g. &quot;html5&quot;, &quot;nextdotjs&quot;)</span>
           <input
-            value={form.icon}
-            onChange={(event) => setForm((f) => ({ ...f, icon: event.target.value }))}
-            placeholder="e.g. Gq"
-            maxLength={3}
-            required
+            value={form.iconSlug}
+            onChange={(event) => setForm((f) => ({ ...f, iconSlug: event.target.value }))}
+            placeholder="e.g. graphql"
             className={`${fieldInput} font-mono`}
           />
-          {fieldErrors.icon ? (
-            <span className="text-[11px] text-text-secondary">{fieldErrors.icon[0]}</span>
+          {fieldErrors.iconSlug ? (
+            <span className="text-[11px] text-text-secondary">{fieldErrors.iconSlug[0]}</span>
           ) : null}
         </label>
 

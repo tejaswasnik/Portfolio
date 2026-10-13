@@ -3,6 +3,8 @@ import { findAllProjects } from "@/lib/db/collections/projects.js";
 import { findAllSkills } from "@/lib/db/collections/skills.js";
 import { serializeDocs } from "@/lib/db/serialize.js";
 import ProjectForm from "@/components/admin/ProjectForm";
+import SkillIcon from "@/components/ui/SkillIcon";
+import { resolveSkillIcon } from "@/lib/icons/resolveSkillIcon.js";
 
 export const metadata = { title: "Admin — New project" };
 
@@ -15,7 +17,10 @@ export default async function NewProjectPage() {
     <ProjectForm
       mode="create"
       project={null}
-      skills={serializeDocs(skills)}
+      skills={serializeDocs(skills).map((skill) => ({
+        ...skill,
+        iconNode: <SkillIcon {...resolveSkillIcon(skill)} size={12} />,
+      }))}
       totalCount={allProjects.length}
     />
   );
