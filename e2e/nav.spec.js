@@ -14,18 +14,19 @@ function boxesOverlap(a, b) {
 test("active pill moves from Home to Projects", async ({ page }) => {
   await page.goto("/");
 
-  const pill = page.locator("[data-nav-pill]");
+  const primaryNav = page.getByRole("navigation", { name: "Primary" });
+  const pill = primaryNav.locator("[data-nav-pill]");
   await expect(pill).toHaveCount(1);
 
-  const homeLink = page.getByRole("link", { name: "Home" });
+  const homeLink = primaryNav.getByRole("link", { name: "Home" });
   const homeBox = await homeLink.boundingBox();
   const pillBoxBefore = await pill.boundingBox();
   expect(boxesOverlap(pillBoxBefore, homeBox)).toBe(true);
 
-  await page.getByRole("link", { name: "Projects" }).click();
+  await primaryNav.getByRole("link", { name: "Projects" }).click();
   await page.waitForURL("**/projects");
 
-  const projectsLink = page.getByRole("link", { name: "Projects" });
+  const projectsLink = primaryNav.getByRole("link", { name: "Projects" });
   await expect(async () => {
     const projectsBox = await projectsLink.boundingBox();
     const pillBoxAfter = await pill.boundingBox();
