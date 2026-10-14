@@ -52,7 +52,7 @@ export default function Lightbox({ images, projectName }) {
             key={src}
             type="button"
             onClick={() => setOpenIndex(index)}
-            className="group flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-1 p-0 text-left transition-colors hover:border-border-default"
+            className="press group flex flex-col gap-2 rounded-xl border border-border-subtle bg-surface-1 p-0 text-left transition-colors hover:border-border-default"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import. */}
             <img
@@ -96,7 +96,7 @@ export default function Lightbox({ images, projectName }) {
               <button
                 type="button"
                 onClick={() => setOpenIndex(-1)}
-                className="font-mono text-[11px] uppercase tracking-[1px] text-text-muted transition-colors hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="press font-mono text-[11px] uppercase tracking-[1px] text-text-muted transition-colors hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 ESC ✕
               </button>
@@ -114,14 +114,14 @@ export default function Lightbox({ images, projectName }) {
                   onClick={() =>
                     setOpenIndex((index) => (index - 1 + images.length) % images.length)
                   }
-                  className="transition-colors hover:text-text-primary"
+                  className="press transition-colors hover:text-text-primary"
                 >
                   ← Previous
                 </button>
                 <button
                   type="button"
                   onClick={() => setOpenIndex((index) => (index + 1) % images.length)}
-                  className="transition-colors hover:text-text-primary"
+                  className="press transition-colors hover:text-text-primary"
                 >
                   Next →
                 </button>
