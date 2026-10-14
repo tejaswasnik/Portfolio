@@ -453,6 +453,18 @@ html.lenis body {
     font-family: var(--font-sans);
   }
 
+  /* Tailwind's preflight resets buttons to the default cursor; every
+     clickable control should still read as clickable. Wrapped in :where()
+     so it carries zero specificity and any cursor-* utility (e.g. the
+     invisible dialog backdrop's cursor-default) still wins. */
+  :where(button:not(:disabled), [role="button"]:not([aria-disabled="true"])) {
+    cursor: pointer;
+  }
+
+  :where(button:disabled, [aria-disabled="true"]) {
+    cursor: not-allowed;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -512,6 +524,23 @@ html.lenis body {
 
   .animate-panel-in {
     animation: panel-in var(--motion-base) var(--ease-enter);
+  }
+
+  /* Dialog content swap (e.g. the contact modal's form -> "sent" state)
+     while the panel itself stays mounted and open. */
+  @keyframes content-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-content-in {
+    animation: content-in var(--motion-base) var(--ease-enter);
   }
 
   /* Admin sidebar mobile drawer enter (docs/motion.md §3). */

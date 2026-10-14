@@ -1,8 +1,8 @@
-import Link from "next/link";
 import PageFrame from "@/components/ui/PageFrame";
 import Nav from "@/components/public/Nav";
 import SectionDivider from "@/components/ui/SectionDivider";
 import LetsTalkSection from "@/components/public/LetsTalkSection";
+import TransitionLink from "@/components/public/transitions/TransitionLink.jsx";
 import { getPublicProfile, getPublicSiteSettings } from "@/lib/db/cache";
 
 // Matches Button's primary/dashed-pill variants as links (Button only
@@ -52,12 +52,12 @@ export default async function NotFoundView() {
             The page you&rsquo;re looking for doesn&rsquo;t exist or has been moved.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
-            <Link href="/" className={goHomeClass}>
+            <TransitionLink href="/" className={goHomeClass}>
               Go home
-            </Link>
-            <Link href="/projects" className={viewProjectsClass}>
+            </TransitionLink>
+            <TransitionLink href="/projects" className={viewProjectsClass}>
               View projects
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       </section>
