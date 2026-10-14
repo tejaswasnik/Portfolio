@@ -10,9 +10,9 @@ import { getPublicProfile, getPublicSiteSettings } from "@/lib/db/cache";
 // the same reason; "VIEW PROJECTS" here is a dashed *pill*, not the
 // rounded-lg dashed Button.jsx normally uses — Figma 74:740).
 const goHomeClass =
-  "inline-flex h-11 items-center justify-center rounded-pill bg-cta-bg border border-cta-bg px-6 text-sm font-medium text-cta-text transition-colors hover:bg-text-primary";
+  "press inline-flex h-11 items-center justify-center rounded-pill bg-cta-bg border border-cta-bg px-6 text-sm font-medium text-cta-text transition-colors hover:bg-text-primary";
 const viewProjectsClass =
-  "inline-flex h-11 items-center justify-center rounded-pill border border-dashed border-border-default px-6 font-mono text-xs uppercase tracking-[1px] text-text-primary hover:border-accent/50";
+  "press inline-flex h-11 items-center justify-center rounded-pill border border-dashed border-border-default px-6 font-mono text-xs uppercase tracking-[1px] text-text-primary hover:border-accent/50";
 
 /**
  * 404 screen (Figma 74:370). Used by the root src/app/not-found.js —
