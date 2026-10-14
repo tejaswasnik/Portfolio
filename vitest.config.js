@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "node",
-    include: ["src/**/*.test.js", "src/**/*.test.jsx", "*.test.js"],
+    include: ["src/**/*.test.js", "src/**/*.test.jsx", "src/**/*.test.ts", "src/**/*.test.tsx", "*.test.js"],
     setupFiles: ["./src/test/setup.js"],
     // Without this, Vite externalizes @testing-library/jest-dom (it lives
     // in node_modules) instead of running it through Vite's own module

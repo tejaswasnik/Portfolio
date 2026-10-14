@@ -28,16 +28,219 @@ html.lenis body {
  * actual `transform` lives in this real CSS rule, not inline, so
  * `:hover` can override it — an inline `style.transform` always wins
  * over a `:hover` utility class, which would make the hover lift a
- * silent no-op. */
-.interest-image {
+ * silent no-op. `.interest-image-slot` is the static wrapper (position +
+ * base rotation only, so the outline/pin inside it never wobble); the
+ * nested `.interest-image-photo` carries the animated entrance wobble in
+ * its own already-rotated local space — see the three `@property`
+ * registrations and the keyframes below. */
+.interest-image-slot {
   transform: translate(-50%, -50%) rotate(var(--interest-rotation, 0deg));
+}
+
+.interest-image-slot:hover .interest-image-photo {
+  transform: translateY(-2px) rotate(0deg);
+}
+
+/* Registered so `interest-settle` below can smoothly interpolate these
+ * rather than snapping between values — plain custom properties don't
+ * animate in standard `@keyframes` without this (Houdini `@property`;
+ * broadly supported in evergreen browsers as of this writing). */
+@property --interest-scale {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --interest-drift {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --interest-overshoot {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.interest-image-photo {
+  opacity: 1;
+  transform:
+    scale(var(--interest-scale, 1)) translateX(var(--interest-drift, 0px))
+    rotate(calc(var(--interest-overshoot, 0) * 1deg));
   transition:
     transform var(--motion-base) var(--ease-out),
     box-shadow var(--motion-base) var(--ease-out);
 }
 
-.interest-image:hover {
-  transform: translate(-50%, calc(-50% - 2px)) rotate(0deg);
+/* The "about to reveal" state — set synchronously on mount by
+ * useInterestImageReveal.ts, before the image is actually observed, so
+ * there's no flash of the final appearance before the entrance plays
+ * (same reasoning as Reveal.jsx's `shouldAnimate`). Readable with JS
+ * disabled: without this attribute ever being set, the photo just
+ * renders at its normal, final appearance (opacity 1, no wobble). */
+[data-reveal-item][data-reveal-pending] .interest-image-photo {
+  /* Instant, not eased — this is the "about to reveal" snap set
+   * synchronously before paint; the base rule's `transition` must not
+   * animate INTO this state (it would be a visible, unwanted wind-up
+   * wobble right as the attribute is set). The later handoff to the
+   * `interest-settle` animation below is unaffected by this. */
+  transition: none;
+  opacity: 0;
+  --interest-scale: 0.94;
+  --interest-drift: var(--interest-drift-start, 0px);
+  --interest-overshoot: 2;
+}
+
+/* Beat 2 — the image settles: fades in while scaling/drifting/
+ * over-rotating back to its stored angle. `animation-delay` is
+ * SETTLE.startAt, `duration` is SETTLE.duration (interestImageReveal.ts). */
+[data-reveal-item][data-revealed="true"] .interest-image-photo {
+  animation: interest-settle 400ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+}
+
+@keyframes interest-settle {
+  from {
+    opacity: 0;
+    --interest-scale: 0.94;
+    --interest-drift: var(--interest-drift-start, 0px);
+    --interest-overshoot: 2;
+  }
+  to {
+    opacity: 1;
+    --interest-scale: 1;
+    --interest-drift: 0px;
+    --interest-overshoot: 0;
+  }
+}
+
+/* Beat 1 — the outline traces: invisible until pending, then a dashed
+ * rect "marches" from stroke-dashoffset = its own perimeter down to 0
+ * over TRACE.duration, holds briefly, then fades out over the last
+ * TRACE.fadeOutDuration as the settling image covers it. */
+.interest-outline {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interest-outline rect {
+  stroke: #2e3337;
+  stroke-width: 1;
+  stroke-dashoffset: calc(var(--interest-outline-length, 0) * 1px);
+}
+
+[data-reveal-item][data-reveal-pending] .interest-outline {
+  opacity: 1;
+}
+
+[data-reveal-item][data-revealed="true"] .interest-outline {
+  animation: interest-outline-fade 640ms linear forwards;
+}
+
+[data-reveal-item][data-revealed="true"] .interest-outline rect {
+  animation: interest-outline-trace 320ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes interest-outline-trace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes interest-outline-fade {
+  /* Holds fully visible through the trace and most of the settle, then
+   * fades over the last 180ms (460ms-640ms of this 640ms timeline). */
+  0%,
+  71.875% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Beat 3 — the pin: a `+` crosshair snaps in (no entrance transition —
+ * it's meant to look like it was already there) 6px outside the
+ * image's top-left corner, then fades away; this is decoration for the
+ * moment of landing, not a permanent mark. */
+.interest-pin {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interest-pin::before,
+.interest-pin::after {
+  content: "";
+  position: absolute;
+  background: #9f9fa9;
+}
+
+.interest-pin::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.interest-pin::after {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+[data-reveal-item][data-revealed="true"] .interest-pin {
+  animation: interest-pin-fade 240ms linear 520ms forwards;
+}
+
+@keyframes interest-pin-fade {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* The plain fallback: prefers-reduced-motion, connection.saveData, or a
+ * detected low-end device (useInterestImageReveal.ts sets
+ * data-reveal-mode="simple" for the latter two; this media query is the
+ * CSS-level backstop for the OS setting regardless of what JS decided). */
+[data-reveal-item][data-reveal-mode="simple"] .interest-outline,
+[data-reveal-item][data-reveal-mode="simple"] .interest-pin {
+  display: none;
+}
+
+[data-reveal-item][data-reveal-mode="simple"][data-revealed] .interest-image-photo {
+  animation: interest-simple-fade 160ms linear both;
+}
+
+@keyframes interest-simple-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-item] .interest-outline,
+  [data-reveal-item] .interest-pin {
+    display: none;
+  }
+
+  [data-reveal-item][data-revealed] .interest-image-photo {
+    animation: interest-simple-fade 160ms linear both;
+  }
 }
 
 /* Lets ThemeToggle's circular clip-path reveal animate on its own terms
