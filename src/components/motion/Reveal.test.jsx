@@ -3,6 +3,18 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import Reveal from "./Reveal.jsx";
 
+function mockReducedMotion(matches) {
+  window.matchMedia = vi.fn().mockImplementation((query) => ({
+    matches: query.includes("prefers-reduced-motion") ? matches : false,
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
+
 describe("Reveal", () => {
   it("always renders its children's text content, regardless of fold position", () => {
     render(<Reveal>Section content</Reveal>);
@@ -49,5 +61,31 @@ describe("Reveal", () => {
     render(<Reveal as="section">Tagged content</Reveal>);
     const el = screen.getByText("Tagged content");
     expect(el.tagName).toBe("SECTION");
+  });
+
+  it("under reduced motion, renders below-the-fold content with no transform or blur filter", () => {
+    mockReducedMotion(true);
+    const originalGetBoundingClientRect = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = vi.fn(() => ({
+      top: 5000,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0,
+    }));
+
+    render(
+      <Reveal stagger>
+        <Reveal.Item>Reduced motion content</Reveal.Item>
+      </Reveal>,
+    );
+    const el = screen.getByText("Reduced motion content");
+
+    expect(el.style.transform).toBe("");
+    expect(el.style.filter).toBe("");
+    expect(el.style.opacity).not.toBe("0");
+
+    Element.prototype.getBoundingClientRect = originalGetBoundingClientRect;
   });
 });
