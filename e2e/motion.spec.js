@@ -63,7 +63,7 @@ test.describe("home with JavaScript disabled", () => {
   test("every section heading is visible", async ({ page }) => {
     await page.goto("/");
 
-    for (const name of ["About", "Projects", "Activity", "Stack", "Let's talk."]) {
+    for (const name of ["About", "Projects", "Activity", "Stack", "Let's talk"]) {
       const heading = page.getByRole("heading", { name, exact: false });
       await expect(heading).toBeVisible();
       await expect(heading).toHaveCSS("opacity", "1");

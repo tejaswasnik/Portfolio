@@ -30,7 +30,10 @@ export default function Nav() {
   const active = pathname === "/" ? "home" : pathname.startsWith("/projects") ? "projects" : null;
 
   return (
-    <div className="relative z-10 mx-auto flex h-16 w-full max-w-column items-center justify-between px-6">
+    <nav
+      aria-label="Primary"
+      className="relative z-10 mx-auto flex h-16 w-full max-w-column items-center justify-between px-6"
+    >
       <TransitionLink
         href="/"
         className="font-serif text-xl tracking-[0.5px] text-text-primary"
@@ -69,6 +72,6 @@ export default function Nav() {
         <span aria-hidden="true" className="h-4 w-px bg-border-subtle" />
         <ThemeToggle />
       </div>
-    </div>
+    </nav>
   );
 }

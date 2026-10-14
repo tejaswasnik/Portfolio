@@ -55,10 +55,15 @@ test.describe("project card hover (desktop, mouse + fine pointer)", () => {
     const card = page.locator("article").filter({ has: page.locator(".card-media") }).first();
     await card.scrollIntoViewIfNeeded();
 
-    const image = card.locator(".card-media img");
+    const media = card.locator(".card-media");
+    const image = media.locator("img");
     const boxBefore = await card.boundingBox();
 
-    await card.hover();
+    // Hovering the card itself can land outside `.card-media` (it's only
+    // the top portion of a taller card) and never trigger `:hover` on it
+    // at all — hover the media box directly, matching the real CSS rule
+    // (`.card-media:hover img`).
+    await media.hover();
     await expect(image).toHaveCSS("transform", /matrix\(1\.03/);
 
     const boxAfter = await card.boundingBox();

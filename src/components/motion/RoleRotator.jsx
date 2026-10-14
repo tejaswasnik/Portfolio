@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRotatingIndex } from "@/hooks/useRotatingIndex.js";
 import { DUR, EASE } from "@/lib/motion/tokens.js";
@@ -18,10 +19,26 @@ const swapTransition = { duration: DUR.ui * 1.5, ease: EASE.inOut };
  * No `aria-live` region — a role cycling every 2.6s would spam a screen
  * reader continuously. Instead the container's `aria-label` states the
  * full set once; the visibly-cycling text is `aria-hidden`.
+ *
+ * `useReducedMotion()`'s `useState` initializer reads `window.matchMedia`
+ * synchronously on the client's very first render — the hydration pass
+ * itself — while the server (no `window`) always renders the
+ * non-reduced branch. With OS reduced-motion on, that made the client's
+ * hydration-pass render branch into completely different markup (no
+ * classNames/transition props) than what the server sent, which React
+ * flags as a hydration mismatch (confirmed live via Playwright's
+ * `reducedMotion: "reduce"` emulation). `mounted` only flips `true` in
+ * an effect, so the hydration pass always matches SSR (non-reduced);
+ * the real reduced-motion value only takes effect on the render after
+ * that, same pattern as `Reveal.jsx`'s `shouldAnimate`/`useHeroPlayed`.
  * @param {{ roles: string[], intervalMs?: number }} props
  */
 export default function RoleRotator({ roles, intervalMs = 2600 }) {
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- marks "past the hydration pass", see comment above
+  useEffect(() => setMounted(true), []);
+  const reducedMotion = mounted && prefersReducedMotion;
   const index = useRotatingIndex(roles.length, intervalMs, { paused: reducedMotion });
   const role = roles[index] ?? roles[0] ?? "";
 
