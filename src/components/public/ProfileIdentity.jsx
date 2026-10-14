@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import TrackedLink from "@/components/public/TrackedLink";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import TextReveal from "@/components/motion/TextReveal.jsx";
@@ -38,6 +38,15 @@ function initials(name) {
 export default function ProfileIdentity({ profile }) {
   const heroPlayed = useHeroPlayed();
   const initial = heroPlayed ? false : "hidden";
+  // `MotionConfig`'s `reducedMotion="user"` only auto-strips positional
+  // keys (x/y/scale/rotate — Motion's own `positionalKeys` list), not
+  // `filter`, so the avatar's blur(4px)->blur(0) would still visibly
+  // transition under OS reduced-motion. Snapping `transition.duration`
+  // to 0 here (rather than touching `initial`, which governs the
+  // server-rendered starting style) stops the blur without risking a
+  // hydration mismatch: `initial`/the SSR output never change based on
+  // this value, only how long the later tween takes.
+  const reducedMotion = useReducedMotion();
 
   return (
     <div className="flex flex-col items-center gap-6 px-6 py-6 text-center sm:flex-row sm:items-center sm:text-left">
@@ -47,7 +56,12 @@ export default function ProfileIdentity({ profile }) {
         animate="visible"
         variants={{
           hidden: { opacity: 0, scale: 0.96, filter: "blur(4px)" },
-          visible: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.5, delay: 0.1 } },
+          visible: {
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            transition: { duration: reducedMotion ? 0 : 0.5, delay: reducedMotion ? 0 : 0.1 },
+          },
         }}
       >
         {profile?.photoUrl ? (

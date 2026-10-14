@@ -5,7 +5,10 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRotatingIndex } from "@/hooks/useRotatingIndex.js";
 import { DUR, EASE } from "@/lib/motion/tokens.js";
 
-const swapTransition = { duration: DUR.ui * 1.5, ease: EASE.inOut };
+// DUR.ui (240ms) is the token table's own value for "pills, rotator
+// swap" — using it directly, not a synthesized `DUR.ui * 1.5` (360ms),
+// keeps this on-token and under the "UI feedback <= 240ms" cap.
+const swapTransition = { duration: DUR.ui, ease: EASE.inOut };
 
 /**
  * Hero's "5 role lines" (A6), now one rotating line (vertical slide +
