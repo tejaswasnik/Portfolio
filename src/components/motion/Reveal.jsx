@@ -72,8 +72,20 @@ export default function Reveal({ as = "div", delay = 0, stagger = false, classNa
   );
 }
 
-/** A stagger child — only meaningful as a direct child of `<Reveal stagger>`. */
-function Item({ as = "div", className = "", children, ...rest }) {
+/**
+ * A stagger child — only meaningful as a direct child of `<Reveal stagger>`.
+ *
+ * Exported by name (not just as `Reveal.Item`, though that's kept too for
+ * client-side callers): a server component importing this "use client"
+ * module gets a client-reference *proxy* for `Reveal`, not the real
+ * function object, so a static property hung off it at runtime
+ * (`Reveal.Item = Item`) doesn't survive that boundary and resolves to
+ * `undefined` — crashing with "Element type is invalid" the moment a
+ * server component (`AboutSection`, `ProjectsSection`, `LetsTalkSection`)
+ * renders `<Reveal.Item>`. Each import statement needs its own named
+ * binding to get its own proxy.
+ */
+export function RevealItem({ as = "div", className = "", children, ...rest }) {
   const MotionTag = motion[as] ?? motion.div;
   return (
     <MotionTag className={className} variants={revealVariants} {...rest}>
@@ -82,4 +94,4 @@ function Item({ as = "div", className = "", children, ...rest }) {
   );
 }
 
-Reveal.Item = Item;
+Reveal.Item = RevealItem;
