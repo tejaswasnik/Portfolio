@@ -119,6 +119,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .card-media:hover img {
+    transform: none;
+  }
+}
+
 /* A9 — the card's own border brightens on hover, over --dur-hover (the
    token value, not Tailwind's untracked `transition-colors` default) —
    on the card element itself, not `.card-media`, since the border lives
