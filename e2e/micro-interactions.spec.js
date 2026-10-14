@@ -42,3 +42,26 @@ test.describe("touch context (no hover capability)", () => {
     expect(after).toBe("none");
   });
 });
+
+/**
+ * A9 (Task 6): the project card's cover image zooms to scale(1.03) inside
+ * its own clipped `.card-media` box on hover — the card's own bounding
+ * box must never change, since `.card-media{overflow:hidden}` is what
+ * makes that safe.
+ */
+test.describe("project card hover (desktop, mouse + fine pointer)", () => {
+  test("card image zooms on hover without shifting the card's box", async ({ page }) => {
+    await page.goto("/");
+    const card = page.locator("article").filter({ has: page.locator(".card-media") }).first();
+    await card.scrollIntoViewIfNeeded();
+
+    const image = card.locator(".card-media img");
+    const boxBefore = await card.boundingBox();
+
+    await card.hover();
+    await expect(image).toHaveCSS("transform", /matrix\(1\.03/);
+
+    const boxAfter = await card.boundingBox();
+    expect(boxAfter).toEqual(boxBefore);
+  });
+});
