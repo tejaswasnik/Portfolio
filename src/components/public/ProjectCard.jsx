@@ -29,7 +29,7 @@ export default function ProjectCard({ project, skillsById }) {
   const isOngoing = project.status === "ongoing";
 
   return (
-    <article className="flex flex-1 flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-1 p-4 transition-colors hover:border-border-default">
+    <article className="card-border-hover flex flex-1 flex-col gap-4 rounded-2xl border border-border-subtle bg-surface-1 p-4 hover:border-border-default">
       <div className="card-media relative h-[200px] w-full rounded-[10px] bg-gradient-to-br from-surface-3 to-surface-2">
         {project.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote ImageKit URL, not a static import.

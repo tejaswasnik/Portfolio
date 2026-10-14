@@ -119,6 +119,14 @@
   }
 }
 
+/* A9 — the card's own border brightens on hover, over --dur-hover (the
+   token value, not Tailwind's untracked `transition-colors` default) —
+   on the card element itself, not `.card-media`, since the border lives
+   on ProjectCard's outer <article>. */
+.card-border-hover {
+  transition: border-color var(--dur-hover) var(--ease-out);
+}
+
 /* A9 — the "Ongoing" status dot: a soft pulsing ring (the one looping
    decoration besides the role rotator). Its own duration, not a --dur-*
    token (those are UI-feedback/reveal timings, not loop timings), but
