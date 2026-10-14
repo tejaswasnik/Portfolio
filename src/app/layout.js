@@ -1,4 +1,5 @@
 import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "@/styles/globals.css";
 import { ToastProvider } from "@/components/ui/Toaster";
 
@@ -55,7 +56,11 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
+        <Script
+          id="no-flash-theme-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: noFlashThemeScript }}
+        />
       </head>
       <body suppressHydrationWarning>
         <ToastProvider>{children}</ToastProvider>
