@@ -25,3 +25,24 @@ test.describe("home with reduced motion", () => {
     expect(consoleErrors).toEqual([]);
   });
 });
+
+/**
+ * Task 5 (A8 section reveals): "Server-rendered HTML must be readable
+ * with JS disabled" — Reveal.jsx renders every section at full opacity
+ * by default and only switches to the animated hidden state once a
+ * client-side effect confirms it, so with JS off that effect never
+ * runs and content must just be there.
+ */
+test.describe("home with JavaScript disabled", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("every section heading is visible", async ({ page }) => {
+    await page.goto("/");
+
+    for (const name of ["About", "Projects", "Activity", "Stack", "Let's talk."]) {
+      const heading = page.getByRole("heading", { name, exact: false });
+      await expect(heading).toBeVisible();
+      await expect(heading).toHaveCSS("opacity", "1");
+    }
+  });
+});

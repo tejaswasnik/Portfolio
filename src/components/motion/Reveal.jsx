@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { revealVariants } from "@/lib/motion/tokens.js";
 
 /**
@@ -21,6 +21,18 @@ import { revealVariants } from "@/lib/motion/tokens.js";
  * variants. A section that's already in the initial viewport (the hero
  * area, effectively) just appears; nothing above the fold waits on
  * Motion to decide it's "in view".
+ *
+ * Reduced motion: `MotionConfig`'s `reducedMotion="user"` (MotionProvider)
+ * only auto-strips *positional* keys (x/y/scale/rotate/etc, per Motion's
+ * own `positionalKeys` list) to an instant jump — `filter` isn't on that
+ * list, so the `blur(4px)->blur(0)` half of `revealVariants` would still
+ * visibly transition over 500ms if left to that global behaviour alone.
+ * The Global Constraints rule ("no translate/scale/blur" under reduced
+ * motion) needs blur suppressed too, so `useReducedMotion()` is checked
+ * here directly: content never leaves the "visible" variant's static
+ * values at all (no hidden phase, no transition), the same way
+ * `RoleRotator` bypasses Motion's animation entirely rather than relying
+ * on the automatic strip.
  * @param {{
  *   as?: string, delay?: number, stagger?: boolean, className?: string,
  *   children: React.ReactNode,
@@ -29,14 +41,16 @@ import { revealVariants } from "@/lib/motion/tokens.js";
 export default function Reveal({ as = "div", delay = 0, stagger = false, className = "", children }) {
   const ref = useRef(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
+    if (reducedMotion) return;
     const el = ref.current;
     if (!el) return;
     if (el.getBoundingClientRect().top > window.innerHeight) {
       setShouldAnimate(true);
     }
-  }, []);
+  }, [reducedMotion]);
 
   const MotionTag = motion[as] ?? motion.div;
 
@@ -48,8 +62,8 @@ export default function Reveal({ as = "div", delay = 0, stagger = false, classNa
     <MotionTag
       ref={ref}
       className={className}
-      initial={shouldAnimate ? "hidden" : false}
-      whileInView="visible"
+      initial={reducedMotion ? false : shouldAnimate ? "hidden" : false}
+      whileInView={reducedMotion ? undefined : "visible"}
       viewport={{ once: true, amount: 0.25 }}
       variants={variants}
     >
@@ -59,10 +73,10 @@ export default function Reveal({ as = "div", delay = 0, stagger = false, classNa
 }
 
 /** A stagger child — only meaningful as a direct child of `<Reveal stagger>`. */
-function Item({ as = "div", className = "", children }) {
+function Item({ as = "div", className = "", children, ...rest }) {
   const MotionTag = motion[as] ?? motion.div;
   return (
-    <MotionTag className={className} variants={revealVariants}>
+    <MotionTag className={className} variants={revealVariants} {...rest}>
       {children}
     </MotionTag>
   );

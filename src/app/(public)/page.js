@@ -71,7 +71,7 @@ export default async function Home() {
             return <ProfileIdentity key={section.key} profile={profile} />;
           case "about":
             return sectionRendered.about ? (
-              <Reveal key={section.key}>
+              <Reveal key={section.key} stagger>
                 <AboutSection profile={profile} />
               </Reveal>
             ) : null;
@@ -89,7 +89,7 @@ export default async function Home() {
             ) : null;
           case "projects":
             return sectionRendered.projects ? (
-              <Reveal key={section.key}>
+              <Reveal key={section.key} stagger>
                 <ProjectsSection projects={featuredProjects} skills={skills} />
               </Reveal>
             ) : null;
@@ -101,7 +101,7 @@ export default async function Home() {
             ) : null;
           case "lets-talk":
             return (
-              <Reveal key={section.key}>
+              <Reveal key={section.key} stagger>
                 <LetsTalkSection
                   heading={profile?.letsTalkHeading}
                   subtext={profile?.letsTalkSubtext}
