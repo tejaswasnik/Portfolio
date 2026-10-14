@@ -24,6 +24,30 @@ test.describe("home with reduced motion", () => {
 
     expect(consoleErrors).toEqual([]);
   });
+
+  /**
+   * Task 7 (A10): CountUp's `inView && !reducedMotion` guard (CountUp.jsx)
+   * can't be exercised in jsdom (its stubbed IntersectionObserver never
+   * fires — see the unit test's comment), so this is the real coverage
+   * for "reduced motion -> static final number, never an intermediate
+   * count-up frame."
+   */
+  test("contribution count-up shows the final number immediately, never an intermediate frame", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const countEl = page.locator(".tabular-nums").first();
+    await countEl.scrollIntoViewIfNeeded();
+
+    const text = (await countEl.textContent())?.trim();
+    expect(text).toMatch(/^\d+$/);
+    const finalValue = text;
+
+    // If it were animating, this would still be mid-count-up a beat later;
+    // under reduced motion it must already be — and stay — at the final value.
+    await page.waitForTimeout(150);
+    await expect(countEl).toHaveText(finalValue);
+  });
 });
 
 /**
