@@ -16,6 +16,19 @@ export default defineConfig({
     environment: "node",
     include: ["src/**/*.test.js", "src/**/*.test.jsx", "*.test.js"],
     setupFiles: ["./src/test/setup.js"],
+    // Without this, Vite externalizes @testing-library/jest-dom (it lives
+    // in node_modules) instead of running it through Vite's own module
+    // graph — its `import { expect } from "vitest"` then resolves via
+    // plain Node module resolution to a SEPARATE `expect` instance than
+    // the one actual test files get from Vitest's runtime, so
+    // `expect.extend(matchers)` registers on the wrong instance and every
+    // jest-dom matcher throws "Invalid Chai property". Inlining forces it
+    // through the same graph, same `expect` singleton.
+    server: {
+      deps: {
+        inline: ["@testing-library/jest-dom"],
+      },
+    },
   },
   resolve: {
     alias: {
