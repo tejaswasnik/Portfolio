@@ -73,7 +73,7 @@ export default function ContactModal({ open, onClose }) {
   if (status === "sent") {
     return (
       <Dialog open={open} onClose={handleClose} title="Message sent.">
-        <div className="flex flex-col gap-6">
+        <div key="sent" className="animate-content-in flex flex-col gap-6">
           <span
             aria-hidden="true"
             className="flex size-12 items-center justify-center rounded-full border border-border-default bg-surface-3 text-xl text-accent"

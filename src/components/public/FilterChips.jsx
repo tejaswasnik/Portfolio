@@ -50,10 +50,10 @@ export default function FilterChips({ groupId, label, options, activeValue }) {
             href={option.href}
             aria-current={active ? "true" : undefined}
             onClick={() => startTransition(() => setOptimisticValue(option.value))}
-            className={`relative rounded-pill border px-3 py-[5px] font-mono text-[10px] transition-colors ${
+            className={`relative rounded-pill border px-3 py-[5px] font-mono text-[10px] transition-colors duration-150 ease-out ${
               active
                 ? "border-accent text-text-primary"
-                : "border-border-default text-text-muted hover:text-text-primary"
+                : "border-border-default text-text-muted hover:border-border-hover hover:text-text-primary"
             }`}
           >
             {active ? (
